@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 const bcrypt = require('bcryptjs')
 
 
@@ -11,55 +10,16 @@ const userSchema = mongoose.Schema({
 	},
 	email: {
 		type:String,
-		unique:true,
 		require: true,
 		trim:true,
-		lowercase:true,
-		validate(value) {
-			if(!validator.isEmail(value)) {
-				throw new Error('Email is invalid')
-			}
-		}
+		lowercase:true
 	},
 	password: {
 		type:String,
-		minlength:8,
 		require:true
-
 	}
 
 })
-
-// userSchema.methods.generateToken = async function() {
-// 	const user = this
-
-// 	const token = await jwt.sign({id: user._id.toString()}, 'thisiseventmanagementtoken')
-
-// 	user.tokens = user.tokens.concat({token})
-
-// 	await user.save()
-// 	return token
-// }
-
-
-// userSchema.statics.findByCredentials = async (email,password) =>  {
-// 	const user = await User.findOne({email})
-
-
-// 	if(!user) {
-// 		throw new Error('unable to login')
-// 	}
-
-// 	const isMatch = await bcrypt.compare(password, user.password)
-
-// 	if(!isMatch) {
-// 		throw new Error('unable to login')
-// 	}
-
-// 	return user
-
-
-// }
 
 
 //Hashing password before saving

@@ -6,6 +6,7 @@ const session = require('express-session')
 const bcrypt = require('bcryptjs')
 const cookieParser = require('cookie-parser');
 const auth = require('../setting/auth-middleware')
+const { body, validationResult } = require('express-validator');
 
 const initializePassport = require('../setting/passport-config')
 initializePassport(passport)
@@ -45,23 +46,38 @@ router.get('/signup', auth.checkNotAuthenticated, (req, res) => {
   res.render('signup')
 })
 
-router.post('/signup', auth.checkNotAuthenticated, async (req, res) => {
-  try {
-    
+router.post('/signup', auth.checkNotAuthenticated, [
+  body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 chars long'),
+  body('email').custom(value => {
+    return User.findOne({email:value}).then(user => {
+      if (user) {
+        return Promise.reject('E-mail already in use')
+      }
+    })
+  })
+
+  ] , async (req, res) => {
+  
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const alert = errors.array() 
+      console.log(alert)
+      return res.render('signup' , {alert})
+    }
+      
     const user = new User(req.body)
-	await user.save()		
-		
+	  await user.save()		
+		req.flash("success_message","Registered Successfully.. Login To Continue")
     res.redirect('/login')
-  } catch {
-    res.redirect('/signup')
-  }
+  
 })
 
 router.get('/login', auth.checkNotAuthenticated, (req, res) => {
   res.render('login')
 })
 
-router.post('/login', auth.checkNotAuthenticated, passport.authenticate('local', {
+router.post('/login', auth.checkNotAuthenticated , passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
