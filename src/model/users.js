@@ -17,8 +17,10 @@ const userSchema = mongoose.Schema({
 	password: {
 		type:String,
 		require:true
-	}
+	},
+	isAdmin: { type: Boolean, default: false }
 })
+
 
 
 //Hashing password before saving

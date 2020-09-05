@@ -7,7 +7,9 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const userRoute = require('./router/users')
 const adminRouter = require('./router/admin')
+const cors = require('cors')
 require('./db/mongoose')
+// const Event = require('./model/events')
 
 const port = process.env.PORT || 3000
 
@@ -16,15 +18,16 @@ const viewDirectoryPath = path.join(__dirname, '../templates/views')
 
 const app = express()
 
-
+app.use(cors())
 app.set('view engine', 'ejs');
 app.set('views', viewDirectoryPath)
 app.use(express.static(publicDirectoryPath))
 
-app.use('/admin',adminRouter)
+ // app.use('/admin',adminRouter)
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/',userRoute)
+
 
 app.listen(port, () => {
 	console.log('Server is up on ' + port)
