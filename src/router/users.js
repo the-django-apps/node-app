@@ -40,6 +40,10 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
+router.get('/gallery', (req, res) => {
+  res.render('gallery')
+})
+
 router.get('/success',auth.checkAuthenticated, (req,res) => {
 	res.render('success',{msg:"messagee"})
 })
@@ -56,7 +60,8 @@ router.post('/signup', auth.checkNotAuthenticated, [
         return Promise.reject('E-mail already in use')
       }
     })
-  })
+  }),
+  body('email').isEmail()
 
   ] , async (req, res) => {
   
@@ -64,7 +69,7 @@ router.post('/signup', auth.checkNotAuthenticated, [
 
     if (!errors.isEmpty()) {
       const alert = errors.array() 
-      console.log(alert)
+      
       return res.render('signup' , {alert})
     }
       
