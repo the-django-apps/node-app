@@ -58,8 +58,9 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
-router.get('/gallery', (req, res) => {
-  res.render('gallery')
+router.get('/gallery', async (req, res) => {
+  const gallery = await Gallery.find({})
+  res.render('gallery',{gallery})
 })
 
 router.get('/signup', auth.checkNotAuthenticated, (req, res) => {
