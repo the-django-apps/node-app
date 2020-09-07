@@ -20,12 +20,17 @@
 	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
 	  <a href="/admin?flag=user">User</a>
 	  <a href="/admin?flag=gallery">Gallery</a>
+	  <a href="/admin?flag=event">Event</a>
 	</div>
 
 	<button class="openbtn" onclick="openNav()">☰ Admin Panel</button> 
 
-	<%if(flag == "true") {%>
+
+
+	<%if(flag == "gallery") {%>
 		<%- include('galleryAdmin') %>
+	<%} else if(flag == "event") {%>
+		<%- include('eventsAdmin') %>
 	<%} else {%>
 		<%- include('usersAdmin') %>
 	<%}%>
@@ -49,6 +54,7 @@
 			alert(errorMessage);
 			location.reload();
 		}
+
 
 </script>
 

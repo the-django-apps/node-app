@@ -116,24 +116,14 @@ router.get('/admin',async (req,res) => {
   
   if(req.query.flag === 'gallery') {
       const gallery = await Gallery.find({})
-      res.render('admin',{gallery,flag:"true"})
-  }else {
-      const userData = await User.find({})
-      res.render('admin',{userData:userData})
+      res.render('admin',{gallery,flag:"gallery"})
+  }else if(req.query.flag === 'event') {
+      res.render('admin', {flag:"event"})
+  } else {
+    const userData = await User.find({})
+    res.render('admin',{userData:userData})
   }
 })
-
-// router.get('/admin/user',async (req,res) => {
-//   try{
-//     const userData = await User.find({})
-//     res.render('users',{userData:userData})
-//   } catch(e) {
-//       res.render('404page', {
-//         errorMsg:'Page not found',
-//       });
-//   }
-  
-// })
 
 router.get('/admin/deleteuser/:id', async (req,res) => {
   try{
@@ -160,16 +150,7 @@ router.get('/admin/edituser/:id', async(req,res) => {
 })
 
 router.post('/admin/edituser/:id', [
-  body('email').custom(value => {
-    return User.findOne({email:value}).then(user => {
-      if (user) {
-        return Promise.reject('E-mail already in use')
-      }
-    })
-  }),
   body('email').isEmail().withMessage('Invalid Email')
-
-
 
   ]  ,async (req, res) => {
     try{
@@ -180,6 +161,16 @@ router.post('/admin/edituser/:id', [
       
       const userData = await User.findById(req.params.id)
       return res.render('editUser' , {alert,userData})
+    }
+
+    const currentUser = await User.findOne({email:req.body.email})
+    console.log(typeof currentUser._id.toString())
+    console.log(typeof req.params.id)
+    if(currentUser) {
+      if(currentUser._id.toString() !== req.params.id) {
+        const userData = await User.findById(req.params.id)
+      return res.render('editUser' , {err_msg:"Email Already in Use",userData})
+      }
     }
     
     editedUser = {}
@@ -227,7 +218,7 @@ const upload = multer({
 })
 
 
-router.post('/admin/gallery/upload',upload.single('photo') , async (req,res) => {
+router.post('/admin/gallery/upload',upload.single('photo')  ,async (req,res) => {
   try {
     const buffer = await sharp(req.file.buffer).png().toBuffer()
     const photo = new Gallery()
@@ -235,7 +226,8 @@ router.post('/admin/gallery/upload',upload.single('photo') , async (req,res) => 
 
     await photo.save()
     res.redirect('/admin?flag=gallery')
-  } catch {
+  } catch(e) {
+    req.flash('error_message',e.toString())
     res.redirect('/admin?flag=gallery')
   }
     
@@ -245,20 +237,6 @@ router.post('/admin/gallery/upload',upload.single('photo') , async (req,res) => 
     res.redirect('/admin?flag=gallery')
 })
 
-// router.get('/admin/gallery', async (req,res) => {
-
-//    try {
-//         const gallery = await Gallery.find({})
-
-//         res.render('gallery',{gallery})
-
-//     } catch (e) {
-//         res.render('404page', {
-//           errorMsg:'Page not found',
-//         });
-//     }
-
-// })
 
 router.get('/admin/gallery/api', async (req,res) => {
 
@@ -319,6 +297,10 @@ router.get('/admin/gallery/delete/:id' ,async (req,res) => {
 
   res.redirect('/admin/gallery')
 
+})
+
+router.get('/admin/events', async (req,res) => {
+  res.render('eventsAdmin')
 })
 
 

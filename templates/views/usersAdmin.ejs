@@ -18,7 +18,7 @@
 	      <td scope="row"><%=user.name%></td>
 	      <td><%=user.email%></td>
 	      <td><%=user.isAdmin%></td>
-	      <td><a href="/admin/delete/<%=user.id%>">delete</a></td>
+	      <td><a href="/admin/deleteuser/<%=user.id%>">delete</a></td>
 		  <td><a href="/admin/edituser/<%=user.id%>">edit</a></td>
 	    </tr>
 	    <%} else {%>
@@ -26,7 +26,7 @@
 	      <td scope="row"><%=user.name%></td>
 	      <td><%=user.email%></td>
 	      <td><%=user.isAdmin%></td>
-	      <td><a href="/admin/delete/<%=user.id%>">delete</a></td>
+	      <td><a href="/admin/deleteuser/<%=user.id%>">delete</a></td>
 		  <td><a href="/admin/edituser/<%=user.id%>">edit</a></td>
 	    </tr>
 	    <%}%>
