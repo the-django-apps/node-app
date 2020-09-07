@@ -1,70 +1,71 @@
-	
-		<div style="right: 10px; top: 20px; position: absolute;">
-		  	<a href="" data-toggle="modal" data-target="#uploadImage" class="btn btn-outline-primary" >Upload Image</a>
-	  	</div>
-		
-	<div class="modal" id="uploadImage">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title">Upload Image</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	       <form action="/admin/gallery/upload" method="post" enctype="multipart/form-data">
-	       	<input type="file" id="img" name="photo" accept="image/*">
-	       
-	      </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary">Upload</button>
-	      </div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+<div style="right: 10px; top: 20px; position: absolute;">
+	<a href="" data-toggle="modal" data-target="#uploadImage" class="btn btn-outline-primary">Upload Image</a>
+</div>
 
-	
-	<%if(typeof gallery != 'undefined') {%>	
-		<div style="text-align: center;">
-			<h1>Gallery</h1>
-		<%gallery.forEach(function(user){%>
-			<span>
-				<a href="/admin/gallery/<%=user.id%>"><img src="" id="<%=user.id%>" alt="Loading..."></a>
-			</span>
-		<%})%>
+<div class="modal" id="uploadImage">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Upload Image</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="/admin/gallery/upload" method="post" enctype="multipart/form-data">
+					<input type="file" id="img" name="photo" accept="image/*">
+
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Upload</button>
+			</div>
+			</form>
 		</div>
-	<%}%>
+	</div>
+</div>
+
+
+<%if(typeof gallery != 'undefined') {%>
+<div style="text-align: center;">
+	<h1>Gallery</h1>
+	<%gallery.forEach(function(user){%>
+	<span>
+		<a href="/admin/gallery/<%=user.id%>"><img src="" id="<%=user.id%>" alt="Loading..."></a>
+	</span>
+	<%})%>
+</div>
+<%}%>
 	
 	
 <script type="text/javascript">
 
 	$(document).ready(function () {
 		function toBase64(arr) {
-		   //arr = new Uint8Array(arr) if it's an ArrayBuffer
-		   return btoa(
-		      arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-		   );
+			//arr = new Uint8Array(arr) if it's an ArrayBuffer
+			return btoa(
+				arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+			);
 		}
-	 	const galleryapifunction= async function(){
+		const galleryapifunction = async function () {
 
-		const response = await fetch('http://127.0.0.1:3000/admin/gallery/api',{headers: {
-		              'Content-Type': 'application/json'
-		            }})
+			const response = await fetch('http://127.0.0.1:3000/admin/gallery/api', {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-		const myData = await response.json()
-		
+			const myData = await response.json()
 
-		for(let i=0; i<myData['gallery'].length; i++) {
-			
-  			var x =document.getElementById(myData['gallery'][i]._id)
-  			x.setAttribute("width", "354");
-  			x.setAttribute("height", "228");
-  			
-			x.src = 'data:image/jpeg;base64,' + toBase64(myData['gallery'][i].photo.data)
-			x.style.padding = "5px 3px";
-		}
+
+			for (let i = 0; i < myData['gallery'].length; i++) {
+
+				var x = document.getElementById(myData['gallery'][i]._id)
+				x.setAttribute("width", "354");
+				x.setAttribute("height", "228");
+
+				x.src = 'data:image/jpeg;base64,' + toBase64(myData['gallery'][i].photo.data)
+				x.style.padding = "5px 3px";
+			}
 
 		}
 		galleryapifunction()
@@ -73,12 +74,10 @@
 
 	var errorMessage = "<%- error_message %>";
 
-	if(errorMessage !== '') {
+	if (errorMessage !== '') {
 		alert(errorMessage);
 	}
-    
-     
+
+
 
 </script>
-
-

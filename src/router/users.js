@@ -58,6 +58,18 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
+router.get('/event', (req, res) => {
+  res.render('event')
+})
+
+router.get('/about', (req, res) => {
+  res.render('about')
+})
+
+router.get('/contact', (req, res) => {
+  res.render('contact')
+})
+
 router.get('/gallery', async (req, res) => {
   const gallery = await Gallery.find({})
   res.render('gallery',{gallery})
