@@ -8,6 +8,16 @@ const gallerySchema = mongoose.Schema({
 	}
 })
 
+gallerySchema.pre('save', async function(next) {
+	const gallery = await Gallery.find({})	
+
+	if(gallery.length >= 20) {
+		throw new  Error('You can upload only 20 images')
+	}
+
+	next()
+
+})
 
 
 

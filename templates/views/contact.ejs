@@ -16,7 +16,7 @@
       <div class="col-sm-12">
         <h3 class="text-center p-3">Contact Us</h3>
       </div>
-      <form action="/signup" method="POST">
+      <form action="#">
           <% if(typeof alert != 'undefined') { %>
               <% alert.forEach(function(error) { %>
               <div class="col-sm-12 alert alert-dismissible alert-danger">
@@ -26,22 +26,16 @@
               <% }) %>
           <% } %>
           <div class="col-sm-12 form-group">
-              <label for="username">Enter Your Name</label>
-              <input type="text" class="form-control" name="name" id="username" autocomplete="off"
-                  placeholder="Name">
+              <input type="text" class="form-control" name="name" id="username" autocomplete="off" placeholder="Name">
           </div>
           <div class="col-sm-12 form-group">
-              <label for="email">Enter Your Email</label>
-              <input type="email" class="form-control" name="email" id="email" autocomplete="off"
-                  placeholder="Email">
-          </div>          
-          <div class="col-sm-12 form-group">
-              <label for="password">Choose A Password</label>
-              <input type="password" class="form-control" name="password" id="password" autocomplete="off"
-                  placeholder="Password">
+              <input type="email" class="form-control" name="email" id="email" autocomplete="off" placeholder="Your Email">
           </div>
           <div class="col-sm-12 form-group">
-              <input type="submit" class="btn btn-block btn-outline-primary" value="Register">
+            <textarea style="resize: none;" class="form-control" id="feedback" placeholder="Feedback" rows="3"></textarea>
+          </div>
+          <div class="col-sm-12 form-group">
+              <input type="submit" class="btn btn-block btn-outline-primary" value="Submit">
           </div>
       </form>
   </div>

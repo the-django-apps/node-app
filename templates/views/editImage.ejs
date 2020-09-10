@@ -7,14 +7,35 @@
 </head>
 <body >
 <%if(typeof gallery != 'undefined' && typeof id != 'undefined') {%>
-	<nav class="navbar navbar-light bg-light">
-		<div class="container">
+	
+	<nav class="navbar navbar-expand-lg  ">
+      <div class="collapse navbar-collapse container" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                  <a href="/admin" class="btn btn-primary">Admin Panel</a>
+                  <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                      <a class="dropdown-item" href="/admin?flag=user">Users</a>
+                      <a class="dropdown-item" href="/admin?flag=gallery">Gallery</a>
+                    </div>
+                  </div>
+            </div>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        	<a href=" " data-toggle="modal" data-target="#updateImage" class="btn btn-outline-primary">Update</a>&nbsp;&nbsp;
+		  	<a href="/admin/gallery/delete/<%=id%>" class="btn btn-outline-danger">Delete</a>
+        </ul>
+      </div>
+    </nav>
+	<!-- <nav class="navbar navbar-light bg-light">
+		<div class="container">                  
 		  <form class="ml-auto">
 		  	<a href=" " data-toggle="modal" data-target="#updateImage" class="btn btn-outline-primary">Update</a>
 		  	<a href="/admin/gallery/delete/<%=id%>" class="btn btn-outline-danger">Delete</a>
 		  </form>
-		  </div>
-	</nav>
+		</div>
+	</nav> -->
 
 	<div class="modal" id="updateImage">
 	  <div class="modal-dialog" role="document">

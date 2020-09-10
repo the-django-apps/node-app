@@ -1,16 +1,79 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login</title>
+    <title>About Us</title>
     <%- include('partials/heads_content') %>
 
     <!-- Footer CSS -->
     <link rel="stylesheet" type="text/css" href="/css/footer.css" />
+
+    <style>
+      @media only screen and (min-width: 600px) {
+        .about_img {
+          height: 230px;
+        }
+      }
+      .btn-outline-primary {
+        color: #85aecc;
+        border-color: #85aecc;
+      }
+      .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #85aecc;
+        border-color: #85aecc;
+      }
+    </style>
   </head>
   <body>
     <%- include('partials/header') %>
 
-    <h1 class="mt-5 mb-5" style="text-align: center; font-weight: 800 !important;">About Content Goes here</h1>
+    <div class="container-fluid my-2">
+      <div class="row">
+        <div class="card col-sm-12 col-md-4 px-1">
+          <img
+            src="/images/rahul1.jpg"
+            class="card-img-top  about_img"
+            alt="..."
+          />
+          <div class="card-body ">
+            <h5 class="card-title">Rahul Gupta</h5>
+            <p class="card-text">Full Stack Developer</p>
+            <a
+              href="https://instagram.com/i.am.rahu?igshid=1dowk8mx5u85t"
+              class="btn btn-block btn-outline-primary"
+              target="_blank"
+              >View Details</a
+            >
+          </div>
+        </div>
+        <div class="card col-sm-12 col-md-4 px-1">
+          <img src="/images/2.jpeg" class="card-img-top  about_img" alt="..." />
+          <div class="card-body ">
+            <h5 class="card-title">Pradeep Ingle</h5>
+            <p class="card-text">XYZ Developer</p>
+            <a
+              href="https://instagram.com/i.am.rahu?igshid=1dowk8mx5u85t"
+              class="btn btn-block btn-outline-primary"
+              target="_blank"
+              >View Details</a
+            >
+          </div>
+        </div>
+        <div class="card col-sm-12 col-md-4 px-1">
+          <img src="/images/3.jpeg" class="card-img-top  about_img" alt="..." />
+          <div class="card-body ">
+            <h5 class="card-title">Aniket Kasturi</h5>
+            <p class="card-text">XYZ Developer</p>
+            <a
+              href="https://instagram.com/i.am.rahu?igshid=1dowk8mx5u85t"
+              class="btn btn-block btn-outline-primary"
+              target="_blank"
+              >View Details</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
 
     <%- include('partials/footer') %>
   </body>
