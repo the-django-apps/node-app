@@ -1,0 +1,49 @@
+.scroll {
+    max-height: 440px;
+    overflow: auto;
+    text-align: justify;
+  }
+  .btn-outline-primary {
+    color: #85aecc;
+    border-color: #85aecc;
+  }
+  .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #85aecc;
+    border-color: #85aecc;
+  }
+  .list-group-item-action {
+    color: #85aecc;
+    border-color: #85aecc;
+  }
+  .list-group-item-action:hover {
+    color: #fff;
+    background-color: #85aecc;
+    border-color: #85aecc;
+  }
+  .list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #85aecc;
+    border-color: #85aecc;
+  }
+  .btn-eventregister {
+    background-color: #85aecc;
+    color: #fff;
+  }
+
+  .btn-eventregister:hover{
+    color: rgb(20, 20, 20);
+  }
+
+
+  .add-event {
+    background-color: #85aecc;
+    color: #fff; 
+  }
+
+  .add-event:hover {
+    color: black;
+  }
+
+ 

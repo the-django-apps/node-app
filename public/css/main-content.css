@@ -4,9 +4,11 @@ body{
 
 	display: flex;
 	flex-direction: column;
-	min-height: 100%;
+	min-height: 600px;
 }
 
 .main-content {
 	flex-grow: 1;
 }
+
+

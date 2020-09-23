@@ -6,11 +6,11 @@ const mongoose = require('mongoose')
 AdminBro.registerAdapter(AdminBroMongoose)
 
 const User = require('../model/users')
-const Event = require('../model/events')
+// const Event = require('../model/events')
 
 const adminBro = new AdminBro({
   databases: [mongoose],
-  resources: [User,Event],
+  resources: [User],
   rootPath: '/admin',
   branding: {
   	companyName: 'Event Management Admin Page'
