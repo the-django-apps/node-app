@@ -6,7 +6,7 @@ const flash = require('express-flash')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const userRoute = require('./router/users')
-const adminRouter = require('./router/admin')
+
 const cors = require('cors')
 require('./db/mongoose')
 // const Event = require('./model/events')
@@ -23,7 +23,6 @@ app.set('view engine', 'ejs');
 app.set('views', viewDirectoryPath)
 app.use(express.static(publicDirectoryPath))
 
- // app.use('/admin',adminRouter)
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/',userRoute)
