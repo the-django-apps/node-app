@@ -38,7 +38,11 @@
 		<%- include('usersAdmin') %>
 	<%}%>
 
-
+	<% if(error_message != '') { %>
+    <script type="text/javascript">
+        alert('<%-error_message%>')
+    </script>
+    <%}%>
 
 <script>
 	function openNav() {

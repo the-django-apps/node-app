@@ -41,7 +41,7 @@
                   <div id="collapse<%=i%>Indoor" class="collapse " aria-labelledby="heading<%=i%>Indoor" data-parent="#accordionIndoor">
                     <div class="card-body">
                       <p><%-indoorevents[i].description%></p>
-                      <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/registerevent/:id">Register Now</a>
+                      <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/event/register/<%=indoorevents[i].id%>">Register Now</a>
                     </div>
                   </div>
                    <%}%>
@@ -71,7 +71,7 @@
                   <div id="collapse<%=i%>Outdoor" class="collapse" aria-labelledby="heading<%=i%>Outdoor" data-parent="#accordionOutdoor">
                     <div class="card-body">
                       <p><%-outdoorevents[i].description%></p>
-                      <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/registerevent/:id">Register Now</a>
+                      <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/event/register/<%=outdoorevents[i].id%>">Register Now</a>
                     </div>
                   </div>
                   <%}%>
@@ -92,5 +92,11 @@
     </div>
 
     <%- include('partials/footer') %>
+
+    <% if(error_message != '') { %>
+    <script type="text/javascript">
+        alert('<%-error_message%>')
+    </script>
+    <%}%>
   </body>
 </html>

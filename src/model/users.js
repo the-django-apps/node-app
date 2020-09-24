@@ -1,26 +1,31 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
-
+const Register = require('./registration')
 
 const userSchema = mongoose.Schema({
 	name: {
 		type:String,
-		require: true
+		required: true
 
 	},
 	email: {
 		type:String,
-		require: true,
+		required: true,
 		trim:true,
 		lowercase:true
 	},
 	password: {
 		type:String,
-		require:true
+		required:true
 	},
 	isAdmin: { type: Boolean, default: false }
 })
 
+userSchema.virtual('registration', {
+	ref:'Register',
+	localField: '_id',
+	foreignField: 'owner'
+})
 
 
 //Hashing password before saving

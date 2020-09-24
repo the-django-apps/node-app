@@ -3,14 +3,19 @@ const User = require('../model/users')
 const Gallery = require('../model/gallery')
 const IndoorEvent = require('../model/indoorEvent')
 const OutdoorEvent = require('../model/outdoorEvent')
+const Registration = require('../model/registration')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const bcrypt = require('bcryptjs')
 const cookieParser = require('cookie-parser');
 const auth = require('../setting/auth-middleware')
+const verifyPin = require('../setting/verifyPin')
 const multer = require('multer')
 const sharp = require('sharp')
+
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SEND_GRID_KEY)
 
 const { body, validationResult } = require('express-validator');
 
@@ -58,26 +63,26 @@ const requiresAdmin = function() {
 
 /******************************Main Contents***************************************/
 router.get('/', (req, res) => {
-  res.render('index')
+  res.render('index',{currentUser:req.user})
 })
 
 router.get('/event', async (req, res) => {
   const indoorevents = await IndoorEvent.find({})
   const outdoorevents = await OutdoorEvent.find({})
-  res.render('event',{indoorevents,outdoorevents})
+  res.render('event',{indoorevents,outdoorevents,currentUser:req.user})
 })
 
 router.get('/about', (req, res) => {
-  res.render('about')
+  res.render('about',{currentUser:req.user})
 })
 
 router.get('/contact', (req, res) => {
-  res.render('contact')
+  res.render('contact',{currentUser:req.user})
 })
 
 router.get('/gallery', async (req, res) => {
   const gallery = await Gallery.find({})
-  res.render('gallery',{gallery})
+  res.render('gallery',{gallery,currentUser:req.user})
 })
 /******************************Login Signup Logout *******************************/
 router.get('/signup', auth.checkNotAuthenticated, (req, res) => {
@@ -97,7 +102,8 @@ router.post('/signup', auth.checkNotAuthenticated, [
 
   ] , async (req, res) => {
   
-    const errors = validationResult(req);
+    try {
+      const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       const alert = errors.array() 
@@ -106,9 +112,29 @@ router.post('/signup', auth.checkNotAuthenticated, [
     }
       
     const user = new User(req.body)
-	  await user.save()		
-		req.flash("success_message","Registered Successfully.. Login To Continue")
+    await user.save()   
+    const msg = {
+      to: req.body.email,
+      from: process.env.FROM_EMAIL,
+      subject: 'Event Management Sign up',
+      text: 'Registration process is sucessfully completed',
+      html: '<strong>Registration process is sucessfully completed</strong>',
+    }
+    await sgMail.send(msg)
+    req.flash("success_message","Registered Successfully.. Login To Continue")
     res.redirect('/login')
+  } catch(e) {
+
+    if(e.toString().includes('required')) {
+      req.flash("error_message",'All Fields are required')
+      res.redirect('/signup')
+    } else {
+      req.flash("error_message",'Somthing went wrong. Please try again!')
+      res.redirect('/signup')
+    }
+    
+  }
+    
   
 })
 
@@ -127,6 +153,82 @@ router.get('/logout', auth.checkAuthenticated ,(req, res) => {
   req.logOut()
   res.redirect('/')
 })
+
+/********************************** Forgot Password *****************************************/
+
+router.get('/user/forgotPassword' ,(req, res) => {
+  res.render('forgotPassword',{sendOption:'email'})
+})
+
+router.post('/user/forgotPassword' , verifyPin.sendPin , (req, res) => {
+
+  res.render('forgotPassword',{sendOption:'pin'})
+})
+
+router.post('/user/forgotPassword/verifyPin' , verifyPin.verifyPin , (req, res) => {
+
+  res.render('forgotPassword',{sendOption:'setPassword'})
+})
+
+router.post('/user/forgotPassword/setPassword' , [
+  body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 chars long'),
+  ] ,verifyPin.setPassword , (req, res) => {
+  req.flash('error_message', 'Password sucessfully Changed!')
+  res.redirect('/login')
+})
+
+/************************************* Register Event **************************************/
+
+router.get('/event/register/:id', async (req,res) => {
+
+  try {
+  const indoorEvent = await IndoorEvent.findById(req.params.id)
+  const outdoorEvent = await OutdoorEvent.findById(req.params.id)
+
+
+  if(indoorEvent) {
+    var registerEvent = new Registration({
+      registeredEvent:indoorEvent.indoorEvent,
+      eventDescription:indoorEvent.description,
+      owner:req.user._id
+    })
+  }else if(oudoorEvent) {
+    var registerEvent = new Registration({
+      registeredEvent:outdoorEvent.outdoorEvent,
+      eventDescription:outdoorEvent.description,
+      owner:req.user._id
+    })
+  }
+  
+  await registerEvent.save()
+
+  res.redirect('/event')
+  } catch(e) {
+    console.log(e)
+    req.flash('error_message', "Somthing thing went wrong. Please try again!")
+    res.redirect('/event')
+  }
+  
+
+})
+
+router.get('/myaccount/registeredEvents', async (req,res) => {
+
+  await req.user.populate({
+    path: 'registration'
+  }).execPopulate()
+
+  res.render('account',({registeredEvents:req.user.registration,currentUser:req.user}))
+  
+
+})
+
+router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
+
+  await Registration.findByIdAndDelete(req.params.id)
+  res.redirect('/myaccount/registeredEvents')
+})
+
 
 
 /***************************************** ADMIN PATHS ****************************************/
@@ -329,17 +431,38 @@ router.get('/admin/gallery/delete/:id' ,async (req,res) => {
 
 
 router.post('/admin/indoorevent/add', async (req,res) => {
-  const event = new IndoorEvent(req.body)
-  await event.save()
-  req.flash('optionFlag', 'indoor')
-  res.redirect('/admin?flag=event')
+  try{
+    const event = new IndoorEvent(req.body)
+    await event.save()
+    req.flash('optionFlag', 'indoor')
+    res.redirect('/admin?flag=event')
+  } catch(e) {
+    if(e.toString().includes('required')) {
+      req.flash("error_message",'All Fields are required')
+      res.redirect('/admin?flag=event')
+    } else {
+      req.flash("error_message",'Somthing went wrong. Please try again!')
+      res.redirect('/admin?flag=event')
+    }
+  }
+  
 })
 
 router.post('/admin/outdoorevent/add', async (req,res) => {
-  const event = new OutdoorEvent(req.body)
-  await event.save()
-  req.flash('optionFlag', 'outdoor')
-  res.redirect('/admin?flag=event')
+  try{
+    const event = new OutdoorEvent(req.body)
+    await event.save()
+    req.flash('optionFlag', 'outdoor')
+    res.redirect('/admin?flag=event')
+  } catch(e) {
+    if(e.toString().includes('required')) {
+      req.flash("error_message",'All Fields are required')
+      res.redirect('/admin?flag=event')
+    } else {
+      req.flash("error_message",'Somthing went wrong. Please try again!')
+      res.redirect('/admin?flag=event')
+    }
+  }
 })
 
 router.get('/admin/indooreventDelete/:id', async (req,res) => {

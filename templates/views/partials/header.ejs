@@ -34,6 +34,13 @@
 
       <ul class="navbar-nav ml-auto">
         <% if(isAuthenticated) { %>
+        <% if(currentUser) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/myaccount/registeredEvents" style="position: relative;">
+            <i class='fas fa-user-circle' style="font-size:22px;"></i>&nbsp;<%=currentUser.name%>            
+          </a>
+        </li>
+        <%}%>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
         </li>

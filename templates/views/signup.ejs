@@ -52,6 +52,12 @@
         </form>
     </div>
 	
+    <% if(error_message != '') { %>
+    <script type="text/javascript">
+        alert('<%-error_message%>')
+    </script>
+    <%}%>
+
 	<%- include('partials/footer') %>
 </body>
 </html>
