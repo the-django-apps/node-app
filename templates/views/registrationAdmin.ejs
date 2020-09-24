@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+
+</head>
+
+<body>
+
+  <h1 style="text-align: center; color: #333333; padding: 5px ;"> Registration Event</h1>
+
+  <% if(typeof userEvents != 'undefined') { %>
+  <% if(userEvents.length != 0) { %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>User info</th>
+        <th>Events</th>
+        <th>Description</th>
+        <th>Delete Event</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% for(var i = 0; i < userEvents.length ; i++ )  {%>
+      <tr>
+        <td rowspan="<%=userEvents[i].length%>"><strong>Name:&nbsp;</strong><%=userEvents[i][userEvents[i].length-1].name%><br><strong>Email:&nbsp;</strong><%=userEvents[i][userEvents[i].length-1].email%></td>
+      </tr>
+        <% for(var j = 0; j < userEvents[i].length-1; j++) {%>
+        <tr>
+          <td><%=userEvents[i][j].registeredEvent%></td>
+          <td><%- userEvents[i][j].eventDescription.replace(/\n/g,'<br>') %></td>
+          <td><a href="/registerEvent/delete/<%=userEvents[i][j].id%>">Delete</a></td>
+        </tr>
+        <%}%>
+      
+    <%}%>
+    </tbody>
+  </table>
+  <%}%>
+  <%}%>
+  
+  
+
+
+</body>
+
+</html>

@@ -9,15 +9,8 @@
 <body>
 
   <h1 style="text-align: center; color: #333333; padding: 5px ;">Admin Events</h1>
-  <!-- <a href="#" class="event-style" data-toggle="collapse">
-      
-    </a>
-    <div id="" class="collapse edit-option">
-      <a href="/admin/eventEdit/">edit</a>
-      <a href="/admin/eventDelete/">delete</a>
-    </div> -->
-
-  <!-- ---------------------   Add Event Model ---------------------- -->
+  
+  <!-- ---------------------   Add Event Model ------------------------->
 
   <div class="modal" id="addIndoorEvent">
     <div class="modal-dialog" role="document">
@@ -103,7 +96,7 @@
               <div id="collapse<%=i%>Indoor" class="collapse " aria-labelledby="heading<%=i%>Indoor"
                 data-parent="#accordionIndoor">
                 <div class="card-body">
-                  <p><%-indoorevents[i].description%></p>
+                  <p><%-indoorevents[i].description.replace(/\n/g,'<br>')%></p>
                   <a class="btn-eventregister btn" href="/admin/indooreventDelete/<%=indoorevents[i].id%>">Delete</a>
                 </div>
               </div>
@@ -138,7 +131,7 @@
                   <div id="collapse<%=i%>Outdoor" class="collapse " aria-labelledby="headingOneOutdoor"
                     data-parent="#accordionOutdoor">
                     <div class="card-body">
-                      <p><%-outdoorevents[i].description%></p>
+                      <p><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></p>
                       <a class="btn-eventregister btn"
                         href="/admin/outdooreventDelete/<%=outdoorevents[i].id%>">Delete</a>
                     </div>
