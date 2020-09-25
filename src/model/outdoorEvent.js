@@ -4,11 +4,12 @@ const mongoose = require('mongoose')
 const outdoorEventSchema = mongoose.Schema({
 	outdoorEvent: {
 		type:String,
-		require:true
+		required:true
 
 	},
 	description: {
-		type:String
+		type:String,
+		required:true
 	}
 })
 

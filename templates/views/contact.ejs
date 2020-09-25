@@ -16,23 +16,15 @@
       <div class="col-sm-12">
         <h3 class="text-center p-3">Contact Us</h3>
       </div>
-      <form action="#">
-          <% if(typeof alert != 'undefined') { %>
-              <% alert.forEach(function(error) { %>
-              <div class="col-sm-12 alert alert-dismissible alert-danger">
-                  <button type="button" class="close" data-dismiss="alert">&times;</button>
-                  <strong> <%= error.msg %> </strong>
-              </div>
-              <% }) %>
-          <% } %>
+      <form method="post">
           <div class="col-sm-12 form-group">
-              <input type="text" class="form-control" name="name" id="username" autocomplete="off" placeholder="Name">
+              <input type="text" class="form-control" name="name" id="username" autocomplete="off" placeholder="Name" required>
           </div>
           <div class="col-sm-12 form-group">
-              <input type="email" class="form-control" name="email" id="email" autocomplete="off" placeholder="Your Email">
+              <input type="email" class="form-control" name="email" id="email" autocomplete="off" placeholder="Your Email" required>
           </div>
           <div class="col-sm-12 form-group">
-            <textarea style="resize: none;" class="form-control" id="feedback" placeholder="Feedback" rows="3"></textarea>
+            <textarea style="resize: none;" class="form-control" name="feedback" id="feedback" placeholder="Feedback" rows="3" required></textarea>
           </div>
           <div class="col-sm-12 form-group">
               <input type="submit" class="btn btn-block btn-outline-primary" value="Submit">
@@ -46,5 +38,12 @@
     </div>
 
     <%- include('partials/footer') %>
+
+    <% if(success_message != '') { %>
+    <script type="text/javascript">
+        alert('<%-success_message%>')
+    </script>
+    <%}%>
+
   </body>
 </html>

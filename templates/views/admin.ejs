@@ -24,6 +24,7 @@
 	  <a href="/admin?flag=user">User</a>
 	  <a href="/admin?flag=gallery">Gallery</a>
 	  <a href="/admin?flag=event">Event</a>
+	  <a href="/admin?flag=register">Registration</a>
 	</div>
 
 	<button class="openbtn" onclick="openNav()">☰ Admin Panel</button> 
@@ -34,21 +35,27 @@
 		<%- include('galleryAdmin') %>
 	<%} else if(flag == "event") {%>
 		<%- include('eventsAdmin') %>
+	<%} else if(flag == "register") {%> 
+		<%- include('registrationAdmin') %>
 	<%} else {%>
 		<%- include('usersAdmin') %>
 	<%}%>
 
-
+	<% if(error_message != '') { %>
+    <script type="text/javascript">
+        alert('<%-error_message%>')
+    </script>
+    <%}%>
 
 <script>
 	function openNav() {
 	  document.getElementById("mySidebar").style.width = "250px";
-	  // document.getElementById("main").style.marginLeft = "250px";
+	  
 	}
 
 	function closeNav() {
 	  document.getElementById("mySidebar").style.width = "0";
-	  // document.getElementById("main").style.marginLeft= "0";
+	  
 	}
 
 	 var errorMessage = "<%- error_message %>";

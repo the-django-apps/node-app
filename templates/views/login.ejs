@@ -7,11 +7,40 @@
     <!-- Footer CSS -->
     <link rel="stylesheet" type="text/css" href="/css/footer.css" />
 
-    <link rel="stylesheet" href="css/signup_login.css">
+    <link rel="stylesheet" href="/css/signup_login.css">
+
+    <!-- Scripts -->
+    <script type="text/javascript" src='/js/sendPin.js'></script>
   </head>
   <body>
     <%- include('partials/header') %>
 
+    <!---------------------- Forgot password Model ----------------------------->
+    <div class="modal" id="forgotPassword">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update Image</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form action="/user/forgotPassword" method="post" >
+            <label>New Password</label>
+            <input type="password" id="img" name="photo" >
+            <label>New Password</label>
+            <input type="password" id="img" name="photo" >
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!----------------------------- Login Form ---------------------------------->
     <div class="container z-depth-2 form-div">
       <div class="col-sm-12">
         <h3 class="text-center p-3">Login Here</h3>
@@ -63,11 +92,18 @@
             />
           </div>
           <div class="col-sm-12">
-            <p>New Here ? <a class="card-link" href="/signup">Signup</a></p>
+            <p>forgot password ? <a class="card-link" href="/user/forgotPassword">click here</a></p>
           </div>
         </div>
       </form>
     </div>
+
+    <% if(error_message != '') {%>
+    <script type="text/javascript">
+      alert('<%-error_message%>')
+    </script>
+    <%}%>
+
 
     <%- include('partials/footer') %>
   </body>
