@@ -11,8 +11,7 @@ const bcrypt = require('bcryptjs')
 const cookieParser = require('cookie-parser');
 const auth = require('../setting/auth-middleware')
 const verifyPin = require('../setting/verifyPin')
-const multer = require('multer')
-const sharp = require('sharp')
+
 
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SEND_GRID_KEY)
@@ -47,26 +46,13 @@ router.use(function (req, res, next) {
     next();
 });
 
-const requiresAdmin = function() {
-  return [
-    auth.checkAuthenticated,
-    function(req, res, next) {
-      
-      if (req.user && req.user.isAdmin === true)
-        next();
-      else
-        res.send(401, 'Unauthorized');
-    }
-  ]
-};
-
 
 /******************************Main Contents***************************************/
 router.get('/', (req, res) => {
   res.render('index',{currentUser:req.user})
 })
 
-router.get('/event', async (req, res) => {
+router.get('/event', auth.checkAuthenticated ,async (req, res) => {
   const indoorevents = await IndoorEvent.find({})
   const outdoorevents = await OutdoorEvent.find({})
   res.render('event',{indoorevents,outdoorevents,currentUser:req.user})
@@ -92,7 +78,7 @@ router.post('/contact', async (req, res) => {
   res.redirect('/contact')
 })
 
-router.get('/gallery', async (req, res) => {
+router.get('/gallery', auth.checkAuthenticated ,async (req, res) => {
   const gallery = await Gallery.find({})
   res.render('gallery',{gallery,currentUser:req.user})
 })
@@ -189,9 +175,10 @@ router.post('/user/forgotPassword/setPassword' , [
   res.redirect('/login')
 })
 
+
 /************************************* Register Event **************************************/
 
-router.get('/event/register/:id', async (req,res) => {
+router.get('/event/register/:id', auth.checkAuthenticated ,async (req,res) => {
 
   try {
   const indoorEvent = await IndoorEvent.findById(req.params.id)
@@ -232,18 +219,40 @@ router.get('/event/register/:id', async (req,res) => {
 
 })
 
-router.get('/myaccount/registeredEvents', async (req,res) => {
+/********************************** My Account ************************************/
 
-  await req.user.populate({
-    path: 'registration'
-  }).execPopulate()
+router.get('/myaccount', auth.checkAuthenticated ,async (req,res) => {
 
-  res.render('account',({registeredEvents:req.user.registration,currentUser:req.user}))
+  if(req.query.accountOption === 'registeredEvents' ) {
+      await req.user.populate({
+      path: 'registration'
+    }).execPopulate()
+
+  res.render('account',({registeredEvents:req.user.registration,currentUser:req.user,accountOption:'registeredEvents'}))
+  } else if (req.query.accountOption === 'resetPassword') {
+    res.render('account',{currentUser:req.user,accountOption:'resetPassword'})
+  } else {
+    console.log('error')
+  }
   
 
 })
 
-router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
+
+// Reset password
+router.post('/user/resetPassword',async (req,res) => {
+  if (await bcrypt.compare(req.body.oldPassword, req.user.password)) {
+    req.user.password = req.body.password
+    await req.user.save()
+    res.redirect('/myaccount?accountOption=resetPassword')
+  }else {
+    req.flash('error_message','Old password is wrong')
+    res.redirect('/myaccount?accountOption=resetPassword')
+  }
+})
+
+
+router.get('/myaccount/registeredEvents/delete/:id' , auth.checkAuthenticated ,async (req,res) => {
 
   await Registration.findByIdAndDelete(req.params.id)
   res.redirect('/myaccount/registeredEvents')

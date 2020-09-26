@@ -23,70 +23,81 @@
         </div>
 
         <div class="col-sm-12 col-lg-8 scroll">
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-indoor" role="tabpanel" aria-labelledby="list-indoor-list">
-              <% if(typeof indoorevents != 'undefined') { %>
-               <% if(indoorevents.length != 0) { %>
-              <div class="accordion" id="accordionIndoor">
-                <div class="card">
-                  <% for(var i=0; i < indoorevents.length ; i++ ) { %>
-                  <div class="card-header" id="heading<%=i%>Indoor">
-                    <h2 class="mb-0">
-                      <button class="btn btn-block btn-outline-primary text-left" type="button" data-toggle="collapse" data-target="#collapse<%=i%>Indoor" aria-expanded="true" aria-controls="collapse<%=i%>Indoor">
-                        <%=indoorevents[i].indoorEvent%>
-                      </button>
-                    </h2>
-                  </div>
-              
-                  <div id="collapse<%=i%>Indoor" class="collapse " aria-labelledby="heading<%=i%>Indoor" data-parent="#accordionIndoor">
-                    <div class="card-body">
-                      <p><%-indoorevents[i].description%></p>
-                      <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/event/register/<%=indoorevents[i].id%>">Register Now</a>
-                    </div>
-                  </div>
-                   <%}%>
-                </div>
-                
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list-indoor" role="tabpanel" aria-labelledby="list-indoor-list">
+          <% if(typeof indoorevents != 'undefined') { %>
+          <% if(indoorevents.length != 0) { %>
+
+          <div class="accordion" id="accordionIndoor">
+            <div class="card">
+              <% for(var i=0; i < indoorevents.length ; i++ ) { %>
+              <div class="card-header" id="heading<%=i%>Indoor">
+                <h2 class="mb-0">
+                  <button class="btn btn-block btn-outline-primary text-left" type="button" data-toggle="collapse"
+                    data-target="#collapse<%=i%>Indoor" aria-expanded="true" aria-controls="collapse<%=i%>Indoor">
+                    <%=indoorevents[i].indoorEvent%>
+                  </button>
+                </h2>
               </div>
-            </div>
-            <%} else {%>
+
+              <div id="collapse<%=i%>Indoor" class="collapse " aria-labelledby="heading<%=i%>Indoor"
+                data-parent="#accordionIndoor">
+                <div class="card-body">
+                  <p><%-indoorevents[i].description.replace(/\n/g,'<br>')%></p>
+                  <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/event/register/<%=indoorevents[i].id%>">Register Now</a>
+                </div>
+              </div>
+              <%}%>
+                </div>
+              
+              </div>
+            
+              <%} else {%>
               <p> No Indoor Games </p>
               <%}%>
             <%}%>
+            </div>
 
             <div class="tab-pane fade" id="list-outdoor" role="tabpanel" aria-labelledby="list-outdoor-list">
               <% if(typeof outdoorevents != 'undefined') { %>
               <% if(outdoorevents.length != 0) { %>
+
+
               <div class="accordion" id="accordionOutdoor">
                 <div class="card">
                   <% for(var i=0; i < outdoorevents.length ; i++ ) { %>
-                  <div class="card-header" id="heading<%=i%>Outdoor">
+                  <div class="card-header" id="headingOneOutdoor">
                     <h2 class="mb-0">
-                      <button class="btn btn-block btn-outline-primary text-left" type="button" data-toggle="collapse" data-target="#collapse<%=i%>Outdoor" aria-expanded="true" aria-controls="collapse<%=i%>Outdoor">
+                      <button class="btn btn-block btn-outline-primary text-left" type="button" data-toggle="collapse"
+                        data-target="#collapse<%=i%>Outdoor" aria-expanded="true" aria-controls="collapse<%=i%>Outdoor">
                         <%=outdoorevents[i].outdoorEvent%>
                       </button>
                     </h2>
                   </div>
-              
-                  <div id="collapse<%=i%>Outdoor" class="collapse" aria-labelledby="heading<%=i%>Outdoor" data-parent="#accordionOutdoor">
+
+                  <div id="collapse<%=i%>Outdoor" class="collapse " aria-labelledby="headingOneOutdoor"
+                    data-parent="#accordionOutdoor">
                     <div class="card-body">
-                      <p><%-outdoorevents[i].description%></p>
+                      <p><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></p>
                       <a class="btn-eventregister btn" id="eventregisterOneIndoor" href="/event/register/<%=outdoorevents[i].id%>">Register Now</a>
                     </div>
                   </div>
                   <%}%>
                 </div>
-                
+               
               </div>
-               <%} else {%>
+            
+            <%} else {%>
 
                   <p> No Outdoor Games </p>
                 </div>
 
                 <%}%>
             <%}%>
+
+              </div>
+
             </div>
-          </div>
         </div>
       </div>
     </div>

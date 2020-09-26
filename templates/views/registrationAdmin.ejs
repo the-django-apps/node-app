@@ -8,10 +8,11 @@
 
 <body>
 
-  <h1 style="text-align: center; color: #333333; padding: 5px ;"> Registration Event</h1>
+  
 
   <% if(typeof userEvents != 'undefined') { %>
   <% if(userEvents.length != 0) { %>
+    <h1 style="text-align: center; color: #333333; padding: 5px ;"> Registration Event</h1>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -37,6 +38,8 @@
     <%}%>
     </tbody>
   </table>
+  <%} else {%>
+    <p class="no-content-text">No Registration</p>
   <%}%>
   <%}%>
   

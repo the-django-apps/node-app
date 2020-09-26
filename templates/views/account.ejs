@@ -12,10 +12,43 @@
     
   </head>
   <body>
-    
-     <%- include('partials/header') %>
-      <div class="registered-event-main">
+    <%- include('partials/header') %>
 
+    <% if(accountOption == 'resetPassword') {%>
+    <div class="registered-event-main">
+      <div class="forgot-password-main ">
+      <div class="forgot-password-inner">
+        <% if(typeof alert != 'undefined') { %>
+                <% alert.forEach(function(error) { %>
+                <div class="col-sm-12 alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong> <%= error.msg %> </strong>
+                </div>
+                <% }) %>
+        <% } %>
+        <% if(typeof err_msg != 'undefined') { %>
+          <div class="col-sm-12 alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong> <%= err_msg %> </strong>
+                </div>
+        <%}%>
+      <p>Reset Password</p>
+      <form action="/user/resetPassword" method="POST">
+        <label>Old Password</label>
+        <input type="password" class="form-control" name="oldPassword" placeholder="Old Password"><br>
+        <label>New Password</label>
+        <input type="password" class="form-control" name="password" placeholder="New Password"><br>
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" name="confirmedPassword" placeholder="Confirm Password"><br>
+        <input type="submit" value="Reset" class="form-control btn btn-primary">
+      </form>
+      </div>
+    </div>
+    </div>
+
+    <% } else if(accountOption == 'registeredEvents') { %>    
+
+      <div class="registered-event-main">
         <% if(typeof registeredEvents != 'undefined') { %>
          <% if(registeredEvents.length != 0) { %>
          <h2 style="text-align: center; color: #333333; padding: 5px ;"> Registered Events</h2>
@@ -53,6 +86,17 @@
         
       <%}%>
       </div>
+    <%} else {%>
+      <div class="no-content-text">
+            Something went wrong
+      </div>
+    <%}%>  
     <%- include('partials/footer') %>
+    
+    <% if(error_message != '') {%>
+    <script type="text/javascript">
+      alert('<%-error_message%>')
+    </script>
+    <%}%>
   </body>
 </html>
