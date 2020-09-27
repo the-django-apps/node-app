@@ -11,6 +11,10 @@ const indoorEventSchema = mongoose.Schema({
 		type: Number,
 		required:true
 	},
+	discountValue: {
+		type: Number,
+		default: 0
+	},
 	description: {
 		type:String,
 		required: true

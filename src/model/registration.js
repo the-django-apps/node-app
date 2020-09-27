@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 const registerSchema = mongoose.Schema({
 	registeredEvent: {
 		type: String,
@@ -12,6 +13,13 @@ const registerSchema = mongoose.Schema({
 	eventDescription: {
 		type: String,
 		required: true
+	},
+	discountGain: {
+		type: Number
+	},
+	discountFlag: {
+		type: Boolean,
+		default: false
 	},
 	owner: {
 		type:mongoose.Schema.Types.ObjectId,

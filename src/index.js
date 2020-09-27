@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const userRoute = require('./router/users')
 const adminRoute = require('./router/admin')
+discount = false;
 
 const cors = require('cors')
 require('./db/mongoose')

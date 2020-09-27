@@ -57,6 +57,7 @@
             <tr>
               <th>Events</th>
               <th>Price</th>
+              <th>Offer</th>
               <th>Description</th>
               <th></th>
             </tr>
@@ -66,12 +67,13 @@
             <tr>
               <td><%=registeredEvents[i].registeredEvent%></td>
               <td><%=registeredEvents[i].price%></td>
+              <td><%=registeredEvents[i].discountFlag%></td>
               <td><%=registeredEvents[i].eventDescription.replace(/\n/g,'<br>')%></td>
               <td><a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>">Delete</a></td>
             </tr>
             <%}%>    
             <tr>
-              <td><strong>Total Price</strong></td>
+              <td><strong>Total Price(with discount)</strong></td>
               <td><strong><%=eventsTotal%></strong></td>
               <td></td>
               <td></td>

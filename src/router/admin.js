@@ -49,7 +49,7 @@ router.get('/admin',  async (req, res) => {
   } else if (req.query.flag === 'event') {
     const indoorevents = await IndoorEvent.find({})
     const outdoorevents = await OutdoorEvent.find({})
-    res.render('admin', { indoorevents, outdoorevents, flag: "event" })
+    res.render('admin', { indoorevents, outdoorevents, flag: "event" , discount: discount })
   } else if (req.query.flag === 'register') {
 
     const users = await User.find({})
@@ -63,8 +63,15 @@ router.get('/admin',  async (req, res) => {
 
       var singleMemberTotal = 0
       users[i].registration.forEach((event) => {
+        
+        if(event.discountFlag === true) {
+          discountValue = (event.price * event.discountGain)/100
+          event.price -= discountValue
+      }
+        
         singleMemberTotal += event.price
       })
+      
       
       grandTotal += singleMemberTotal 
       if (users[i].registration.length !== 0) {
@@ -265,6 +272,19 @@ router.get('/admin/gallery/delete/:id', async (req, res) => {
 
 /******************************************* Events **************************************/
 
+router.post('/admin/discount',(req,res) => {
+  
+  for(var value in req.body) {
+    if(value === 'discount') {
+      discount = true
+    }else if(value === 'noDiscount'){
+      discount = false
+     }
+  }
+  
+  res.redirect('/admin?flag=event')
+})
+
 
 router.post('/admin/indoorevent/add', [
   body('price').custom(value => {
@@ -273,6 +293,18 @@ router.post('/admin/indoorevent/add', [
     } else {
       return true
     }
+  }),
+  body('discountValue').custom(value => {
+    if(value) {
+      if(isNaN(value)) {
+        throw new Error('Discount value is not a number')
+     } else {
+       return true
+     }
+    } else {
+      return true
+    }
+    
   })
 ]  ,async (req, res) => {
   try {

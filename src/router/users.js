@@ -45,6 +45,7 @@ router.use(function (req, res, next) {
     res.locals.optionFlag = req.flash('optionFlag')
     res.locals.alert_msg = req.flash('alert_msg')
     res.locals.isAuthenticated = req.isAuthenticated()
+    res.locals.discount = req.flash('discount')
     next();
 });
 
@@ -176,38 +177,72 @@ router.post('/user/forgotPassword/setPassword' , [
 
 /************************************* Register Event **************************************/
 
-router.get('/event/register/:id', async (req,res) => {
+router.post('/event/register', async (req,res) => {
 
   try {
-    
-  const indoorEvent = await IndoorEvent.findById(req.params.id)
-  const outdoorEvent = await OutdoorEvent.findById(req.params.id)
+      // console.log(Object.keys(req.body).length)
+      if(Object.keys(req.body).length === 1 || discount === false) {
+        for(var event in req.body) {
+        var indoorEvent = await IndoorEvent.findById(event)
+        var outdoorEvent = await OutdoorEvent.findById(event)
+        if(indoorEvent) {
+            var registerEvent = new Registration({
+              registeredEvent:indoorEvent.indoorEvent,
+              price:indoorEvent.price,
+              discountGain: indoorEvent.discountValue,
+              eventDescription:indoorEvent.description,
+              owner:req.user._id
+            })
+          }else if(outdoorEvent) {
+            var registerEvent = new Registration({
+              registeredEvent:outdoorEvent.outdoorEvent,
+              price:outdoorEvent.price,
+              discountGain: outdoorEvent.discountValue,
+              eventDescription:outdoorEvent.description,
+              owner:req.user._id
+            })
+          }
+          await registerEvent.save()
+        }
+      }else if(Object.keys(req.body).length > 1 && discount === true) {
+        for(var event in req.body) {
+        var indoorEvent = await IndoorEvent.findById(event)
+        var outdoorEvent = await OutdoorEvent.findById(event)
+        if(indoorEvent) {
+            var registerEvent = new Registration({
+              registeredEvent:indoorEvent.indoorEvent,
+              price:indoorEvent.price,
+              discountFlag: true,
+              discountGain: indoorEvent.discountValue,
+              eventDescription:indoorEvent.description,
+              owner:req.user._id
+            })
+          }else if(outdoorEvent) {
+            var registerEvent = new Registration({
+              registeredEvent:outdoorEvent.outdoorEvent,
+              price:outdoorEvent.price,
+              discountFlag: true,
+              discountGain: outdoorEvent.discountValue,
+              eventDescription:outdoorEvent.description,
+              owner:req.user._id
+            })
+          }
+          await registerEvent.save()
+        }
+      }
+      
+      // console.log(indoorEvent)
+      // console.log(outdoorEvent)
 
-  if(indoorEvent) {
-    var registerEvent = new Registration({
-      registeredEvent:indoorEvent.indoorEvent,
-      price:indoorEvent.price,
-      eventDescription:indoorEvent.description,
-      owner:req.user._id
-    })
-  }else if(outdoorEvent) {
-    var registerEvent = new Registration({
-      registeredEvent:outdoorEvent.outdoorEvent,
-      price:outdoorEvent.price,
-      eventDescription:outdoorEvent.description,
-      owner:req.user._id
-    })
-  }
+  // const msg = {
+  //     to: req.user.email,
+  //     from: process.env.FROM_EMAIL,
+  //     subject: 'Event Registration',
+  //     text: 'You have sucessfully registered in ' + registerEvent.registeredEvent+ ' event'
+  //   }
+  //   await sgMail.send(msg)
 
-  const msg = {
-      to: req.user.email,
-      from: process.env.FROM_EMAIL,
-      subject: 'Event Registration',
-      text: 'You have sucessfully registered in ' + registerEvent.registeredEvent+ ' event'
-    }
-    await sgMail.send(msg)
-
-  await registerEvent.save()
+  
   req.flash('error_message', "Registered successfully")
   res.redirect('/event')
   } catch(e) {
@@ -226,6 +261,12 @@ router.get('/myaccount', async (req,res) => {
     }).execPopulate()
     var eventsTotal = 0
     req.user.registration.forEach((value) => {
+      if(value.discountFlag === true) {
+        
+        var discountValue = (value.price * value.discountGain)/100
+        value.price = value.price - discountValue
+      }
+       
         eventsTotal += value.price
     })
 

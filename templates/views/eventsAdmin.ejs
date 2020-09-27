@@ -24,6 +24,7 @@
           <form action="/admin/indoorevent/add" method="post">
             <input type="text" name="indoorEvent" placeholder="add indoor event" class="form-control" required><br>
             <input type="text" name="price" placeholder="price" class="form-control" required><br>
+            <input type="text" name="discountValue" placeholder="Discount e.g- 10,5,20" class="form-control" required><br>
             <textarea class="form-control" name="description" placeholder="Add Description" required></textarea>
         </div>
         <div class="modal-footer">
@@ -47,6 +48,7 @@
           <form action="/admin/outdoorevent/add" method="post">
             <input type="text" name="outdoorEvent" placeholder="add outdoor event" class="form-control"><br>
             <input type="text" name="price" placeholder="price" class="form-control" required><br>
+            <input type="text" name="discountValue" placeholder="Discount e.g- 10,5,20" class="form-control" required><br>
             <textarea class="form-control" name="description" placeholder="Add Description"></textarea>
         </div>
         <div class="modal-footer">
@@ -56,6 +58,18 @@
       </div>
     </div>
   </div>
+
+  <!-------------------------- discount/Discount ------------------------------>
+  
+   <form action="/admin/discount" method="POST">
+      <input type="checkbox" name="discount" id="discount">
+      <input type="submit" value="Set discount">
+   </form>
+   <form action="/admin/discount" method="POST">
+      <input type="checkbox" name="noDiscount" id="noDiscount">
+      <input type="submit" value="Unset discount">
+   </form>
+   
 
 
   <!----------------------------------- Event Lists ------------------------------------------->
@@ -93,7 +107,8 @@
                         <div id="collapse<%=i%>Indoor" class="collapse " aria-labelledby="heading<%=i%>Indoor"
                            data-parent="#accordionIndoor">
                            <div class="card-body">
-                              <p><strong>Price: </strong><%=outdoorevents[i].price%></p>
+                              <p><strong>Price: </strong><%=indoorevents[i].price%></p>
+                              <p><strong>Discount:</strong> <%=indoorevents[i].discountValue%>%</p>
                               <p><strong>Description: </strong><%-indoorevents[i].description.replace(/\n/g,'<br>')%></p>
                               <a class="btn-eventregister btn" href="/admin/indooreventDelete/<%=indoorevents[i].id%>">Delete</a>
                            </div>
@@ -124,6 +139,7 @@
                            data-parent="#accordionOutdoor">
                            <div class="card-body">
                               <p><strong>Price:</strong> <%=outdoorevents[i].price%></p>
+                              <p><strong>Discount:</strong> <%=outdoorevents[i].discountValue%>%</p>
                               <p><strong>Description: </strong><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></p>
                               <a class="btn-eventregister btn"
                                  href="/admin/outdooreventDelete/<%=outdoorevents[i].id%>">Delete</a>
@@ -171,6 +187,14 @@
             indoorList.removeClass("show")
           }
 
+          function setOrUnsetDiscount(discountValue) {
+            if(discountValue === true) {
+               $('#discount').prop("checked",true)
+            }else {
+               $('#noDiscount').prop("checked",true)
+            }
+          }
+          setOrUnsetDiscount(<%-discount%>)
 
         </script>
 
