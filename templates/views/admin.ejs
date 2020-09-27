@@ -25,6 +25,7 @@
 	  <a href="/admin?flag=gallery">Gallery</a>
 	  <a href="/admin?flag=event">Event</a>
 	  <a href="/admin?flag=register">Registration</a>
+	  <a href="/admin?flag=contact">Contact Feedbacks</a>
 	</div>
 
 	<button class="openbtn" onclick="openNav()">☰ Admin Panel</button> 
@@ -37,6 +38,8 @@
 		<%- include('eventsAdmin') %>
 	<%} else if(flag == "register") {%> 
 		<%- include('registrationAdmin') %>
+	<%} else if(flag == "contact") {%> 
+		<%- include('contactUsAdmin') %>
 	<%} else {%>
 		<%- include('usersAdmin') %>
 	<%}%>
@@ -58,15 +61,22 @@
 	  
 	}
 
-	 var errorMessage = "<%- error_message %>";
-
-		if(errorMessage !== '') {
-			alert(errorMessage);
-			location.reload();
-		}
-
-
+	 
 </script>
+
+<% if(error_message != '') {%>
+		<script>
+			alert('<%- error_message %>')
+		</script>
+<%}%>
+	
+<% if( alert_msg != '') {%>
+	<% alert_msg.forEach(function(value) { %>
+		<script>
+			alert('<%-value.msg%>')
+		</script>
+	<% }) %>
+<%}%>
 
 </body>
 </html>

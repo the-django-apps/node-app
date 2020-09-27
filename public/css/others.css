@@ -46,10 +46,16 @@
 	min-height: 90vh;
 	margin-top: 10px;
 	margin-bottom: 10px; 
+	
+}
 
+.registered-event-table {
+	margin-top: 100px;
+	margin-bottom: 100px;
 }
 
 
+/* 
 .registered-event-main .registered-event-inner {
 	position: absolute;
 	top: 20%;
@@ -57,10 +63,10 @@
 	width: 100%;
 	max-height: 400px;
 	overflow: auto;
-}
+} */
 
 
-.event-style {
+/* .event-style {
 	color: #333333;
 	position: relative;
 	text-align: center;
@@ -79,7 +85,7 @@
 	color: white;
 	background-color: #85aecc;
 	cursor:pointer;
-}
+} */
 
 
 

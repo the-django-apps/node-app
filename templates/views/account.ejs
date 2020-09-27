@@ -1,36 +1,37 @@
-
 <html lang="en">
-  <head>
-    <title>Event Management System</title>
-    
-    <%- include('partials/heads_content') %>
 
-    <!-- Footer CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/footer.css">
-    <!-- Other Content -->
-    <link rel="stylesheet" type="text/css" href="/css/others.css">
-    
-  </head>
-  <body>
-    <%- include('partials/header') %>
+<head>
+  <title>Event Management System</title>
 
-    <% if(accountOption == 'resetPassword') {%>
-    <div class="registered-event-main">
-      <div class="forgot-password-main ">
+  <%- include('partials/heads_content') %>
+
+  <!-- Footer CSS -->
+  <link rel="stylesheet" type="text/css" href="/css/footer.css">
+  <!-- Other Content -->
+  <link rel="stylesheet" type="text/css" href="/css/others.css">
+
+</head>
+
+<body>
+  <%- include('partials/header') %>
+
+  <% if(accountOption == 'resetPassword') {%>
+  <div class="registered-event-main">
+    <div class="forgot-password-main ">
       <div class="forgot-password-inner">
         <% if(typeof alert != 'undefined') { %>
-                <% alert.forEach(function(error) { %>
-                <div class="col-sm-12 alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong> <%= error.msg %> </strong>
-                </div>
-                <% }) %>
+        <% alert.forEach(function(error) { %>
+        <div class="col-sm-12 alert alert-dismissible alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong> <%= error.msg %> </strong>
+        </div>
+        <% }) %>
         <% } %>
         <% if(typeof err_msg != 'undefined') { %>
-          <div class="col-sm-12 alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong> <%= err_msg %> </strong>
-                </div>
+        <div class="col-sm-12 alert alert-dismissible alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong> <%= err_msg %> </strong>
+        </div>
         <%}%>
       <p>Reset Password</p>
       <form action="/user/resetPassword" method="POST">
@@ -44,59 +45,62 @@
       </form>
       </div>
     </div>
-    </div>
+    </div> 
 
-    <% } else if(accountOption == 'registeredEvents') { %>    
-
-      <div class="registered-event-main">
-        <% if(typeof registeredEvents != 'undefined') { %>
-         <% if(registeredEvents.length != 0) { %>
-         <h2 style="text-align: center; color: #333333; padding: 5px ;"> Registered Events</h2>
-        <div class="registered-event-inner">
-          <% for(var i = 0; i < registeredEvents.length ; i++ ) { %>
-              <div class="event-style" data-toggle="modal" data-target="#eventinfo<%=i%>">
-                <%=registeredEvents[i].registeredEvent%>
-              </div>
-              <div class="modal" id="eventinfo<%=i%>">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title"><%=registeredEvents[i].registeredEvent%></h5>
-                      <button type="button" onclick="document.getElementById('eventinfo<%=i%>').style.display='none'" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Event:&nbsp;<%=registeredEvents[i].registeredEvent%></p>
-                      <p>Description:&nbsp;<%=registeredEvents[i].eventDescription%></p>
-                    </div>
-                    <div class="modal-footer">
-                      <a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>" class="btn btn-primary btn-sm">unregister</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          <% } %>
+     <% } else if(accountOption == 'registeredEvents') { %>
+      
+        <% if(registeredEvents.length != 0) { %>
+      <div class="registered-event-table">
+        <table class="table table-hover">
+          
+          <thead>
+            <tr>
+              <th>Events</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i = 0; i < registeredEvents.length ; i++ ) { %>
+            <tr>
+              <td><%=registeredEvents[i].registeredEvent%></td>
+              <td><%=registeredEvents[i].price%></td>
+              <td><%=registeredEvents[i].eventDescription.replace(/\n/g,'<br>')%></td>
+              <td><a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>">Delete</a></td>
+            </tr>
+            <%}%>    
+            <tr>
+              <td><strong>Total Price</strong></td>
+              <td><strong><%=eventsTotal%></strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+              </tbody>
+              
+              </table>
+            </div>
           <% } else { %>
-          <div class="no-content-text">
-            No Event Registered
-          </div>
-        <%}%>
-         </div>
-        
-      <%}%>
-      </div>
-    <%} else {%>
-      <div class="no-content-text">
-            Something went wrong
-      </div>
-    <%}%>  
+             <div class="registered-event-main"> 
+              <div class="no-content-text ">
+                No Event Registered
+              </div>
+            </div> 
+            
+          
+            <%}%>
+        <% } else {%>
+            <div class="no-content-text">
+              Something went wrong
+            </div>
+            <%}%> 
+     
     <%- include('partials/footer') %>
-    
-    <% if(error_message != '') {%>
-    <script type="text/javascript">
-      alert('<%-error_message%>')
-    </script>
-    <%}%>
+
+            <% if(error_message != '') {%>
+            <script type="text/javascript">
+              alert('<%-error_message%>')
+            </script>
+            <%}%>
   </body>
 </html>

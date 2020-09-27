@@ -4,6 +4,7 @@ const Gallery = require('../model/gallery')
 const IndoorEvent = require('../model/indoorEvent')
 const OutdoorEvent = require('../model/outdoorEvent')
 const Registration = require('../model/registration')
+const Contact = require('../model/contactUs')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -42,6 +43,7 @@ router.use(function (req, res, next) {
     res.locals.success = req.flash('success')
     res.locals.flag = req.flash('flag')
     res.locals.optionFlag = req.flash('optionFlag')
+    res.locals.alert_msg = req.flash('alert_msg')
     res.locals.isAuthenticated = req.isAuthenticated()
     next();
 });
@@ -52,7 +54,7 @@ router.get('/', (req, res) => {
   res.render('index',{currentUser:req.user})
 })
 
-router.get('/event', auth.checkAuthenticated ,async (req, res) => {
+router.get('/event', async (req, res) => {
   const indoorevents = await IndoorEvent.find({})
   const outdoorevents = await OutdoorEvent.find({})
   res.render('event',{indoorevents,outdoorevents,currentUser:req.user})
@@ -66,19 +68,8 @@ router.get('/contact', (req, res) => {
   res.render('contact',{currentUser:req.user})
 })
 
-router.post('/contact', async (req, res) => {
-  const msg = {
-      to: process.env.FROM_EMAIL,
-      from: process.env.FROM_EMAIL,
-      subject: 'Contact User',
-      text: 'Name: ' + req.body.name + '\nEmail: ' + req.body.email + '\nFeedback: ' + req.body.feedback
-    }
-    await sgMail.send(msg)
-  req.flash('success_message', 'Feedback sent sucessfully!')
-  res.redirect('/contact')
-})
 
-router.get('/gallery', auth.checkAuthenticated ,async (req, res) => {
+router.get('/gallery', async (req, res) => {
   const gallery = await Gallery.find({})
   res.render('gallery',{gallery,currentUser:req.user})
 })
@@ -96,16 +87,23 @@ router.post('/signup', auth.checkNotAuthenticated, [
       }
     })
   }),
-   body('email').isEmail().withMessage('Invalid Email')
+   body('email').isEmail().withMessage('Invalid Email'),
+   body('mobileNumber').custom(value => {
+     if(isNaN(value)) {
+      throw new Error('Mobile number is not a number')
+     }else if(value.length != 10) {
+      throw new Error('Mobile number must be 10 digit')
+     } else {
+       return true
+     }
+   })
 
   ] , async (req, res) => {
   
     try {
       const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       const alert = errors.array() 
-      
       return res.render('signup' , {alert})
     }
       
@@ -147,7 +145,7 @@ router.post('/login', auth.checkNotAuthenticated , passport.authenticate('local'
   successFlash: 'logedin'
 }))
 
-router.get('/logout', auth.checkAuthenticated ,(req, res) => {
+router.get('/logout', (req, res) => {
   req.logOut()
   res.redirect('/')
 })
@@ -178,22 +176,24 @@ router.post('/user/forgotPassword/setPassword' , [
 
 /************************************* Register Event **************************************/
 
-router.get('/event/register/:id', auth.checkAuthenticated ,async (req,res) => {
+router.get('/event/register/:id', async (req,res) => {
 
   try {
+    
   const indoorEvent = await IndoorEvent.findById(req.params.id)
   const outdoorEvent = await OutdoorEvent.findById(req.params.id)
-
 
   if(indoorEvent) {
     var registerEvent = new Registration({
       registeredEvent:indoorEvent.indoorEvent,
+      price:indoorEvent.price,
       eventDescription:indoorEvent.description,
       owner:req.user._id
     })
   }else if(outdoorEvent) {
     var registerEvent = new Registration({
       registeredEvent:outdoorEvent.outdoorEvent,
+      price:outdoorEvent.price,
       eventDescription:outdoorEvent.description,
       owner:req.user._id
     })
@@ -208,27 +208,28 @@ router.get('/event/register/:id', auth.checkAuthenticated ,async (req,res) => {
     await sgMail.send(msg)
 
   await registerEvent.save()
-
+  req.flash('error_message', "Registered successfully")
   res.redirect('/event')
   } catch(e) {
-    console.log(e)
     req.flash('error_message', "Somthing thing went wrong. Please try again!")
     res.redirect('/event')
   }
-  
-
 })
 
 /********************************** My Account ************************************/
 
-router.get('/myaccount', auth.checkAuthenticated ,async (req,res) => {
+router.get('/myaccount', async (req,res) => {
 
   if(req.query.accountOption === 'registeredEvents' ) {
       await req.user.populate({
       path: 'registration'
     }).execPopulate()
+    var eventsTotal = 0
+    req.user.registration.forEach((value) => {
+        eventsTotal += value.price
+    })
 
-  res.render('account',({registeredEvents:req.user.registration,currentUser:req.user,accountOption:'registeredEvents'}))
+  res.render('account',({registeredEvents:req.user.registration,eventsTotal,currentUser:req.user,accountOption:'registeredEvents'}))
   } else if (req.query.accountOption === 'resetPassword') {
     res.render('account',{currentUser:req.user,accountOption:'resetPassword'})
   } else {
@@ -252,11 +253,14 @@ router.post('/user/resetPassword',async (req,res) => {
 })
 
 
-router.get('/myaccount/registeredEvents/delete/:id' , auth.checkAuthenticated ,async (req,res) => {
+router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
 
   await Registration.findByIdAndDelete(req.params.id)
-  res.redirect('/myaccount/registeredEvents')
+  res.redirect('/myaccount?accountOption=registeredEvents')
 })
+
+
+
 
 
 

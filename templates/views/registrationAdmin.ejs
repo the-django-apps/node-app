@@ -18,6 +18,7 @@
       <tr>
         <th>User info</th>
         <th>Events</th>
+        <th>Price</th>
         <th>Description</th>
         <th>Delete Event</th>
       </tr>
@@ -25,17 +26,32 @@
     <tbody>
     <% for(var i = 0; i < userEvents.length ; i++ )  {%>
       <tr>
-        <td rowspan="<%=userEvents[i].length%>"><strong>Name:&nbsp;</strong><%=userEvents[i][userEvents[i].length-1].name%><br><strong>Email:&nbsp;</strong><%=userEvents[i][userEvents[i].length-1].email%></td>
+        <td rowspan="<%=userEvents[i].length%>">
+          <strong>Name:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].name%><br>
+          <strong>Email:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].email%><br>
+          <strong>Mobile Number:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].mobileNumber%><br>
+          <strong>Events Total price:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].price%>
+        </td>
       </tr>
         <% for(var j = 0; j < userEvents[i].length-1; j++) {%>
         <tr>
           <td><%=userEvents[i][j].registeredEvent%></td>
+          <td><%=userEvents[i][j].price%></td>
           <td><%- userEvents[i][j].eventDescription.replace(/\n/g,'<br>') %></td>
           <td><a href="/registerEvent/delete/<%=userEvents[i][j].id%>">Delete</a></td>
         </tr>
-        <%}%>
-      
+        <%}%>      
     <%}%>
+    <tr>
+      <td><strong>Grand Total</strong></td>
+      <td></td>
+      <td><strong><%=grandTotal%></strong></td>
+      <td></td>  
+    </tr>
     </tbody>
   </table>
   <%} else {%>

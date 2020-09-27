@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
-
-
-
 const registerSchema = mongoose.Schema({
 	registeredEvent: {
 		type: String,
 		required: true
+	},
+	price: {
+		type: Number,
+		required:true
 	},
 	eventDescription: {
 		type: String,
