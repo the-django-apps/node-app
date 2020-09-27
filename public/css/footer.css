@@ -105,7 +105,7 @@ footer.light .footer-copyright {
   margin-bottom: 18px;
 }
 .widget li a {
-  color: #ff8d1e;
+  color: #85aecc;
 }
 .widget li a:hover {
   color: #4b92dc;
@@ -164,7 +164,7 @@ ul.social-footer2 li {
   padding: 0;
 }
 ul.social-footer2 li a:hover {
-  background-color: #ff8d1e;
+  background-color: #85aecc;
 }
 ul.social-footer2 li a {
   display: block;
@@ -173,7 +173,7 @@ ul.social-footer2 li a {
   text-align: center;
 }
 .btn-footer {
-  background-color: #ff8d1e;
+  background-color: #85aecc;
   color: #fff;
 }
 .btn-footer:hover,

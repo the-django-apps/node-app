@@ -1,9 +1,9 @@
 <nav
-  class="navbar navbar-expand-lg navbar-light "
-  style="background-color: #85aecc; margin-bottom: 0;"
+  class="navbar navbar-expand-lg navbar-light fixed-top"
+  style="background-color: #85aecc; margin-bottom: 0"
 >
   <div class="container">
-    <a class="navbar-brand" href="/">Event Management</a>
+    <!-- <a class="navbar-brand" href="/">Event Management</a> -->
     <button
       class="navbar-toggler"
       type="button"
@@ -19,46 +19,99 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/gallery">Gallery</a>
+          <a class="nav-link navbar-brandedit " id="brand_navbar" href="/"
+            >Event Management</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/event">Event</a>
+          <a class="nav-link " id="gallery_navbar" href="/gallery">Gallery</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
+          <a class="nav-link " id="event_navbar" href="/event">Event</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/contact">Contact</a>
+          <a class="nav-link " id="about_navbar" href="/about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " id="contact_navbar" href="/contact">Contact</a>
         </li>
       </ul>
 
       <ul class="navbar-nav ml-auto">
-        <% if(isAuthenticated) { %>
-        <% if(currentUser) { %>
-        
+        <% if(isAuthenticated) { %> <% if(currentUser) { %>
+
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class='fas fa-user-circle' style="font-size:22px;"></i>&nbsp;<%=currentUser.name%>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/myaccount/registeredEvents">Registered Events</a>
-        </div>
-      </li>
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fas fa-user-circle" style="font-size: 22px"></i
+            >&nbsp;<%=currentUser.name%>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/myaccount/registeredEvents"
+              >Registered Events</a
+            >
+          </div>
+        </li>
         <%}%>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
         </li>
         <%} else {%>
         <li class="nav-item">
-          <a class="nav-link" href="/signup"
+          <a class="nav-link " id="signup_navbar" href="/signup"
             >Signup <span class="sr-only">(current)</span></a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link " id="login_navbar" href="/login">Login</a>
         </li>
         <% } %>
       </ul>
     </div>
   </div>
 </nav>
+
+<script>
+  let page = window.location.href;
+  let page1 = page.split("//")[1];
+  let page2 = page1.split("/")[1];
+
+  let element = document.getElementById("brand_navbar");
+  let element1 = document.getElementById("gallery_navbar");
+  let element2 = document.getElementById("about_navbar");
+  let element3 = document.getElementById("event_navbar");
+  let element4 = document.getElementById("contact_navbar");
+  let element5 = document.getElementById("signup_navbar");
+  let element6 = document.getElementById("login_navbar");
+
+  switch(page2) {
+    case "gallery" : 
+      element1.classList.add("active");
+      break;
+    case "event" : 
+      element3.classList.add("active");
+      break;
+    case "about" : 
+      element2.classList.add("active");
+      break;
+    case "contact" : 
+      element4.classList.add("active");
+      break;
+    case "signup" : 
+      element5.classList.add("active");
+      break;
+    case "login" : 
+      element6.classList.add("active");
+      break;
+    default : 
+      element.classList.add("active"); 
+      break;
+  }
+</script>
