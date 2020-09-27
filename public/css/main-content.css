@@ -1,0 +1,22 @@
+.home-background-image {
+    background-image: url('../images/clg.jpg');
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+.home-background-contents{
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    font-family: 'Play', sans-serif;
+    
+}
+
+.home-inner-contents {
+    color: #ffffff;
+    font-size: 16px;
+}
