@@ -7,6 +7,9 @@ const indoorEventSchema = mongoose.Schema({
 		required:true
 
 	},
+	date:{
+		type: Date
+	},
 	price: {
 		type: Number,
 		required:true
