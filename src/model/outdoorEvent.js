@@ -21,8 +21,11 @@ const outdoorEventSchema = mongoose.Schema({
 	}
 })
 
-
-
+outdoorEventSchema.virtual('outdoorEventPath', {
+	ref: 'eventRegistered',
+	localField: '_id',
+	foreignField: 'outdoorEventId'
+})
 
 
 const outdoorEvent = mongoose.model('OutdoorEvent', outdoorEventSchema)

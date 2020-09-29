@@ -6,6 +6,21 @@
 </head>
 
 <body>
+   <style>
+      .discountFlag {
+            width: 150px;
+            margin-left: 30px;
+         }
+      
+      @media screen and (max-width: 600px){
+         .discountFlag {
+            width: 115px;
+         }
+         .discountFont {
+         font-size: 11px;
+      }
+      }
+   </style>
 
   <h1 style="text-align: center; color: #333333; padding: 5px ;">Admin Events</h1>
   
@@ -61,17 +76,13 @@
 
   <!-------------------------- discount/Discount ------------------------------>
   
-   <form action="/admin/discount" method="POST">
-      <input type="checkbox" name="discount" id="discount">
-      <input type="submit" value="Set discount">
-   </form>
-   <form action="/admin/discount" method="POST">
-      <input type="checkbox" name="noDiscount" id="noDiscount">
-      <input type="submit" value="Unset discount">
-   </form>
+   <div class="discountFlag">
+      <select name="discount" class="form-control discountFont" id="discount" onchange="window.location.href=this.value">
+         <option value="/admin/discount?discount=set">Set Discount</option>
+         <option value="/admin/discount?discount=unset">Unset Discount</option>
+      </select>
+   </div>
    
-
-
   <!----------------------------------- Event Lists ------------------------------------------->
       <div class="container-fluid my-2" style="min-height: 70vh; ">
          <div class="col-sm-12 col-lg-4 event-option" style="float: right;">
@@ -188,10 +199,11 @@
           }
 
           function setOrUnsetDiscount(discountValue) {
+             console.log(discountValue)
             if(discountValue === true) {
-               $('#discount').prop("checked",true)
+               $('#discount').val('/admin/discount?discount=set')
             }else {
-               $('#noDiscount').prop("checked",true)
+               $('#discount').val('/admin/discount?discount=unset')
             }
           }
           setOrUnsetDiscount(<%-discount%>)

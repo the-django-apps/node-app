@@ -26,6 +26,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(userRoute)
 app.use(adminRoute)
 
+app.get('*', (req, res) => {
+	res.render('404page', {
+	  errorMsg: 'Page not found',
+	});
+  });
+
 
 app.listen(port, () => {
 	console.log('Server is up on ' + port)

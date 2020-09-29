@@ -5,6 +5,7 @@ const Gallery = require('../model/gallery')
 const IndoorEvent = require('../model/indoorEvent')
 const OutdoorEvent = require('../model/outdoorEvent')
 const Registration = require('../model/registration')
+const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -63,27 +64,65 @@ router.get('/admin',  async (req, res) => {
 
       var singleMemberTotal = 0
       users[i].registration.forEach((event) => {
-        
-        if(event.discountFlag === true) {
-          discountValue = (event.price * event.discountGain)/100
-          event.price -= discountValue
-      }
-        
         singleMemberTotal += event.price
       })
-      
-      
+            
       grandTotal += singleMemberTotal 
+
       if (users[i].registration.length !== 0) {
         users[i].password = undefined
         users[i].price = singleMemberTotal
         users[i].registration[users[i].registration.length] = users[i]
-
         userEvents.push(users[i].registration)
       }
     }
     
     res.render('admin', { userEvents, flag: 'register',grandTotal })
+  } else if (req.query.flag === 'eventRegister') {
+
+    const users = await User.find({})
+    const indoorEvents = await IndoorEvent.find({})
+    const outdoorEvents = await OutdoorEvent.find({})
+
+    var userEvents = []
+    var grandTotal = 0;
+    
+      for (var i = 0; i < indoorEvents.length; i++) {
+        await indoorEvents[i].populate({
+          path: 'indoorEventPath'
+        }).execPopulate()
+
+        var singleEventTotal = 0
+        indoorEvents[i].indoorEventPath.forEach((value) => {
+          singleEventTotal += value.price
+        })
+        grandTotal += singleEventTotal
+
+        if(indoorEvents[i].indoorEventPath.length > 0) {
+          indoorEvents[i].price = singleEventTotal
+          indoorEvents[i].indoorEventPath[indoorEvents[i].indoorEventPath.length] = indoorEvents[i]
+          userEvents.push(indoorEvents[i].indoorEventPath)
+        }
+       
+      }
+
+      for (var i = 0; i < outdoorEvents.length; i++) {
+        const event = await outdoorEvents[i].populate({
+          path: 'outdoorEventPath'
+        }).execPopulate()
+
+        var singleEventTotal = 0
+        outdoorEvents[i].outdoorEventPath.forEach((value) => {
+          singleEventTotal += value.price
+        })
+        grandTotal += singleEventTotal
+        if(outdoorEvents[i].outdoorEventPath.length > 0) {
+          outdoorEvents[i].price = singleEventTotal
+          outdoorEvents[i].outdoorEventPath[outdoorEvents[i].outdoorEventPath.length] = outdoorEvents[i]
+          userEvents.push(outdoorEvents[i].outdoorEventPath)
+        }               
+      }
+    res.render('admin', { userEvents, flag: 'eventRegister',grandTotal })
   } else if (req.query.flag === 'contact') {
     const feedbacktList = await Contact.find({})
     res.render('admin',{feedbacktList, flag: 'contact'})
@@ -197,13 +236,12 @@ router.post('/admin/gallery/upload',  upload.single('photo'), async (req, res) =
 
     res.redirect('/admin?flag=gallery')
   } catch (e) {
-
     req.flash('error_message', e.toString())
-    res.redirect('/admin?flag=gallery')
+    return res.redirect('/admin?flag=gallery')
   }
 
 }, (error, req, res, next) => {
-
+  
   req.flash('error_message', error.message)
   res.redirect('/admin?flag=gallery')
 })
@@ -272,15 +310,15 @@ router.get('/admin/gallery/delete/:id', async (req, res) => {
 
 /******************************************* Events **************************************/
 
-router.post('/admin/discount',(req,res) => {
+router.get('/admin/discount',(req,res) => {
   
-  for(var value in req.body) {
-    if(value === 'discount') {
+  
+    if(req.query.discount === 'set') {
       discount = true
-    }else if(value === 'noDiscount'){
+    }else if(req.query.discount === 'unset'){
       discount = false
      }
-  }
+  
   
   res.redirect('/admin?flag=event')
 })
@@ -312,7 +350,7 @@ router.post('/admin/indoorevent/add', [
     if (!errors.isEmpty()) {
       const alert = errors.array() 
       req.flash('alert_msg', alert)
-      res.redirect('/admin?flag=event')
+      return res.redirect('/admin?flag=event')
     }
 
     const event = new IndoorEvent(req.body)
@@ -338,13 +376,26 @@ router.post('/admin/outdoorevent/add', [
     } else {
       return true
     }
+  }),
+  body('discountValue').custom(value => {
+    if(value) {
+      if(isNaN(value)) {
+        throw new Error('Discount value is not a number')
+     } else {
+       return true
+     }
+    } else {
+      return true
+    }
+    
   })
 ] , async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      const alert = errors.array() 
       req.flash('alert_msg', alert)
-      res.redirect('/admin?flag=event')
+      return res.redirect('/admin?flag=event')
     }
     const event = new OutdoorEvent(req.body)
     await event.save()
@@ -378,17 +429,37 @@ router.get('/admin/outdooreventDelete/:id',  async (req, res) => {
 
 /***************************** Registration Event *************************************/
 
-router.get('/registerEvent/delete/:id',  async (req, res) => {
-  await Registration.findByIdAndDelete(req.params.id)
-  res.redirect('/admin?flag=register')
+router.post('/registerEvent/payment/:id',async (req,res) => {
+  try{
+        
+    if(await EventRegistration.findById(req.params.id)) {
+      await EventRegistration.findByIdAndUpdate(req.params.id,req.body)
+      await Registration.findOneAndUpdate({syncEventRegistrationId:req.params.id},req.body)
+      return res.redirect('/admin?flag=eventRegister')
+    } 
+      await Registration.findByIdAndUpdate(req.params.id,req.body)
+      await EventRegistration.findOneAndUpdate({syncRegistrationId:req.params.id},req.body)
+
+      res.redirect('/admin?flag=register')  
+  } catch(e) {
+    req.flash('error_message','Somthing went wrong. Please try again')
+    res.redirect('/admin?flag=register')
+  }
+  
 })
 
+router.get('/registerEvent/delete/:id',  async (req, res) => {
+  if(await EventRegistration.findById(req.params.id)) {
+    await EventRegistration.findByIdAndDelete(req.params.id)
+    await Registration.findOneAndDelete({syncEventRegistrationId:req.params.id})
+    return res.redirect('/admin?flag=eventRegister')
+  }
+  await Registration.findByIdAndDelete(req.params.id)
+  await EventRegistration.findOneAndDelete({syncRegistrationId:req.params.id})
+  res.redirect('/admin?flag=register')
 
-router.get('*', (req, res) => {
-  res.render('404page', {
-    errorMsg: 'Page not found',
-  });
-});
+})
+
 
 /**********************************Contact Us *********************************/
 router.post('/contact', [

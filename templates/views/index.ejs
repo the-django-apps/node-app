@@ -13,8 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css" />
 
   <link rel="stylesheet" type="text/css" href="/css/testimonial.css" />
-  <!-- Google fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/eventdescription.css" />
 </head>
 <style>
   @media only screen and (max-width: 600px) {
@@ -24,8 +23,9 @@
   }
 </style>
 
-<body class="home-background-image">
+<body>
   <%- include('partials/header') %>
+  <div style="margin-bottom: 56px"></div>
 
   <!--Carousel Wrapper-->
   <div id="carouselExampleIndicators" class="carousel slide carousel_css" data-ride="carousel">
@@ -36,13 +36,13 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="/images/1.jpeg" class="d-block w-100 carousel_css" alt="carousel_image_1" />
+        <img src="/images/1.jpg" class="d-block w-100 carousel_css" alt="carousel_image_1" />
       </div>
       <div class="carousel-item">
-        <img src="/images/2.jpeg" class="d-block w-100 carousel_css" alt="carousel_image_2" />
+        <img src="/images/2.jpg" class="d-block w-100 carousel_css" alt="carousel_image_2" />
       </div>
       <div class="carousel-item">
-        <img src="/images/3.jpeg" class="d-block w-100 carousel_css" alt="carousel_image_3" />
+        <img src="/images/3.jpg" class="d-block w-100 carousel_css" alt="carousel_image_3" />
       </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -56,62 +56,71 @@
   </div>
   <!--Carousel Wrapper Ends-->
 
-  <div class="container-fluid my-2 text-center">
+  <div class="bodyeventdesc eventdesc1">
+    <h1 class="h1eventdesc eventdesc2">Atharva Events</h1>
 
-    <div class="home-background-contents">
-      <div class="home-inner-contents">
-      <h1 ><b>RHYTHM</b></h1>
-      <p >
-        RHYTHM – where the culture blends with Technology since 1999. Shri.
-        Sunil Rane, Executive President, Atharva Group of Institutes believes
-        in the all round development of every student to be the competent
-        citizen of the nation to serve the society.
-      </p>
-      <p class="mobileview">
-        We have started the cultural festival called RHYTHM where students
-        showcase their talents in multiple cultural events, technical fests,
-        celebrity performances and competitions make them confident and job
-        ready. RHYTHM is the amazing festival which entertains and plays a
-        significant role in shaping the career of students.
-      </p>
-      <p class="mobileview">
-        We at Atharva encourage students to volunteer and organize college
-        fests display their self-starter attitude, which is highly appreciated
-        by recruiters. Besides that, students also develop essential skills
-        from organizing fests such as planning, teamwork, leadership and
-        multi-tasking which makes them to balance personal and professional
-        life in future. It also helps in differentiating between doers and
-        dreamers.
-      </p>
-    </div>
-    </div>
-
-
-    <div class="home-background-contents">
-      <div class="home-inner-contents">
-      <h1><b>TECHITHON</b></h1>
-      <p>
-        Atharva College of Engineering hosted one of the most jubilant and
-        elaborate annual technical fest from 9th October to 11th October 2019.
-        IEEE TECHITHON is the annual inter-collegiate Technical Festival that
-        began by Shri. Sunil Rane, Executive President, Atharva Group of
-        Institutes which encourages engineering undergraduates to showcase
-        their technical skills and compete with others to find the best.
-      </p>
-      <p class="mobileview">
-        IEEE TECHITHON 2019, this time focuses on filling in the gap that
-        separates existing technology with new, modern users with their theme
-        INNOVAZIA, Revamping tech. Innovazia is the environment where the
-        existing technology is re-accelerated to fit the needs of the new
-        generation. The fest is more promising than ever assuring a radiant
-        blend of technology, Creativity, Beauty and fun with technical events
-        like Robo wars,Robo Soccer, Technical paper presentation, Blind coding
-        favoured with various genre’s events like Fifa, Treasurehunt,
-        Hogathon, Neon football, escape the room , PUBG ,Laser tag and many
-        more, IEEE TECHITHON is anticipated to set a new high for all the
-        technical fests in the city.
-      </p>
-    </div>
+    <div class="tabs">
+      <div class="tab-2">
+        <label for="tab2-1">Rhythm</label>
+        <input id="tab2-1" name="tabs-two" type="radio" checked="checked" />
+        <div>
+          <h4>Rhythm</h4>
+          <p>
+            RHYTHM – where the culture blends with Technology since 1999. Shri.
+            Sunil Rane, Executive President, Atharva Group of Institutes believes
+            in the all round development of every student to be the competent
+            citizen of the nation to serve the society.
+          </p>
+          <p class="mobileview">
+            We have started the cultural festival called RHYTHM where students
+            showcase their talents in multiple cultural events, technical fests,
+            celebrity performances and competitions make them confident and job
+            ready. RHYTHM is the amazing festival which entertains and plays a
+            significant role in shaping the career of students.
+          </p>
+          <p class="mobileview">
+            We at Atharva encourage students to volunteer and organize college
+            fests display their self-starter attitude, which is highly appreciated
+            by recruiters. Besides that, students also develop essential skills
+            from organizing fests such as planning, teamwork, leadership and
+            multi-tasking which makes them to balance personal and professional
+            life in future. It also helps in differentiating between doers and
+            dreamers.
+          </p>
+        </div>
+      </div>
+      <div class="tab-2">
+        <label for="tab2-2">Techithon</label>
+        <input id="tab2-2" name="tabs-two" type="radio" />
+        <div>
+          <h4>Techithon</h4>
+          <p>
+            Atharva College of Engineering hosted one of the most jubilant and
+            elaborate annual technical fest from 9th October to 11th October 2019.
+            IEEE TECHITHON is the annual inter-collegiate Technical Festival that
+            began by Shri. Sunil Rane, Executive President, Atharva Group of
+            Institutes.
+          </p>
+          <p class="mobileview">
+            IEEE TECHITHON 2019, this time focuses on filling in the gap that
+            separates existing technology with new, modern users with their theme
+            INNOVAZIA, Revamping tech. The fest is more promising than ever assuring a radiant
+            blend of technology, Creativity, Treasurehunt,
+            Hogathon, Neon football, escape the room , PUBG ,Laser tag and many
+            more, IEEE TECHITHON is anticipated to set a new high for all the
+            technical fests in the city.
+          </p>
+          <p class="mobileview">
+            Through this festival, IEEE TECHITHON desires to promote innovations
+            in technologies for the betterment of our country as well as to the
+            whole world, which is also the mission and vision of IEEE (Institute
+            of Electrical and Electronics Engineers) worldwide. The projects are
+            Mini Kuka- 6 axis Robot, Military Robot-Stealth Robot, Power mate,
+            Humidity to water Converter, Solar curtain
+            and many more.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -130,7 +139,9 @@
           <div class="img">
             <img src="images/rahul.jpg" alt="image" />
           </div>
-          <h2>Rahul Gupta</h2>
+          <a href="google.com" target="_blank">
+            <h2>Rahul Gupta</h2>
+          </a>
           <h2 style="color: #777">&#126;&#126;Chairman</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

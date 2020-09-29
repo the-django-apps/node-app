@@ -21,6 +21,11 @@ const indoorEventSchema = mongoose.Schema({
 	}
 })
 
+indoorEventSchema.virtual('indoorEventPath', {
+	ref: 'eventRegistered',
+	localField: '_id',
+	foreignField: 'indoorEventId'
+})
 
 const indoorEvent = mongoose.model('IndoorEvent', indoorEventSchema)
 

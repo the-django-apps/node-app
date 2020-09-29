@@ -10,6 +10,9 @@
   <!-- Other Content -->
   <link rel="stylesheet" type="text/css" href="/css/others.css">
 
+  <!-- Main content -->
+  <link rel="stylesheet" href="/css/main-content.css">
+
 </head>
 
 <body>
@@ -69,12 +72,13 @@
               <td><%=registeredEvents[i].price%></td>
               <td><%=registeredEvents[i].discountFlag%></td>
               <td><%=registeredEvents[i].eventDescription.replace(/\n/g,'<br>')%></td>
-              <td><a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>">Delete</a></td>
+              <td><a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>" >Delete</a></td>
             </tr>
             <%}%>    
             <tr>
               <td><strong>Total Price(with discount)</strong></td>
               <td><strong><%=eventsTotal%></strong></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>

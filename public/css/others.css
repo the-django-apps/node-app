@@ -2,6 +2,7 @@
     position: absolute;
 	top: 50%;
 	left: 50%; 
+	margin-bottom: 50%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
 	text-align: center; 
@@ -15,7 +16,7 @@
 .forgot-password-main {
 	position: relative;
 	min-height: 90vh;
-	margin-top: 10px;
+	margin-top: 40px;
 	margin-bottom: 10px; 
 }
 .forgot-password-inner {
@@ -47,11 +48,13 @@
 	margin-top: 10px;
 	margin-bottom: 10px; 
 	
+	
 }
 
 .registered-event-table {
 	margin-top: 100px;
 	margin-bottom: 100px;
+	flex-grow: 1;
 }
 
 

@@ -4,6 +4,7 @@ const Gallery = require('../model/gallery')
 const IndoorEvent = require('../model/indoorEvent')
 const OutdoorEvent = require('../model/outdoorEvent')
 const Registration = require('../model/registration')
+const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -58,7 +59,7 @@ router.get('/', (req, res) => {
 router.get('/event', async (req, res) => {
   const indoorevents = await IndoorEvent.find({})
   const outdoorevents = await OutdoorEvent.find({})
-  res.render('event',{indoorevents,outdoorevents,currentUser:req.user})
+  res.render('event',{indoorevents,outdoorevents,currentUser:req.user,discount: discount})
 })
 
 router.get('/about', (req, res) => {
@@ -180,8 +181,9 @@ router.post('/user/forgotPassword/setPassword' , [
 router.post('/event/register', async (req,res) => {
 
   try {
-      // console.log(Object.keys(req.body).length)
-      if(Object.keys(req.body).length === 1 || discount === false) {
+      var eventsToEmail = []
+      if(Object.keys(req.body).length === 1 || (discount === false && Object.keys(req.body).length > 0)) {
+        
         for(var event in req.body) {
         var indoorEvent = await IndoorEvent.findById(event)
         var outdoorEvent = await OutdoorEvent.findById(event)
@@ -193,6 +195,18 @@ router.post('/event/register', async (req,res) => {
               eventDescription:indoorEvent.description,
               owner:req.user._id
             })
+            
+            var registerUser = new EventRegistration({
+              user:req.user.name,
+              email:req.user.email,
+              price:indoorEvent.price,
+              discountGain: indoorEvent.discountValue,
+              eventDescription:indoorEvent.description,
+              syncRegistrationId:registerEvent._id,
+              indoorEventId:indoorEvent._id
+            })
+            registerEvent.syncEventRegistrationId = registerUser._id
+            eventsToEmail.push(indoorEvent)
           }else if(outdoorEvent) {
             var registerEvent = new Registration({
               registeredEvent:outdoorEvent.outdoorEvent,
@@ -201,14 +215,31 @@ router.post('/event/register', async (req,res) => {
               eventDescription:outdoorEvent.description,
               owner:req.user._id
             })
+            var registerUser = new EventRegistration({
+              user:req.user.name,
+              price:outdoorEvent.price,
+              email:req.user.email,
+              discountGain: outdoorEvent.discountValue,
+              eventDescription:outdoorEvent.description,
+              syncRegistrationId:registerEvent._id,
+              outdoorEventId:outdoorEvent._id
+            })
+            registerEvent.syncEventRegistrationId = registerUser._id
+            eventsToEmail.push(outdoorEvent)
           }
           await registerEvent.save()
+          await registerUser.save()
+          
         }
+        
+        req.flash('error_message', "Registered successfully")
       }else if(Object.keys(req.body).length > 1 && discount === true) {
         for(var event in req.body) {
         var indoorEvent = await IndoorEvent.findById(event)
         var outdoorEvent = await OutdoorEvent.findById(event)
         if(indoorEvent) {
+            var discountGot = (indoorEvent.price * indoorEvent.discountValue)/100
+            indoorEvent.price -= discountGot
             var registerEvent = new Registration({
               registeredEvent:indoorEvent.indoorEvent,
               price:indoorEvent.price,
@@ -217,7 +248,21 @@ router.post('/event/register', async (req,res) => {
               eventDescription:indoorEvent.description,
               owner:req.user._id
             })
+            var registerUser = new EventRegistration({
+              user:req.user.name,
+              price:indoorEvent.price,
+              email:req.user.email,
+              discountFlag: true,
+              discountGain: indoorEvent.discountValue,
+              eventDescription:indoorEvent.description,
+              syncRegistrationId:registerEvent._id,
+              indoorEventId:indoorEvent._id
+            })
+            registerEvent.syncEventRegistrationId = registerUser._id
+            eventsToEmail.push(indoorEvent)
           }else if(outdoorEvent) {
+            var discountGot = (outdoorEvent.price * outdoorEvent.discountValue)/100
+            outdoorEvent.price -= discountGot
             var registerEvent = new Registration({
               registeredEvent:outdoorEvent.outdoorEvent,
               price:outdoorEvent.price,
@@ -226,24 +271,48 @@ router.post('/event/register', async (req,res) => {
               eventDescription:outdoorEvent.description,
               owner:req.user._id
             })
+            var registerUser = new EventRegistration({
+              user:req.user.name,
+              price:outdoorEvent.price,
+              email:req.user.email,
+              discountFlag: true,
+              discountGain: outdoorEvent.discountValue,
+              eventDescription:outdoorEvent.description,
+              syncRegistrationId:registerEvent._id,
+              outdoorEventId:outdoorEvent._id
+            })
+            registerEvent.syncEventRegistrationId = registerUser._id
+            eventsToEmail.push(outdoorEvent)
           }
           await registerEvent.save()
+          await registerUser.save()
         }
+        
+        req.flash('error_message', "Registered successfully")
       }
       
-      // console.log(indoorEvent)
-      // console.log(outdoorEvent)
+      var eventsString = '';
+      eventsToEmail.forEach((value) => {
+        if(value.indoorEvent){
+          eventsString += value.indoorEvent + ','
+        } else {
+          eventsString += value.outdoorEvent + ','
+        }
+        
+      })
+      
 
-  // const msg = {
-  //     to: req.user.email,
-  //     from: process.env.FROM_EMAIL,
-  //     subject: 'Event Registration',
-  //     text: 'You have sucessfully registered in ' + registerEvent.registeredEvent+ ' event'
-  //   }
-  //   await sgMail.send(msg)
+      
+  const msg = {
+      to: req.user.email,
+      from: process.env.FROM_EMAIL,
+      subject: 'Event Registration',
+      text: 'You have sucessfully registered in: \n' + eventsString + ' event'
+    }
+    await sgMail.send(msg)
 
   
-  req.flash('error_message', "Registered successfully")
+  
   res.redirect('/event')
   } catch(e) {
     req.flash('error_message', "Somthing thing went wrong. Please try again!")
@@ -261,13 +330,7 @@ router.get('/myaccount', async (req,res) => {
     }).execPopulate()
     var eventsTotal = 0
     req.user.registration.forEach((value) => {
-      if(value.discountFlag === true) {
-        
-        var discountValue = (value.price * value.discountGain)/100
-        value.price = value.price - discountValue
-      }
-       
-        eventsTotal += value.price
+      eventsTotal += value.price
     })
 
   res.render('account',({registeredEvents:req.user.registration,eventsTotal,currentUser:req.user,accountOption:'registeredEvents'}))
@@ -278,6 +341,13 @@ router.get('/myaccount', async (req,res) => {
   }
   
 
+})
+
+router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
+
+  await Registration.findByIdAndDelete(req.params.id)
+  await EventRegistration.findOneAndDelete({syncRegistrationId:req.params.id})
+  res.redirect('/myaccount?accountOption=registeredEvents')
 })
 
 
@@ -292,19 +362,6 @@ router.post('/user/resetPassword',async (req,res) => {
     res.redirect('/myaccount?accountOption=resetPassword')
   }
 })
-
-
-router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
-
-  await Registration.findByIdAndDelete(req.params.id)
-  res.redirect('/myaccount?accountOption=registeredEvents')
-})
-
-
-
-
-
-
 
 
 module.exports = router
