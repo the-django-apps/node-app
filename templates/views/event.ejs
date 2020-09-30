@@ -8,145 +8,188 @@
   <!-- Footer CSS -->
   <link rel="stylesheet" type="text/css" href="/css/footer.css" />
 
-  <!-- Main content -->
-  <!-- <link rel="stylesheet" href="/css/main-content.css"> -->
+  <!-- Event Css -->
+  <link rel="stylesheet" href="/css/event.css" />
+
+  <link rel="stylesheet" href="/css/eventtable.css" />
 </head>
 
 <body>
-
   <%- include('partials/header') %>
-  <!-- <div style="flex-grow: 1;"> -->
-    <% if(eventFlag == 'eventRegistration') {%>
+  <div style="margin-bottom: 56px"></div>
 
-    <table style="margin-top: 100px;">
-      <thead>
-        <tr>
-          <th>Event</th>
-          <th>Price</th>
-          <th>Discount</th>
-          <th>Select</th>
-        </tr>
-      </thead>
-      <tbody>
+  <% if(eventFlag == 'eventRegistration') {%>
 
-        <form action="/event/register" method="POST" id="registration-form">
-          <% if(typeof indoorevents != 'undefined') { %>
-          <% if(indoorevents.length != 0) { %>
-          <% for(var i=0; i < indoorevents.length ; i++ ) { %>
-          <tr>
-            <td><%=indoorevents[i].indoorEvent%></td>
-            <td class="indoor<%-i%>"><%=indoorevents[i].price%></td>
-            <td class="indoor<%-i%>"><%=indoorevents[i].discountValue%>%</td>
-            <td><input type="checkbox" class="indoor<%-i%>" name="<%=indoorevents[i].id%>"></td>
-          </tr>
-
-          <%}%>
-              <%}%>
-          <%}%>
-            <% if(typeof outdoorevents != 'undefined') { %>
-          <% if(outdoorevents.length != 0) { %>
-          <% for(var i=0; i < outdoorevents.length ; i++ ) { %>
-          <tr>
-            <td><%=outdoorevents[i].outdoorEvent%></td>
-            <td class="outdoor<%-i%>"><%=outdoorevents[i].price%></td>
-            <td class="outdoor<%-i%>"><%=outdoorevents[i].discountValue%>%</td>
-            <td><input type="checkbox" class="outdoor<%-i%>" class="eventsCheckbox" name="<%=outdoorevents[i].id%>">
-            </td>
-          </tr>
-          <%}%>
-              <%}%>
-          <%}%>
-            
-              <tr><td><input type="submit" value="Register"></td></tr>
-            </form>
-                      
-        </tbody>
-      </table>
-  
-  
+  <div class="container-fluid" style="min-height: 60vh">
+    <div class="row">
+      <div class="col-sm-12 col-lg-4" style="margin-top: 11px;">
+        <div class="list-group" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+            href="#list-home" role="tab" aria-controls="home">Home</a>
+          <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+            href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+            <div class="tablebodycss">
+              <div class="sectiontablecss" style="margin-top: 10px !important">
+                <div class="tbl-header">
+                  <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                      <tr>
+                        <th>Game</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Select</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="tbl-content">
+                  <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                    <tbody>
+                      <tr>
+                        <td>AAC</td>
+                        <td>AUSTRALIAN COMPANY</td>
+                        <td>$1.38</td>
+                        <td><input type="checkbox" id="1" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+            <div class="tablebodycss">
+              <div class="sectiontablecss" style="margin-top: 10px !important">
+                <div class="tbl-header">
+                  <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                      <tr>
+                        <th>Game</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Select</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="tbl-content">
+                  <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                    <tbody>
+                      <tr>
+                        <td>AAC</td>
+                        <td>AUSTRALIAN COMPANY</td>
+                        <td>$1.38</td>
+                        <td><input type="checkbox" id="1" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 my-3" style="text-align: center;">
+        <button class="btn-footer btn" style="align-items: center;">Register</button>
+      </div>
+    </div>
+  </div>
 
   <%}%>
-          <div class="table-Event-Date-main">
-            <div class="table-Event-Date-inner">
-              <%if(eventFlag == 'eventDashboard') {%>
-              <h1 style="margin-top: 10%;">Event Dashbord</h1>
-              <%if(EventDates != 'undefined') {%>
-              <% for(var i=0; i < EventDates.length; i++) {%>
-              <table class="table table-Event-Date">
-                <tr style="background-color: #85aecc;">
-                  <td><%=EventDates[i][EventDates[i].length-1].date%></td>
-                </tr>
-                <% EventDates[i].forEach(function(value) { %>
-                <%if(value.indoorEvent){%>
-                <tr>
-                  <td><%=value.indoorEvent%></td>
-                </tr>
-                <%}%>
-          <%if(value.outdoorEvent){%>
-                <tr>
-                  <td><%=value.outdoorEvent%></td>
-                </tr>
-                <%}%>
-        <% }) %>
-              </table>
-              <%}%>
+
+  <div class="table-Event-Date-main">
+    <div class="table-Event-Date-inner">
+      <%if(eventFlag == 'eventDashboard') {%>
+  <h1 style="margin-top: 10%;">Event Dashbord</h1>
+  <%if(EventDates != 'undefined') {%>
+  <% for(var i=0; i < EventDates.length; i++) {%>
+  <table class="table table-Event-Date">
+    <tr style="background-color: #85aecc;">
+      <td><%=EventDates[i][EventDates[i].length-1].date%></td>
+    </tr>
+    <% EventDates[i].forEach(function(value) { %>
+    <%if(value.indoorEvent){%>
+    <tr>
+      <td><%=value.indoorEvent%></td>
+    </tr>
     <%}%>
-              <%}%>
+  <%if(value.outdoorEvent){%>
+    <tr>
+      <td><%=value.outdoorEvent%></td>
+    </tr>
+    <%}%>
+<% }) %>
+  </table>
+  <%}%>
+<%}%>
+  <%}%>
 </div>
 </div>
 
-<!-- </div> -->
-<%- include('partials/footer') %>
-    
+  <%- include('partials/footer') %>
 
+  <% if(error_message != '') { %>
+  <script type="text/javascript">
+    alert('<%-error_message%>')
+  </script>
+  <%}%>
     <% if(typeof indoorevents != 'undefined') { %>
-              <% if(indoorevents.length != 0) { %>
-              <script>
-                function discountCheck(eventLength, eventName) {
-                  var eventsTotal = 0
-                  for (var i = 0; i < eventLength; i++) {
-                    var rergisteredEvent = document.getElementsByClassName(eventName + i)
-                    if (rergisteredEvent[2].checked) {
+  <% if(indoorevents.length != 0) { %>
+  <script>
+    function discountCheck(eventLength, eventName) {
+      var eventsTotal = 0
+      for (var i = 0; i < eventLength; i++) {
+        var rergisteredEvent = document.getElementsByClassName(eventName + i)
+        if (rergisteredEvent[2].checked) {
 
-                      if (<% - discount %> && totalSelectedEvent > 1) {
-                        var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0, parseInt(rergisteredEvent[1].innerHTML.length) - 1)) / 100
-                        eventsTotal += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
-                      } else {
-                        eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
-                      }
-                    }
+          if (<% - discount %> && totalSelectedEvent > 1) {
+            var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0, parseInt(rergisteredEvent[1].innerHTML.length) - 1)) / 100
+            eventsTotal += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
+          } else {
+            eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
+          }
+        }
 
-                  }
-                  return eventsTotal
-                }
+      }
+      return eventsTotal
+    }
 
-                $("#registration-form").submit(function (e) {
+    $("#registration-form").submit(function (e) {
 
-                  totalSelectedEvent = 0
-                  var allInputs = document.getElementsByTagName('input')
-                  for (value in allInputs) {
-                    if (allInputs[value].checked) {
-                      totalSelectedEvent++
-                    }
-                  }
+      totalSelectedEvent = 0
+      var allInputs = document.getElementsByTagName('input')
+      for (value in allInputs) {
+        if (allInputs[value].checked) {
+          totalSelectedEvent++
+        }
+      }
 
-                  var indoorDiscount = discountCheck(<% -indoorevents.length %>, 'indoor')
-                  var outdoorDiscount = discountCheck(<% -outdoorevents.length %>, 'outdoor')
+      var indoorDiscount = discountCheck(<% -indoorevents.length %>, 'indoor')
+      var outdoorDiscount = discountCheck(<% -outdoorevents.length %>, 'outdoor')
 
-                  return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
-                })
+      return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
+    })
 
 
-              </script>
-              <%}%>
+  </script>
+  <%}%>
       <%}%>
 
-              <% if(error_message != '') { %>
-              <script type="text/javascript">
-                alert('<%-error_message%>')
-              </script>
-              <%}%>
-        
+
+  <script>
+    $(window)
+      .on("load resize ", function () {
+        var scrollWidth =
+          $(".tbl-content").width() - $(".tbl-content table").width();
+        $(".tbl-header").css({ "padding-right": scrollWidth });
+      })
+      .resize();
+  </script>
 </body>
 
 </html>
