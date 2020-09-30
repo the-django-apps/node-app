@@ -37,6 +37,21 @@ const eventRegisterSchema = mongoose.Schema({
 })
 
 
+/***** Here the syncEventRegistrationId is used to sync eventRegistered model and Register model
+ * like if we delete any thing from this model than using the syncEventRegistrationId
+ *  of eventRegistered model we can delete object from eventRegistered Model also.
+ * 
+ * 
+ * This things are done due to user wise registration and event wise registration on admin side.
+ */
+
+/***********
+ * The 'owner' field here is used to store the id of owner
+ *  to get all the regiesterd events of that user.
+ *
+ * */
+
+
 
 
 

@@ -7,6 +7,7 @@ const OutdoorEvent = require('../model/outdoorEvent')
 const Registration = require('../model/registration')
 const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
+const DateEvent = require('../model/dateEvents')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -62,6 +63,7 @@ router.get('/admin',  async (req, res) => {
         path: 'registration'
       }).execPopulate()
 
+
       var singleMemberTotal = 0
       users[i].registration.forEach((event) => {
         singleMemberTotal += event.price
@@ -91,7 +93,7 @@ router.get('/admin',  async (req, res) => {
         await indoorEvents[i].populate({
           path: 'indoorEventPath'
         }).execPopulate()
-
+        
         var singleEventTotal = 0
         indoorEvents[i].indoorEventPath.forEach((value) => {
           singleEventTotal += value.price
@@ -318,13 +320,29 @@ router.get('/admin/discount',(req,res) => {
     }else if(req.query.discount === 'unset'){
       discount = false
      }
-  
-  
+
   res.redirect('/admin?flag=event')
 })
 
+/****** Date Validation Function *******/
+dateValidation = function() {
+  return function(req,res,next) {
+    if(req.body.day && req.body.month && req.body.year) {
+      var valideDate = new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)
+      if((valideDate.getDate() !== parseInt(req.body.day)) || (valideDate.toString() === 'Invalid Date')  ) {
+        req.flash("error_message", 'Invalid Date')
+        return res.redirect('/admin?flag=event')
+      }     
+      next()
+    } else{
+      req.flash("error_message", 'All Fields are required')
+        res.redirect('/admin?flag=event')
+    }
+    
+  }
+}
 
-router.post('/admin/indoorevent/add', [
+router.post('/admin/indoorevent/add', dateValidation() ,[
   body('price').custom(value => {
     if(isNaN(value)) {
        throw new Error('Price is not a number')
@@ -343,6 +361,13 @@ router.post('/admin/indoorevent/add', [
       return true
     }
     
+  }),
+  body('indoorEvent').custom(value => {
+    return IndoorEvent.findOne({indoorEvent:value}).then(event => {
+      if (event) {
+        return Promise.reject('Event already exist')
+      }
+    })
   })
 ]  ,async (req, res) => {
   try {
@@ -353,8 +378,21 @@ router.post('/admin/indoorevent/add', [
       return res.redirect('/admin?flag=event')
     }
 
-    const event = new IndoorEvent(req.body)
+    
+    const oldDate = await DateEvent.findOne({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+     /****** This  verification is done to keep all date unique in dateEvent model
+      *  but if two objects of same date is created then there will be (ambiguity) conflict between two object. 
+      * It means that, interpretar will find two objects have same date than it will repeat same result two time. 
+      * Means it will find all the result of first date then again it will give same result for second date (if first and second are same) ********/
+      
+    if(!oldDate){ 
+     const date = new DateEvent({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+      await date.save()     
+    } 
+    
+    const event = new IndoorEvent({...req.body,date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
     await event.save()
+    
     req.flash('optionFlag', 'indoor')
     res.redirect('/admin?flag=event')
   } catch (e) {
@@ -369,7 +407,7 @@ router.post('/admin/indoorevent/add', [
 
 })
 
-router.post('/admin/outdoorevent/add', [
+router.post('/admin/outdoorevent/add', dateValidation(),[
   body('price').custom(value => {
     if(isNaN(value)) {
        throw new Error('Price is not a number')
@@ -397,8 +435,15 @@ router.post('/admin/outdoorevent/add', [
       req.flash('alert_msg', alert)
       return res.redirect('/admin?flag=event')
     }
-    const event = new OutdoorEvent(req.body)
+    const oldDate = await DateEvent.findOne({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+
+    if(!oldDate){ 
+      const date = new DateEvent({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+       await date.save()
+    }
+    const event = new OutdoorEvent({...req.body,date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
     await event.save()
+    
     req.flash('optionFlag', 'outdoor')
     res.redirect('/admin?flag=event')
   } catch (e) {

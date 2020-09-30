@@ -25,6 +25,15 @@ const userSchema = mongoose.Schema({
 	isAdmin: { type: Boolean, default: false }
 })
 
+
+/**** This is one to many concept(similar to foregin key). 
+ * Here we give id of one field model to many field model. 
+ * Like user model is one and register model is many so we save id of user object to register model.
+ * then while populating(finding) data(registered events) of single user we compare 
+ * id of user with userId field created in register model(owner field). 
+ * Wherever we find match between both the fields(_id field of user model and owner field of register model) 
+ * we selects that data(object) only*/
+
 userSchema.virtual('registration', {
 	ref:'Register',
 	localField: '_id',

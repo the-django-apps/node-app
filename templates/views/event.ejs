@@ -9,13 +9,15 @@
   <link rel="stylesheet" type="text/css" href="/css/footer.css" />
 
   <!-- Main content -->
-  <link rel="stylesheet" href="/css/main-content.css">
+  <!-- <link rel="stylesheet" href="/css/main-content.css"> -->
 </head>
 
 <body>
 
   <%- include('partials/header') %>
-  <div style="flex-grow: 1;">
+  <!-- <div style="flex-grow: 1;"> -->
+    <% if(eventFlag == 'eventRegistration') {%>
+
     <table style="margin-top: 100px;">
       <thead>
         <tr>
@@ -26,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-  
+
         <form action="/event/register" method="POST" id="registration-form">
           <% if(typeof indoorevents != 'undefined') { %>
           <% if(indoorevents.length != 0) { %>
@@ -37,7 +39,7 @@
             <td class="indoor<%-i%>"><%=indoorevents[i].discountValue%>%</td>
             <td><input type="checkbox" class="indoor<%-i%>" name="<%=indoorevents[i].id%>"></td>
           </tr>
-  
+
           <%}%>
               <%}%>
           <%}%>
@@ -48,7 +50,8 @@
             <td><%=outdoorevents[i].outdoorEvent%></td>
             <td class="outdoor<%-i%>"><%=outdoorevents[i].price%></td>
             <td class="outdoor<%-i%>"><%=outdoorevents[i].discountValue%>%</td>
-            <td><input type="checkbox" class="outdoor<%-i%>" class="eventsCheckbox" name="<%=outdoorevents[i].id%>"></td>
+            <td><input type="checkbox" class="outdoor<%-i%>" class="eventsCheckbox" name="<%=outdoorevents[i].id%>">
+            </td>
           </tr>
           <%}%>
               <%}%>
@@ -56,63 +59,93 @@
             
               <tr><td><input type="submit" value="Register"></td></tr>
             </form>
-            
-          
+                      
         </tbody>
       </table>
   
-  </div>
   
-    <%- include('partials/footer') %>
 
-        <% if(error_message != '') { %>
-        <script type="text/javascript">
-          alert('<%-error_message%>')
-        </script>
-        <%}%>
+  <%}%>
+          <div class="table-Event-Date-main">
+            <div class="table-Event-Date-inner">
+              <%if(eventFlag == 'eventDashboard') {%>
+              <h1 style="margin-top: 10%;">Event Dashbord</h1>
+              <%if(EventDates != 'undefined') {%>
+              <% for(var i=0; i < EventDates.length; i++) {%>
+              <table class="table table-Event-Date">
+                <tr style="background-color: #85aecc;">
+                  <td><%=EventDates[i][EventDates[i].length-1].date%></td>
+                </tr>
+                <% EventDates[i].forEach(function(value) { %>
+                <%if(value.indoorEvent){%>
+                <tr>
+                  <td><%=value.indoorEvent%></td>
+                </tr>
+                <%}%>
+          <%if(value.outdoorEvent){%>
+                <tr>
+                  <td><%=value.outdoorEvent%></td>
+                </tr>
+                <%}%>
+        <% }) %>
+              </table>
+              <%}%>
+    <%}%>
+              <%}%>
+</div>
+</div>
+
+<!-- </div> -->
+<%- include('partials/footer') %>
+    
+
     <% if(typeof indoorevents != 'undefined') { %>
-        <% if(indoorevents.length != 0) { %>
-        <script>
-          function discountCheck(eventLength, eventName) {
-              var eventsTotal = 0
-              for (var i = 0; i < eventLength; i++) {
-                var rergisteredEvent = document.getElementsByClassName(eventName + i)
-                if (rergisteredEvent[2].checked) {
-                  
-                  if(<%- discount %> && totalSelectedEvent > 1) {
-                  var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0,parseInt(rergisteredEvent[1].innerHTML.length)-1))/100
-                  eventsTotal  += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
-                  } else {
-                    eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
+              <% if(indoorevents.length != 0) { %>
+              <script>
+                function discountCheck(eventLength, eventName) {
+                  var eventsTotal = 0
+                  for (var i = 0; i < eventLength; i++) {
+                    var rergisteredEvent = document.getElementsByClassName(eventName + i)
+                    if (rergisteredEvent[2].checked) {
+
+                      if (<% - discount %> && totalSelectedEvent > 1) {
+                        var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0, parseInt(rergisteredEvent[1].innerHTML.length) - 1)) / 100
+                        eventsTotal += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
+                      } else {
+                        eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
+                      }
+                    }
+
                   }
+                  return eventsTotal
                 }
 
-              }
-              return eventsTotal
-          }
+                $("#registration-form").submit(function (e) {
 
-          $("#registration-form").submit(function (e) {
-            
-            totalSelectedEvent = 0
-            var allInputs = document.getElementsByTagName('input')
-            for (value in allInputs) {
-              if (allInputs[value].checked) {
-                totalSelectedEvent++
-              }
-            }
-              
-              var indoorDiscount = discountCheck(<%-indoorevents.length %>, 'indoor')
-              var outdoorDiscount = discountCheck(<%-outdoorevents.length %>, 'outdoor')
+                  totalSelectedEvent = 0
+                  var allInputs = document.getElementsByTagName('input')
+                  for (value in allInputs) {
+                    if (allInputs[value].checked) {
+                      totalSelectedEvent++
+                    }
+                  }
 
-            return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
-          })
+                  var indoorDiscount = discountCheck(<% -indoorevents.length %>, 'indoor')
+                  var outdoorDiscount = discountCheck(<% -outdoorevents.length %>, 'outdoor')
+
+                  return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
+                })
 
 
-          </script>
-            <%}%>
+              </script>
+              <%}%>
       <%}%>
 
-
+              <% if(error_message != '') { %>
+              <script type="text/javascript">
+                alert('<%-error_message%>')
+              </script>
+              <%}%>
         
 </body>
 

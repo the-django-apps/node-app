@@ -7,8 +7,9 @@ const outdoorEventSchema = mongoose.Schema({
 		required:true
 
 	},
-	date: {
-		type: Date
+	date:{
+		type: String,
+		ref:'DateEvent'
 	},
 	price: {
 		type: Number,
@@ -29,6 +30,18 @@ outdoorEventSchema.virtual('outdoorEventPath', {
 	localField: '_id',
 	foreignField: 'outdoorEventId'
 })
+
+/******** The above virtual is used to connect eventRegistered model OutdoorEvent model 
+ * The localField refers to id of OutdoorEvent.
+ * The foreignField refers to the field which will store the id of OutdoorEvent object 
+ * but in objects of eventRegistered model .
+ * 
+ * 
+ * 
+ * 
+ * To know more about this go to file eventRegistered model.
+ */
+
 
 
 const outdoorEvent = mongoose.model('OutdoorEvent', outdoorEventSchema)

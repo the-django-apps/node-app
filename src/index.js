@@ -36,3 +36,11 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
 	console.log('Server is up on ' + port)
 })
+
+
+// function dateValidation() {
+// 	var d = new Date("2015-02-32");
+// 	console.log(d)
+// }
+
+// dateValidation()

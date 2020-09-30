@@ -6,6 +6,7 @@ const OutdoorEvent = require('../model/outdoorEvent')
 const Registration = require('../model/registration')
 const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
+const DateEvent = require('../model/dateEvents')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -21,6 +22,7 @@ sgMail.setApiKey(process.env.SEND_GRID_KEY)
 const { body, validationResult } = require('express-validator');
 
 const initializePassport = require('../setting/passport-config')
+const dateEvent = require('../model/dateEvents')
 initializePassport(passport)
 
 const router = new express.Router()
@@ -56,11 +58,46 @@ router.get('/', (req, res) => {
   res.render('index',{currentUser:req.user})
 })
 
-router.get('/event', async (req, res) => {
-  const indoorevents = await IndoorEvent.find({})
-  const outdoorevents = await OutdoorEvent.find({})
-  res.render('event',{indoorevents,outdoorevents,currentUser:req.user,discount: discount})
+router.get('/eventRegistration', async (req, res) => {
+  if(req.query.eventFlag == 'eventRegistration') {
+    const indoorevents = await IndoorEvent.find({})
+    const outdoorevents = await OutdoorEvent.find({})
+   return res.render('event',{indoorevents,outdoorevents,currentUser:req.user,discount: discount,eventFlag: 'eventRegistration'})
+  } 
+  
+  res.redirect('/404')
 })
+
+router.get('/eventDashboard', async (req, res) => {
+  
+  if(req.query.eventFlag == 'eventDashboard') {
+    const dateEvents = await DateEvent.find({})
+  const EventDates = []  
+  
+
+  for(var i=0; i < dateEvents.length ; i++) {
+    await dateEvents[i].populate({
+      path: 'indoorEventDate'
+    }).execPopulate()
+    await dateEvents[i].populate({
+      path: 'outdoorEventDate'
+    }).execPopulate()
+    
+    if(dateEvents[i].indoorEventDate.length !== 0){   
+      dateEvents[i].indoorEventDate[dateEvents[i].indoorEventDate.length] = dateEvents[i]
+      EventDates.push(dateEvents[i].indoorEventDate)
+    }
+    if(dateEvents[i].outdoorEventDate.length !== 0){
+      dateEvents[i].outdoorEventDate[dateEvents[i].outdoorEventDate.length] = dateEvents[i]
+      EventDates.push(dateEvents[i].outdoorEventDate)
+    }    
+  }
+  return res.render('event',{EventDates,currentUser:req.user,eventFlag: 'eventDashboard'})
+  }
+  
+  res.redirect('/404')
+})
+
 
 router.get('/about', (req, res) => {
   res.render('about',{currentUser:req.user})
@@ -301,22 +338,18 @@ router.post('/event/register', async (req,res) => {
         
       })
       
-
-      
   const msg = {
       to: req.user.email,
       from: process.env.FROM_EMAIL,
       subject: 'Event Registration',
-      text: 'You have sucessfully registered in: \n' + eventsString + ' event'
+      text: 'You have sucessfully registered in: \n' + eventsString + ' events'
     }
     await sgMail.send(msg)
-
   
-  
-  res.redirect('/event')
+  res.redirect('/event?eventFlag=eventRegistration')
   } catch(e) {
     req.flash('error_message', "Somthing thing went wrong. Please try again!")
-    res.redirect('/event')
+    res.redirect('/event?eventFlag=eventRegistration')
   }
 })
 

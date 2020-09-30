@@ -26,9 +26,18 @@
         <li class="nav-item">
           <a class="nav-link " id="gallery_navbar" href="/gallery">Gallery</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Event
+          </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/eventRegistration?eventFlag=eventRegistration">Event Registration</a>
+          <a class="dropdown-item" href="/eventDashboard?eventFlag=eventDashboard">Event Dashboard</a>
+        </div>
+      </li>
+        <!-- <li class="nav-item">
           <a class="nav-link " id="event_navbar" href="/event">Event</a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link " id="about_navbar" href="/about">About</a>
         </li>

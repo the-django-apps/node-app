@@ -8,7 +8,8 @@ const indoorEventSchema = mongoose.Schema({
 
 	},
 	date:{
-		type: Date
+		type: String,
+		ref:'DateEvent'
 	},
 	price: {
 		type: Number,
@@ -29,6 +30,17 @@ indoorEventSchema.virtual('indoorEventPath', {
 	localField: '_id',
 	foreignField: 'indoorEventId'
 })
+
+/******** The above virtual is used to connect eventRegistered model IndoorEvent model  
+ * The localField refers to id of IndoorEvent.
+ * The foreignField refers to the field which will store the id of IndoorEvent object 
+ * but in objects of eventRegistered model .
+ * 
+ * 
+ * 
+ * To know more about this go to file eventRegistered model.
+*/
+
 
 const indoorEvent = mongoose.model('IndoorEvent', indoorEventSchema)
 

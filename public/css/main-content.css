@@ -1,4 +1,4 @@
-.home-background-image {
+/* .home-background-image {
     background-image: url('../images/clg.jpg');
     background-repeat: no-repeat;
     -webkit-background-size: cover;
@@ -25,4 +25,30 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+} */
+
+
+/* .table-Event-Date-main{
+    position: relative;
+    min-height: 100vh;
+	margin-top: 15%;
+    margin-bottom: 10px;
+    border: 2px solid black;
+} */
+
+.table-Event-Date-inner{
+    position: absolute;
+	top: 75%;
+	left: 50%; 
+	margin-bottom: 50%;
+	margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    text-align: center; 
+    border: 2px solid yellow;
+    min-height: 70vh;
+}
+
+.table-Event-Date{
+    
 }
