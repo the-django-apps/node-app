@@ -76,6 +76,10 @@ router.get('/about', (req, res) => {
   res.render('about',{currentUser:req.user})
 })
 
+router.get('/example', (req, res) => {
+  res.render('example',{currentUser:req.user})
+})
+
 router.get('/contact', (req, res) => {
   res.render('contact',{currentUser:req.user})
 })
