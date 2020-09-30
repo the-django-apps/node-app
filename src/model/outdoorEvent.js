@@ -7,14 +7,25 @@ const outdoorEventSchema = mongoose.Schema({
 		required:true
 
 	},
+	price: {
+		type: Number,
+		required:true
+	},
+	discountValue: {
+		type: Number,
+		default: 0
+	},
 	description: {
 		type:String,
 		required:true
 	}
 })
 
-
-
+outdoorEventSchema.virtual('outdoorEventPath', {
+	ref: 'eventRegistered',
+	localField: '_id',
+	foreignField: 'outdoorEventId'
+})
 
 
 const outdoorEvent = mongoose.model('OutdoorEvent', outdoorEventSchema)

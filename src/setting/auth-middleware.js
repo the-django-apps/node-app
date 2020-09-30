@@ -1,4 +1,5 @@
 function checkAuthenticated(req, res, next) {
+  
   if (req.isAuthenticated()) {
   	//Once loged out this line will not allow user to go back by pressing back button in browser. 
   	//It will throw you at login page

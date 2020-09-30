@@ -7,12 +7,25 @@ const indoorEventSchema = mongoose.Schema({
 		required:true
 
 	},
+	price: {
+		type: Number,
+		required:true
+	},
+	discountValue: {
+		type: Number,
+		default: 0
+	},
 	description: {
 		type:String,
 		required: true
-    }
+	}
 })
 
+indoorEventSchema.virtual('indoorEventPath', {
+	ref: 'eventRegistered',
+	localField: '_id',
+	foreignField: 'indoorEventId'
+})
 
 const indoorEvent = mongoose.model('IndoorEvent', indoorEventSchema)
 

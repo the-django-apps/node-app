@@ -1,0 +1,16 @@
+body{
+    /* font-family: 'Roboto', sans-serif; */
+    /* font-family: 'Bangers', cursive; */
+    /* font-family: 'Roboto','RobotoDraft',Helvetica,Arial,sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+}
+
+
+/* Table css */
+
+.table-css thead {
+    background-color: #85aecc;
+    color: white;
+}
+

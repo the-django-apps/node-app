@@ -24,8 +24,8 @@
         <div class="list-group" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
             href="#list-home" role="tab" aria-controls="home">Home</a>
-          <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile"
-            role="tab" aria-controls="profile">Profile</a>
+          <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+            href="#list-profile" role="tab" aria-controls="profile">Profile</a>
         </div>
       </div>
       <div class="col-sm-12 col-lg-8">
@@ -52,7 +52,7 @@
                         <td>AAC</td>
                         <td>AUSTRALIAN COMPANY</td>
                         <td>$1.38</td>
-                        <td><input type="checkbox" id="1"/></td>
+                        <td><input type="checkbox" id="1" /></td>
                       </tr>
                       <tr>
                         <td>AAC</td>
@@ -230,6 +230,56 @@
     </div>
   </div>
 
+  <%- include('partials/footer') %>
+
+  <% if(error_message != '') { %>
+  <script type="text/javascript">
+    alert('<%-error_message%>')
+  </script>
+  <%}%>
+    <% if(typeof indoorevents != 'undefined') { %>
+  <% if(indoorevents.length != 0) { %>
+  <script>
+    function discountCheck(eventLength, eventName) {
+      var eventsTotal = 0
+      for (var i = 0; i < eventLength; i++) {
+        var rergisteredEvent = document.getElementsByClassName(eventName + i)
+        if (rergisteredEvent[2].checked) {
+
+          if (<% - discount %> && totalSelectedEvent > 1) {
+            var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0, parseInt(rergisteredEvent[1].innerHTML.length) - 1)) / 100
+            eventsTotal += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
+          } else {
+            eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
+          }
+        }
+
+      }
+      return eventsTotal
+    }
+
+    $("#registration-form").submit(function (e) {
+
+      totalSelectedEvent = 0
+      var allInputs = document.getElementsByTagName('input')
+      for (value in allInputs) {
+        if (allInputs[value].checked) {
+          totalSelectedEvent++
+        }
+      }
+
+      var indoorDiscount = discountCheck(<% -indoorevents.length %>, 'indoor')
+      var outdoorDiscount = discountCheck(<% -outdoorevents.length %>, 'outdoor')
+
+      return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
+    })
+
+
+  </script>
+  <%}%>
+      <%}%>
+
+
   <script>
     $(window)
       .on("load resize ", function () {
@@ -239,8 +289,6 @@
       })
       .resize();
   </script>
-
-  <%- include('partials/footer') %>
 </body>
 
 </html>

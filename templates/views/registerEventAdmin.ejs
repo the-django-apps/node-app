@@ -2,25 +2,24 @@
 <html>
 
 <head>
-  <title>User Registration</title>
+  <title>Event Registration</title>
 
 </head>
 
 <body>
 
-
   <% if(typeof userEvents != 'undefined') { %>
   <% if(userEvents.length != 0) { %>
-  <h1 style="text-align: center; color: #333333; padding: 5px ;">User Registration</h1>
+  <h1 style="text-align: center; color: #333333; padding: 5px ;">Event Registration</h1>
   <table class="table table-hover table-css">
     <thead>
       <tr>
-        <th>User info</th>
-        <th>Events</th>
+        <th>Event Info</th>
+        <th>User</th>
+        <th>Email</th>
         <th>Registered Price</th>
         <th>Discount</th>
         <th>Paid</th>
-        <th>Description</th>
         <th>Edit Paid</th>
         <th>Delete Event</th>
       </tr>
@@ -29,23 +28,27 @@
       <% for(var i = 0; i < userEvents.length ; i++ )  {%>
       <tr>
         <td rowspan="<%=userEvents[i].length-1%>">
-          <strong>Name:&nbsp;</strong>
-          <%=userEvents[i][userEvents[i].length-1].name%><br>
-          <strong>Email:&nbsp;</strong>
-          <%=userEvents[i][userEvents[i].length-1].email%><br>
-          <strong>Mobile Number:&nbsp;</strong>
-          <%=userEvents[i][userEvents[i].length-1].mobileNumber%><br>
-          <strong>Events Total price:&nbsp;</strong>
-          <%=userEvents[i][userEvents[i].length-1].price%>
+          <strong>Event:&nbsp;</strong>
+          <% if(userEvents[i][userEvents[i].length-1].indoorEvent) {%>
+            <%=userEvents[i][userEvents[i].length-1].indoorEvent%><br>
+          <%} else {%>
+            <%=userEvents[i][userEvents[i].length-1].outdoorEvent%><br>
+          <%}%>
+          <strong>Collection:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].price%><br>
+          <strong>Discount:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].discountValue%>%<br>
+          <strong>Description:&nbsp;</strong>
+          <%=userEvents[i][userEvents[i].length-1].description%>
         </td>
       
       <% for(var j = 0; j < userEvents[i].length-1; j++) {%>
-      
-        <td><%=userEvents[i][j].registeredEvent%></td>
+       
+        <td><%=userEvents[i][j].user%></td>
+        <td><%=userEvents[i][j].email%></td>
         <td><%=userEvents[i][j].price%></td>
         <td><%=userEvents[i][j].discountFlag%></td>
         <td><%=userEvents[i][j].payment%></td>
-        <td><%- userEvents[i][j].eventDescription.replace(/\n/g,'<br>') %></td>
         <td><a href="" data-toggle="modal" data-target="#a<%=userEvents[i][j].id%>" class="btn btn-primary btn-sm">Edit</a></td>
         <td><a href="/registerEvent/delete/<%=userEvents[i][j].id%>" class="btn btn-danger btn-sm">Delete</a></td>
       </tr>
@@ -77,8 +80,8 @@
       <tr>
         <td><strong>Grand Total</strong></td>
         <td></td>
-        <td><strong><%=grandTotal%></strong></td>
         <td></td>
+        <td><strong><%=grandTotal%></strong></td>
         <td></td>
         <td></td>
         <td></td>

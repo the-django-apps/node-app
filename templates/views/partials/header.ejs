@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link navbar-brandedit " id="brand_navbar" href="/"
+          <a class="nav-link navbar-brand active " id="brand_navbar" href="/"
             >Event Management</a
           >
         </li>
@@ -41,24 +41,14 @@
         <% if(isAuthenticated) { %> <% if(currentUser) { %>
 
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <i class="fas fa-user-circle" style="font-size: 22px"></i
-            >&nbsp;<%=currentUser.name%>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/myaccount/registeredEvents"
-              >Registered Events</a
-            >
-          </div>
-        </li>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class='fas fa-user-circle' style="font-size:22px;"></i>&nbsp;<%=currentUser.name%>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/myaccount?accountOption=registeredEvents">Registered Events</a>
+          <a class="dropdown-item" href="/myaccount?accountOption=resetPassword">Reset Password</a>
+        </div>
+      </li>
         <%}%>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
@@ -93,25 +83,22 @@
 
   switch(page2) {
     case "gallery" : 
-      element1.classList.add("activenavbar");
+      element1.classList.add('activenavbar', 'active');
       break;
     case "event" : 
-      element3.classList.add("activenavbar");
+      element3.classList.add('activenavbar', 'active');
       break;
     case "about" : 
-      element2.classList.add("activenavbar");
+      element2.classList.add('activenavbar', 'active');
       break;
     case "contact" : 
-      element4.classList.add("activenavbar");
+      element4.classList.add('activenavbar', 'active');
       break;
     case "signup" : 
-      element5.classList.add("activenavbar");
+      element5.classList.add('activenavbar', 'active');
       break;
     case "login" : 
-      element6.classList.add("activenavbar");
-      break;
-    default : 
-      element.classList.add("activenavbar"); 
+      element6.classList.add('activenavbar', 'active');
       break;
   }
 </script>

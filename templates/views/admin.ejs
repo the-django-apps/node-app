@@ -1,56 +1,86 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <%- include('partials/heads_content') %>
+<head>
+	<title>Admin</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<%- include('partials/heads_content') %>
 
-    <!-- Side Navbar -->
-    <link rel="stylesheet" type="text/css" href="/css/sideNavbar.css" />
+	<!-- Side Navbar -->
+	<link rel="stylesheet" type="text/css" href="/css/sideNavbar.css">
 
-    <!-- main content -->
-    <link rel="stylesheet" href="/css/others.css" />
+	<!-- main content -->
+	<link rel="stylesheet" href="/css/others.css">
 
-    <!-- Event Css -->
-    <link rel="stylesheet" href="/css/event.css" />
-  </head>
-  <body>
-    <div id="mySidebar" class="sidebar">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-      <a href="/admin?flag=user">User</a>
-      <a href="/admin?flag=gallery">Gallery</a>
-      <a href="/admin?flag=event">Event</a>
-      <a href="/admin?flag=register">Registration</a>
-    </div>
+	 <!-- Event Css -->
+	<link rel="stylesheet" href="/css/event.css">
+	<!-- google fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
 
-    <button class="openbtn" onclick="openNav()">☰ Admin Panel</button>
+	<!-- admin css -->
+	<link rel='stylesheet' href="/css/admin-css.css">
 
-		<%if(flag == "gallery") 
-		{%> <%- include('galleryAdmin') %> <%} 
-		else if(flag == "event") 
-		{%> <%- include('eventsAdmin') %> <%} 
-		else if(flag == "register") 
-		{%> <%- include('registrationAdmin') %> <%} 
-		else 
-		{%> <%-include('usersAdmin') %> <%}%> 
-		<% if(error_message != '') { %>
-    <script type="text/javascript">
-      alert("<%-error_message%>");
-    </script>
-    <%}%>
+</head>
+<body>
+	
+	
 
-    <script>
-      function openNav() {
-        document.getElementById("mySidebar").style.width = "250px";
-      }
-      function closeNav() {
-        document.getElementById("mySidebar").style.width = "0";
-      }
-      var errorMessage = "<%- error_message %>";
-			if (errorMessage !== "") {
-        alert(errorMessage);
-        location.reload();
-      }
-    </script>
-  </body>
+	<div id="mySidebar" class="sidebar">
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+	  <a href="/admin?flag=user">User</a>
+	  <a href="/admin?flag=gallery">Gallery</a>
+	  <a href="/admin?flag=event">Event</a>
+	  <a href="/admin?flag=register">User Registration</a>
+	  <a href="/admin?flag=eventRegister">Event Registration</a>
+	  <a href="/admin?flag=contact">Contact Feedbacks</a>
+	</div>
+
+	<button class="openbtn" onclick="openNav()">☰ Admin Panel</button> 
+
+
+
+	<%if(flag == "gallery") {%>
+		<%- include('galleryAdmin') %>
+	<%} else if(flag == "event") {%>
+		<%- include('eventsAdmin') %>
+	<%} else if(flag == "register") {%> 
+		<%- include('registrationAdmin') %>
+	<%} else if(flag == "eventRegister") {%> 
+		<%- include('registerEventAdmin') %>
+	<%}else if(flag == "contact") {%> 
+		<%- include('contactUsAdmin') %>
+	<%} else {%>
+		<%- include('usersAdmin') %>
+	<%}%>
+
+
+<script>
+	function openNav() {
+	  document.getElementById("mySidebar").style.width = "250px";
+	  
+	}
+
+	function closeNav() {
+	  document.getElementById("mySidebar").style.width = "0";
+	  
+	}
+
+	 
+</script>
+
+<% if(error_message != '') {%>
+		<script>
+			alert('<%- error_message %>')
+			console.log('<%- error_message %>')
+		</script>
+<%}%>
+	
+<% if( alert_msg != '') {%>
+	<% alert_msg.forEach(function(value) { %>
+		<script>
+			alert('<%-value.msg%>')
+		</script>
+	<% }) %>
+<%}%>
+
+</body>
 </html>

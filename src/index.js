@@ -1,12 +1,9 @@
 const path = require('path')
 const express = require('express')
-const bcrypt = require('bcryptjs')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
 const bodyParser = require('body-parser')
 const userRoute = require('./router/users')
 const adminRoute = require('./router/admin')
+discount = false;
 
 const cors = require('cors')
 require('./db/mongoose')
@@ -28,6 +25,12 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(userRoute)
 app.use(adminRoute)
+
+app.get('*', (req, res) => {
+	res.render('404page', {
+	  errorMsg: 'Page not found',
+	});
+  });
 
 
 app.listen(port, () => {
