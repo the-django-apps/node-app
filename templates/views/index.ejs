@@ -182,6 +182,12 @@
 
   <%- include('partials/footer') %>
 
+  <% if(error_message != '') {%>
+    <script type="text/javascript">
+      alert('<%-error_message%>')
+    </script>
+  <%}%>
+
   <script src="https://use.fontawesome.com/1744f3f671.js"></script>
 
   <script>

@@ -13,8 +13,10 @@
 
   <link rel="stylesheet" href="/css/eventtable.css" />
 
-  <!-- others css -->
-  <link rel="stylesheet" href="/css/others.css">
+  <link rel="stylesheet" href="/css/eventdashboard.css" />
+  
+  <link rel="stylesheet" href="/css/signup_login.css">
+  
 </head>
 
 <body>
@@ -135,35 +137,37 @@
 </form>
   <%}%>
 
-  <div class="table-Event-Date-main">
-    <div class="table-Event-Date-inner">
-      <%if(eventFlag == 'eventDashboard') {%>
-        <h1 style="margin-top: 10%;">Event Dashbord</h1>
-        <%if(EventDates != 'undefined') {%>
-        <% for(var i=0; i < EventDates.length; i++) {%>
-          <table class="table table-Event-Date">
-            <tr style="background-color: #85aecc;">
-              <td><%=EventDates[i][EventDates[i].length-1]%></td>
-             </tr>
-            <% EventDates[i].forEach(function(value) { %>
-             <%if(value.indoorEvent){%>
-            <tr>
-              <td><%=value.indoorEvent%></td>
-            </tr>
-              <%}%>
-              <%if(value.outdoorEvent){%>
-            <tr>
-              <td><%=value.outdoorEvent%></td>
-            </tr>
-              <%}%>
-            <%})%>
-          </table>
+<%if(eventFlag == 'eventDashboard') {%>
+    <%if(EventDates != 'undefined') {%>
+      <%if(EventDates.length != 0) {%>
+  <div class="container-fluid">
+    <div class="row">
+     <% for(var i=0; i < EventDates.length; i++) {%>
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          <%=EventDates[i][EventDates[i].length-1]%>
+        </h4>
+        <div class="card-body">
+          <% EventDates[i].forEach(function(value) { %>
+            <%if(value.indoorEvent){%>
+          <p class="card-title"><%=value.indoorEvent%></p>
           <%}%>
+          <%if(value.outdoorEvent){%>
+          <p class="card-title"><%=value.outdoorEvent%></p>
           <%}%>
-      <%}%>
+          <%})%>
+        </div>
+      </div>
+        <%}%>
+    </div>
   </div>
-</div>
-
+  <%}else {%>
+    <div class="registered-event-main">
+      <p class="no-content-text">No Games</p>
+    </div>
+  <%}%>
+  <%}%>
+  <%}%>
   <%- include('partials/footer') %>
 
   <% if(error_message != '') { %>

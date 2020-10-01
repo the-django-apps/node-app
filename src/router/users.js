@@ -58,7 +58,7 @@ router.get('/', (req, res) => {
   res.render('index',{currentUser:req.user})
 })
 
-router.get('/eventRegistration', async (req, res) => {
+router.get('/eventRegistration', auth.checkAuthenticated ,async (req, res) => {
   if(req.query.eventFlag == 'eventRegistration') {
     const indoorevents = await IndoorEvent.find({})
     const outdoorevents = await OutdoorEvent.find({})
@@ -76,10 +76,8 @@ router.get('/eventDashboard', async (req, res) => {
   const EventDates = []  
  
   for(var x=1; x < dateEvents.length; x++) {
-        
     var temp = x
     for(var y=x-1; y >= 0   ; y--) {
-      
       if(dateEvents[x].date < dateEvents[y].date) {
         temp = y
         
@@ -89,7 +87,6 @@ router.get('/eventDashboard', async (req, res) => {
       dateEvents.splice(x+1,1)
   }
   
-
   for(var i=0; i < dateEvents.length ; i++) {
     await dateEvents[i].populate({
       path: 'indoorEventDate'
@@ -97,8 +94,7 @@ router.get('/eventDashboard', async (req, res) => {
     await dateEvents[i].populate({
       path: 'outdoorEventDate'
     }).execPopulate()
-    
-    
+        
     if(dateEvents[i].indoorEventDate.length !== 0 && dateEvents[i].outdoorEventDate.length !== 0) {
       dateEvents[i].outdoorEventDate.forEach(value => {
         dateEvents[i].indoorEventDate.push(value)
@@ -132,6 +128,52 @@ router.get('/contact', (req, res) => {
   res.render('contact',{currentUser:req.user})
 })
 
+
+router.post('/contact' ,[
+  body('email').isEmail().withMessage('Invalid Email'),
+  body('mobileNumber').custom(value => {
+    if(isNaN(value)) {
+     throw new Error('Mobile number is not a number')
+    }else if(value.length != 10) {
+     throw new Error('Mobile number must be 10 digit')
+    } else {
+      return true
+    }
+  }),
+  body('feedback').custom(value => {
+    if(value.length > 500) {
+     throw new Error('Please keep feedback with 500 characters only')
+    } else {
+      return true
+    }
+  })
+] , async (req, res) => {
+  try {
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const alert = errors.array() 
+      return res.render('contact' , {alert})
+    }
+
+    const msg = {
+      to: process.env.FROM_EMAIL,
+      from: process.env.FROM_EMAIL,
+      subject: 'Contact User',
+      text: 'Name: ' + req.body.name + '\nEmail: ' + req.body.email + '\nMobile Number: ' + req.body.mobileNumber + '\nFeedback: ' + req.body.feedback
+    }
+  
+    const contact = new Contact(req.body)
+    contact.save()
+    await sgMail.send(msg)
+    req.flash('success_message', 'Feedback sent sucessfully!')
+    res.redirect('/contact')
+  } catch(e) {
+    req.flash('success_message', 'Something went wrong. Please try again')
+    res.redirect('/contact')
+  }
+  
+})
 
 router.get('/gallery', async (req, res) => {
   const gallery = await Gallery.find({})
@@ -240,7 +282,7 @@ router.post('/user/forgotPassword/setPassword' , [
 
 /************************************* Register Event **************************************/
 
-router.post('/event/register', async (req,res) => {
+router.post('/event/register', auth.checkAuthenticated ,async (req,res) => {
 
   try {
       var eventsToEmail = []
@@ -380,7 +422,7 @@ router.post('/event/register', async (req,res) => {
 
 /********************************** My Account ************************************/
 
-router.get('/myaccount', async (req,res) => {
+router.get('/myaccount', auth.checkAuthenticated ,async (req,res) => {
 
   if(req.query.accountOption === 'registeredEvents' ) {
       await req.user.populate({
@@ -401,7 +443,7 @@ router.get('/myaccount', async (req,res) => {
 
 })
 
-router.get('/myaccount/registeredEvents/delete/:id' , async (req,res) => {
+router.get('/myaccount/registeredEvents/delete/:id' , auth.checkAuthenticated ,async (req,res) => {
 
   await Registration.findByIdAndDelete(req.params.id)
   await EventRegistration.findOneAndDelete({syncRegistrationId:req.params.id})

@@ -1,6 +1,4 @@
 .bodyeventdesc {
-  background: #1f1e1e;
-  color: #efedef;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 300;
@@ -48,7 +46,6 @@ select:focus {
 }
 .tabs [class^="tab"] label,
 .tabs [class*=" tab"] label {
-  color: #efedef;
   cursor: pointer;
   display: block;
   font-size: 1.1em;

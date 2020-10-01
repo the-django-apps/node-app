@@ -33,7 +33,7 @@ const requiresAdmin = function () {
       if (req.user && req.user.isAdmin === true)
         next();
       else
-        res.status(401).send('Unauthorized');
+        res.redirect('/')
     }
   ]
 };
@@ -43,7 +43,7 @@ const requiresAdmin = function () {
 
 /*****************************************User Paths ***********************************/
 
-router.get('/admin',  async (req, res) => {
+router.get('/admin', requiresAdmin() ,async (req, res) => {
 
   if (req.query.flag === 'gallery') {
     const gallery = await Gallery.find({})
@@ -134,7 +134,7 @@ router.get('/admin',  async (req, res) => {
   }
 })
 
-router.get('/admin/deleteuser/:id',  async (req, res) => {
+router.get('/admin/deleteuser/:id', requiresAdmin() ,async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id)
     res.redirect('/admin')
@@ -146,7 +146,7 @@ router.get('/admin/deleteuser/:id',  async (req, res) => {
 
 })
 
-router.get('/admin/edituser/:id',  async (req, res) => {
+router.get('/admin/edituser/:id', requiresAdmin() ,async (req, res) => {
   try {
     const userData = await User.findById(req.params.id)
     res.render('editUser', { userData: userData })
@@ -158,7 +158,7 @@ router.get('/admin/edituser/:id',  async (req, res) => {
 
 })
 
-router.post('/admin/edituser/:id',  [
+router.post('/admin/edituser/:id', requiresAdmin()  ,[
   body('email').isEmail().withMessage('Invalid Email')
 
 ], async (req, res) => {
@@ -228,7 +228,7 @@ const upload = multer({
 })
 
 
-router.post('/admin/gallery/upload',  upload.single('photo'), async (req, res) => {
+router.post('/admin/gallery/upload', requiresAdmin()  ,upload.single('photo'), async (req, res) => {
   try {
     const buffer = await sharp(req.file.buffer).png().toBuffer()
     const photo = new Gallery()
@@ -249,7 +249,7 @@ router.post('/admin/gallery/upload',  upload.single('photo'), async (req, res) =
 })
 
 
-router.get('/admin/gallery/api',  async (req, res) => {
+router.get('/admin/gallery/api', async (req, res) => {
 
   try {
     const gallery = await Gallery.find({})
@@ -263,7 +263,7 @@ router.get('/admin/gallery/api',  async (req, res) => {
 
 })
 
-router.get('/admin/gallery/:id',  async (req, res) => {
+router.get('/admin/gallery/:id', requiresAdmin()  ,async (req, res) => {
   try {
     const gallery = await Gallery.findById(req.params.id)
     res.render('editImage', { gallery, id: req.params.id })
@@ -276,7 +276,7 @@ router.get('/admin/gallery/:id',  async (req, res) => {
 })
 
 
-router.get('/admin/gallery/:id/api',  async (req, res) => {
+router.get('/admin/gallery/:id/api', requiresAdmin(), async (req, res) => {
   try {
     const gallery = await Gallery.findById(req.params.id)
 
@@ -288,7 +288,7 @@ router.get('/admin/gallery/:id/api',  async (req, res) => {
 })
 
 
-router.post('/admin/gallery/update/:id',  upload.single('photo'), async (req, res) => {
+router.post('/admin/gallery/update/:id', requiresAdmin() , upload.single('photo'), async (req, res) => {
 
   const buffer = await sharp(req.file.buffer).png().toBuffer()
   const gallery = await Gallery.findByIdAndUpdate(req.params.id, { photo: buffer })
@@ -302,7 +302,7 @@ router.post('/admin/gallery/update/:id',  upload.single('photo'), async (req, re
   res.redirect('/admin/gallery/' + req.params.id)
 })
 
-router.get('/admin/gallery/delete/:id', async (req, res) => {
+router.get('/admin/gallery/delete/:id', requiresAdmin() ,async (req, res) => {
 
   await Gallery.findByIdAndDelete(req.params.id)
 
@@ -312,7 +312,7 @@ router.get('/admin/gallery/delete/:id', async (req, res) => {
 
 /******************************************* Events **************************************/
 
-router.get('/admin/discount',(req,res) => {
+router.get('/admin/discount', requiresAdmin() , (req,res) => {
   
   
     if(req.query.discount === 'set') {
@@ -343,7 +343,7 @@ dateValidation = function() {
   }
 }
 
-router.post('/admin/indoorevent/add', dateValidation() ,[
+router.post('/admin/indoorevent/add', requiresAdmin() , dateValidation() ,[
   body('price').custom(value => {
     if(isNaN(value)) {
        throw new Error('Price is not a number')
@@ -405,10 +405,9 @@ router.post('/admin/indoorevent/add', dateValidation() ,[
       res.redirect('/admin?flag=event')
     }
   }
-
 })
 
-router.post('/admin/outdoorevent/add', dateValidation(),[
+router.post('/admin/outdoorevent/add', requiresAdmin() ,dateValidation(),[
   body('price').custom(value => {
     if(isNaN(value)) {
        throw new Error('Price is not a number')
@@ -458,13 +457,13 @@ router.post('/admin/outdoorevent/add', dateValidation(),[
   }
 })
 
-router.get('/admin/indooreventDelete/:id',  async (req, res) => {
+router.get('/admin/indooreventDelete/:id', requiresAdmin() ,  async (req, res) => {
   await IndoorEvent.findByIdAndDelete(req.params.id)
   req.flash('optionFlag', 'indoor')
   res.redirect('/admin?flag=event')
 })
 
-router.get('/admin/outdooreventDelete/:id',  async (req, res) => {
+router.get('/admin/outdooreventDelete/:id', requiresAdmin() , async (req, res) => {
   await OutdoorEvent.findByIdAndDelete(req.params.id)
   req.flash('optionFlag', 'outdoor')
   res.redirect('/admin?flag=event')
@@ -475,7 +474,7 @@ router.get('/admin/outdooreventDelete/:id',  async (req, res) => {
 
 /***************************** Registration Event *************************************/
 
-router.post('/registerEvent/payment/:id',async (req,res) => {
+router.post('/registerEvent/payment/:id', requiresAdmin() ,async (req,res) => {
   try{
         
     if(await EventRegistration.findById(req.params.id)) {
@@ -494,7 +493,7 @@ router.post('/registerEvent/payment/:id',async (req,res) => {
   
 })
 
-router.get('/registerEvent/delete/:id',  async (req, res) => {
+router.get('/registerEvent/delete/:id', requiresAdmin() ,async (req, res) => {
   if(await EventRegistration.findById(req.params.id)) {
     await EventRegistration.findByIdAndDelete(req.params.id)
     await Registration.findOneAndDelete({syncEventRegistrationId:req.params.id})
@@ -508,52 +507,6 @@ router.get('/registerEvent/delete/:id',  async (req, res) => {
 
 
 /**********************************Contact Us *********************************/
-router.post('/contact', [
-  body('email').isEmail().withMessage('Invalid Email'),
-  body('mobileNumber').custom(value => {
-    if(isNaN(value)) {
-     throw new Error('Mobile number is not a number')
-    }else if(value.length != 10) {
-     throw new Error('Mobile number must be 10 digit')
-    } else {
-      return true
-    }
-  }),
-  body('feedback').custom(value => {
-    if(value.length > 500) {
-     throw new Error('Please keep feedback with 500 characters only')
-    } else {
-      return true
-    }
-  })
-] , async (req, res) => {
-  try {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const alert = errors.array() 
-      return res.render('contact' , {alert})
-    }
-
-    const msg = {
-      to: process.env.FROM_EMAIL,
-      from: process.env.FROM_EMAIL,
-      subject: 'Contact User',
-      text: 'Name: ' + req.body.name + '\nEmail: ' + req.body.email + '\nMobile Number: ' + req.body.mobileNumber + '\nFeedback: ' + req.body.feedback
-    }
-  
-    const contact = new Contact(req.body)
-    contact.save()
-    await sgMail.send(msg)
-    req.flash('success_message', 'Feedback sent sucessfully!')
-    res.redirect('/contact')
-  } catch(e) {
-    req.flash('success_message', 'Something went wrong. Please try again')
-    res.redirect('/contact')
-  }
-  
-})
-
 
 router.post('/admin/contact' , async (req,res) => {
   const feedbacktList = await Contact.find({})

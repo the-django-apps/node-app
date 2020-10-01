@@ -27,12 +27,12 @@
           <a class="nav-link " id="gallery_navbar" href="/gallery">Gallery</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="event_navbar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Event
           </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/eventRegistration?eventFlag=eventRegistration">Event Registration</a>
-          <a class="dropdown-item" href="/eventDashboard?eventFlag=eventDashboard">Event Dashboard</a>
+        <div class="dropdown-menu" aria-labelledby="event_navbar">
+          <a class="dropdown-item" href="/eventRegistration?eventFlag=eventRegistration" id="event_navbar_dropdown1">Event Registration</a>
+          <a class="dropdown-item" href="/eventDashboard?eventFlag=eventDashboard" id="event_navbar_dropdown2">Event Dashboard</a>
         </div>
       </li>
         <!-- <li class="nav-item">
@@ -47,15 +47,15 @@
       </ul>
 
       <ul class="navbar-nav ml-auto">
-        <% if(isAuthenticated) { %> <% if(currentUser) { %>
-
+        <% if(isAuthenticated) { %> 
+          <% if(typeof currentUser != 'undefined') { %>
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="account_navbar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class='fas fa-user-circle' style="font-size:22px;"></i>&nbsp;<%=currentUser.name%>
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/myaccount?accountOption=registeredEvents">Registered Events</a>
-          <a class="dropdown-item" href="/myaccount?accountOption=resetPassword">Reset Password</a>
+        <div class="dropdown-menu" aria-labelledby="account_navbar">
+          <a class="dropdown-item" href="/myaccount?accountOption=registeredEvents" id="account_navbar_dropdown1">Registered Events</a>
+          <a class="dropdown-item" href="/myaccount?accountOption=resetPassword" id="account_navbar_dropdown2">Reset Password</a>
         </div>
       </li>
         <%}%>
@@ -86,16 +86,34 @@
   let element1 = document.getElementById("gallery_navbar");
   let element2 = document.getElementById("about_navbar");
   let element3 = document.getElementById("event_navbar");
+  let element3_1 = document.getElementById("event_navbar_dropdown1");
+  let element3_2 = document.getElementById("event_navbar_dropdown2");
   let element4 = document.getElementById("contact_navbar");
   let element5 = document.getElementById("signup_navbar");
   let element6 = document.getElementById("login_navbar");
+  let element7 = document.getElementById("account_navbar");
+  let element7_1 = document.getElementById("account_navbar_dropdown1");
+  let element7_2 = document.getElementById("account_navbar_dropdown2");
 
   switch(page2) {
     case "gallery" : 
       element1.classList.add('activenavbar', 'active');
       break;
-    case "event" : 
+    case "eventRegistration?eventFlag=eventRegistration" : 
       element3.classList.add('activenavbar', 'active');
+      element3_1.classList.add('activenavbar');
+      break;
+    case "eventDashboard?eventFlag=eventDashboard" : 
+      element3.classList.add('activenavbar', 'active');
+      element3_2.classList.add('activenavbar');
+      break;
+    case "myaccount?accountOption=registeredEvents" : 
+      element7.classList.add('activenavbar', 'active');
+      element7_1.classList.add('activenavbar');
+      break;
+    case "myaccount?accountOption=resetPassword" : 
+      element7.classList.add('activenavbar', 'active');
+      element7_2.classList.add('activenavbar');
       break;
     case "about" : 
       element2.classList.add('activenavbar', 'active');
