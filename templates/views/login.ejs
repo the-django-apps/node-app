@@ -1,111 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Login</title>
-    <%- include('partials/heads_content') %>
 
-    <!-- Footer CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/footer.css" />
+<head>
+  <title>Login</title>
+  <%- include('partials/heads_content') %>
 
-    <link rel="stylesheet" href="/css/signup_login.css">
+  <!-- Footer CSS -->
+  <link rel="stylesheet" type="text/css" href="/css/footer.css" />
 
-    <!-- Scripts -->
-    <script type="text/javascript" src='/js/sendPin.js'></script>
-  </head>
-  <body>
-    <%- include('partials/header') %>
-    <div style="margin-bottom: 72px;"></div>
+  <link rel="stylesheet" href="/css/signup_login.css">
 
-    <!---------------------- Forgot password Model ----------------------------->
-    <div class="modal" id="forgotPassword">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Update Image</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-           <form action="/user/forgotPassword" method="post" >
+  <!-- Scripts -->
+  <script type="text/javascript" src='/js/sendPin.js'></script>
+</head>
+
+<body>
+  <%- include('partials/header') %>
+  <div style="margin-bottom: 72px;"></div>
+
+  <!---------------------- Forgot password Model ----------------------------->
+  <div class="modal" id="forgotPassword">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/user/forgotPassword" method="post">
             <label>New Password</label>
-            <input type="password" id="img" name="photo" >
+            <input type="password" id="img" name="photo">
             <label>New Password</label>
-            <input type="password" id="img1" name="photo" >
+            <input type="password" id="img1" name="photo">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!----------------------------- Login Form ---------------------------------->
+
+  <div style="margin-top: 80px; margin-bottom: 60px">
+    <div class="row" style="margin: 0; padding: 0">
+      <div class="col-sm-12">
+        <div class="z-depth-2 form-div">
+          <div class="col-sm-12">
+            <h3 class="text-center p-3">Login Here</h3>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Update</button>
-          </div>
+          <form action="/login" method="POST">
+            <div class="row">
+              <% if (success_message != ''){ %>
+              <div class="col-sm-12 alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                  &times;
+                </button>
+                <strong> <%= success_message %> </strong>
+              </div>
+              <% } %> <% if( error != '') { %>
+              <div class="col-sm-12 alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                  &times;
+                </button>
+                <strong><%= error %></strong>
+              </div>
+              <% } %>
+              <div class="col-sm-12 form-group">
+                <label for="username">Enter Your Email</label>
+                <input type="email" class="form-control" name="email" id="username" autocomplete="off"
+                  placeholder="Email" />
+              </div>
+              <div class="col-sm-12 form-group">
+                <label for="password">Enter Your Password</label>
+                <input type="password" class="form-control" name="password" id="password" autocomplete="off"
+                  placeholder="Password" />
+              </div>
+              <div class="col-sm-12 form-group">
+                <input type="submit" class="btn btn-block btn-outline-primary" value="Login" />
+              </div>
+              <div class="col-sm-12">
+                <p>forgot password ? <a class="card-link" href="/user/forgotPassword">click here</a></p>
+              </div>
+            </div>
           </form>
         </div>
       </div>
     </div>
+  </div>
 
-    <!----------------------------- Login Form ---------------------------------->
-    <div class="container z-depth-2 form-div">
-      <div class="col-sm-12">
-        <h3 class="text-center p-3">Login Here</h3>
-      </div>
-      <form action="/login" method="POST">
-        <div class="row">
-          <% if (success_message != ''){ %>
-          <div class="col-sm-12 alert alert-dismissible alert-success">
-            <button type="button" class="close" data-dismiss="alert">
-              &times;
-            </button>
-            <strong> <%= success_message %> </strong>
-          </div>
-          <% } %> <% if( error != '') { %>
-          <div class="col-sm-12 alert alert-dismissible alert-danger">
-            <button type="button" class="close" data-dismiss="alert">
-              &times;
-            </button>
-            <strong><%= error %></strong>
-          </div>
-          <% } %>
-          <div class="col-sm-12 form-group">
-            <label for="username">Enter Your Email</label>
-            <input
-              type="email"
-              class="form-control"
-              name="email"
-              id="username"
-              autocomplete="off"
-              placeholder="Email"
-            />
-          </div>
-          <div class="col-sm-12 form-group">
-            <label for="password">Enter Your Password</label>
-            <input
-              type="password"
-              class="form-control"
-              name="password"
-              id="password"
-              autocomplete="off"
-              placeholder="Password"
-            />
-          </div>
-          <div class="col-sm-12 form-group">
-            <input
-              type="submit"
-              class="btn btn-block btn-outline-primary"
-              value="Login"
-            />
-          </div>
-          <div class="col-sm-12">
-            <p>forgot password ? <a class="card-link" href="/user/forgotPassword">click here</a></p>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <% if(error_message != '') {%>
-    <script type="text/javascript">
-      alert('<%-error_message%>')
-    </script>
-    <%}%>
+  <% if(error_message != '') {%>
+  <script type="text/javascript">
+    alert('<%-error_message%>')
+  </script>
+  <%}%>
 
 
     <%- include('partials/footer') %>
-  </body>
+</body>
+
 </html>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Login</title>
+  <title>Contact Us</title>
   <%- include('partials/heads_content') %>
 
   <!-- Footer CSS -->
@@ -37,8 +37,8 @@
                 required />
             </div>
             <div class="col-sm-12 form-group">
-              <input type="email" class="form-control" name="email" id="email" autocomplete="off" placeholder="Your Email"
-                required />
+              <input type="email" class="form-control" name="email" id="email" autocomplete="off"
+                placeholder="Your Email" required />
             </div>
             <div class="col-sm-12 form-group">
               <textarea style="resize: none" class="form-control" name="feedback" id="feedback" placeholder="Feedback"
@@ -62,10 +62,10 @@
   </div>
   <!-- <div style="margin-bottom: 72px"></div> -->
 
-  
 
-  <%- include('partials/footer') %> 
-  
+
+  <%- include('partials/footer') %>
+
   <% if(success_message != '') { %>
   <script type="text/javascript">
     alert("<%-success_message%>");

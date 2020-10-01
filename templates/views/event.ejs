@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="/css/event.css" />
 
   <link rel="stylesheet" href="/css/eventtable.css" />
+  <link rel="stylesheet" href="/css/eventdashboard.css" />
+  
 </head>
 
 <body>
@@ -102,34 +104,69 @@
 
   <%}%>
 
-  <div class="table-Event-Date-main">
-    <div class="table-Event-Date-inner">
-      <%if(eventFlag == 'eventDashboard') {%>
-  <h1 style="margin-top: 10%;">Event Dashbord</h1>
-  <%if(EventDates != 'undefined') {%>
-  <% for(var i=0; i < EventDates.length; i++) {%>
-  <table class="table table-Event-Date">
-    <tr style="background-color: #85aecc;">
-      <td><%=EventDates[i][EventDates[i].length-1].date%></td>
-    </tr>
-    <% EventDates[i].forEach(function(value) { %>
-    <%if(value.indoorEvent){%>
-    <tr>
-      <td><%=value.indoorEvent%></td>
-    </tr>
-    <%}%>
-  <%if(value.outdoorEvent){%>
-    <tr>
-      <td><%=value.outdoorEvent%></td>
-    </tr>
-    <%}%>
-<% }) %>
-  </table>
-  <%}%>
-<%}%>
-  <%}%>
-</div>
-</div>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          5 oct 2020
+        </h4>
+        <div class="card-body">
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+        </div>
+      </div>
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          6 oct 2020
+        </h4>
+        <div class="card-body">
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+        </div>
+      </div>
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          7 oct 2020
+        </h4>
+        <div class="card-body">
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+        </div>
+      </div>
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          8 oct 2020
+        </h4>
+        <div class="card-body">
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+        </div>
+      </div>
+      <div class="card text-center eventcardcss" style="padding: 0; border: 1px solid #85aecc; margin: 5px;">
+        <h4 class="card-header" style="background-color: #85aecc;">
+          9 oct 2020
+        </h4>
+        <div class="card-body">
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+          <p class="card-title">Carrom</p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
 
   <%- include('partials/footer') %>
 

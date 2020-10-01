@@ -1,63 +1,70 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title> Sign Up </title>
     <%- include('partials/heads_content') %>
 
-     <!-- Footer CSS -->
+    <!-- Footer CSS -->
     <link rel="stylesheet" type="text/css" href="/css/footer.css">
     <!-- Main Content -->
     <link rel="stylesheet" type="text/css" href="/css/main-content.css">
 
     <link rel="stylesheet" href="css/signup_login.css">
 </head>
+
 <body>
     <%- include('partials/header') %>
-    <div style="margin-bottom: 56px;"></div>
-    
-    <div class="container z-depth-2 form-div" style="margin-top: 40px;">
-        <div class="col-sm-12">
-          <h3 class="text-center p-3">Register Yourself</h3>
-        </div>
-        <form action="/signup" method="POST">
-            <% if(typeof alert != 'undefined') { %>
-                <% alert.forEach(function(error) { %>
-                <div class="col-sm-12 alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong> <%= error.msg %> </strong>
-                </div>
-                <% }) %>
-            <% } %>
-            <div class="col-sm-12 form-group">
-                <label for="username">Enter Your Name</label>
-                <input type="text" class="form-control" name="name" id="username" autocomplete="off"
-                    placeholder="Name">
-            </div>
-            <div class="col-sm-12 form-group">
-                <label for="mobileNumber">Mobile Number</label>
-                <input type="text" class="form-control" name="mobileNumber" id="mobileNumber" autocomplete="off"
-                    placeholder="Mobile Number">
-            </div>
-            <div class="col-sm-12 form-group">
-                <label for="email">Enter Your Email</label>
-                <input type="email" class="form-control" name="email" id="email" autocomplete="off"
-                    placeholder="Email">
-            </div>
-            
-            <div class="col-sm-12 form-group">
-                <label for="password">Choose A Password</label>
-                <input type="password" class="form-control" name="password" id="password" autocomplete="off"
-                    placeholder="Password">
-            </div>
-            <div class="col-sm-12 form-group">
-                <input type="submit" class="btn btn-block btn-outline-primary" value="Register">
-            </div>
+    <div style="margin-top: 80px; margin-bottom: 60px">
+        <div class="row" style="margin: 0; padding: 0">
             <div class="col-sm-12">
-                <p>Already Registered ? <a class="card-link" href="/login">LOGIN Here</a> </p>
+                <div class="z-depth-2 form-div">
+                    <div class="col-sm-12">
+                        <h3 class="text-center p-3">Register Yourself</h3>
+                    </div>
+                    <form action="/signup" method="POST">
+                        <% if(typeof alert != 'undefined') { %>
+                        <% alert.forEach(function(error) { %>
+                        <div class="col-sm-12 alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong> <%= error.msg %> </strong>
+                        </div>
+                        <% }) %>
+                        <% } %>
+                        <div class="col-sm-12 form-group">
+                            <label for="username">Enter Your Name</label>
+                            <input type="text" class="form-control" name="name" id="username" autocomplete="off"
+                                placeholder="Name">
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label for="mobileNumber">Mobile Number</label>
+                            <input type="text" class="form-control" name="mobileNumber" id="mobileNumber"
+                                autocomplete="off" placeholder="Mobile Number">
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label for="email">Enter Your Email</label>
+                            <input type="email" class="form-control" name="email" id="email" autocomplete="off"
+                                placeholder="Email">
+                        </div>
+
+                        <div class="col-sm-12 form-group">
+                            <label for="password">Choose A Password</label>
+                            <input type="password" class="form-control" name="password" id="password" autocomplete="off"
+                                placeholder="Password">
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <input type="submit" class="btn btn-block btn-outline-primary" value="Register">
+                        </div>
+                        <div class="col-sm-12">
+                            <p>Already Registered ? <a class="card-link" href="/login">LOGIN Here</a> </p>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-	
+
+
     <% if(error_message != '') { %>
     <script type="text/javascript">
         alert('<%-error_message%>')
@@ -66,4 +73,5 @@
 
 	<%- include('partials/footer') %>
 </body>
+
 </html>
