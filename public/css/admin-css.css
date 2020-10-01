@@ -35,3 +35,23 @@ body{
     float: left;
 }
 
+
+
+ /* Discount (set or unset) */
+
+.discountFlag {
+    width: 153px;
+    margin-left: 30px;
+ }
+ .discountFont {
+     font-size: 15px;
+ }
+@media screen and (max-width: 600px){
+ .discountFlag {
+    width: 120px;
+ }
+ .discountFont {
+ font-size: 11px;
+}
+}
+

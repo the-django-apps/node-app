@@ -62,17 +62,32 @@ router.get('/eventRegistration', async (req, res) => {
   if(req.query.eventFlag == 'eventRegistration') {
     const indoorevents = await IndoorEvent.find({})
     const outdoorevents = await OutdoorEvent.find({})
-   return res.render('event',{indoorevents,outdoorevents,currentUser:req.user,discount: discount,eventFlag: 'eventRegistration'})
+      
+   return res.render('event',{indoorevents,outdoorevents,currentUser:req.user,discount,eventFlag: 'eventRegistration'})
   } 
   
   res.redirect('/404')
 })
 
 router.get('/eventDashboard', async (req, res) => {
-  
+ 
   if(req.query.eventFlag == 'eventDashboard') {
     const dateEvents = await DateEvent.find({})
   const EventDates = []  
+ 
+  for(var x=1; x < dateEvents.length; x++) {
+        
+    var temp = x
+    for(var y=x-1; y >= 0   ; y--) {
+      
+      if(dateEvents[x].date < dateEvents[y].date) {
+        temp = y
+        
+      }
+    }
+      dateEvents.splice(temp,0,dateEvents[x])
+      dateEvents.splice(x+1,1)
+  }
   
 
   for(var i=0; i < dateEvents.length ; i++) {
@@ -83,12 +98,18 @@ router.get('/eventDashboard', async (req, res) => {
       path: 'outdoorEventDate'
     }).execPopulate()
     
-    if(dateEvents[i].indoorEventDate.length !== 0){   
-      dateEvents[i].indoorEventDate[dateEvents[i].indoorEventDate.length] = dateEvents[i]
+    
+    if(dateEvents[i].indoorEventDate.length !== 0 && dateEvents[i].outdoorEventDate.length !== 0) {
+      dateEvents[i].outdoorEventDate.forEach(value => {
+        dateEvents[i].indoorEventDate.push(value)
+      })
+      dateEvents[i].indoorEventDate.push(dateEvents[i].date.toDateString())
       EventDates.push(dateEvents[i].indoorEventDate)
-    }
-    if(dateEvents[i].outdoorEventDate.length !== 0){
-      dateEvents[i].outdoorEventDate[dateEvents[i].outdoorEventDate.length] = dateEvents[i]
+    }else if(dateEvents[i].indoorEventDate.length !== 0){   
+      dateEvents[i].indoorEventDate[dateEvents[i].indoorEventDate.length] = dateEvents[i].date.toDateString()
+      EventDates.push(dateEvents[i].indoorEventDate)
+    }else if(dateEvents[i].outdoorEventDate.length !== 0){
+      dateEvents[i].outdoorEventDate[dateEvents[i].outdoorEventDate.length] = dateEvents[i].date.toDateString()
       EventDates.push(dateEvents[i].outdoorEventDate)
     }    
   }
@@ -350,10 +371,10 @@ router.post('/event/register', async (req,res) => {
     }
     await sgMail.send(msg)
   
-  res.redirect('/event?eventFlag=eventRegistration')
+  res.redirect('/eventRegistration?eventFlag=eventRegistration')
   } catch(e) {
     req.flash('error_message', "Somthing thing went wrong. Please try again!")
-    res.redirect('/event?eventFlag=eventRegistration')
+    res.redirect('/eventRegistration?eventFlag=eventRegistration')
   }
 })
 
@@ -393,6 +414,7 @@ router.post('/user/resetPassword',async (req,res) => {
   if (await bcrypt.compare(req.body.oldPassword, req.user.password)) {
     req.user.password = req.body.password
     await req.user.save()
+    req.flash('error_message', 'Password Successfully Changed')
     res.redirect('/myaccount?accountOption=resetPassword')
   }else {
     req.flash('error_message','Old password is wrong')

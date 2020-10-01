@@ -6,21 +6,6 @@
 </head>
 
 <body>
-   <style>
-      .discountFlag {
-            width: 150px;
-            margin-left: 30px;
-         }
-      
-      @media screen and (max-width: 600px){
-         .discountFlag {
-            width: 115px;
-         }
-         .discountFont {
-         font-size: 11px;
-      }
-      }
-   </style>
 
   <h1 style="text-align: center; color: #333333; padding: 5px ;">Admin Events</h1>
   
@@ -182,6 +167,7 @@
                            <div class="card-body">
                               <p><strong>Price: </strong><%=indoorevents[i].price%></p>
                               <p><strong>Discount:</strong> <%=indoorevents[i].discountValue%>%</p>
+                              <p><strong>Date:</strong> <%=indoorevents[i].date.toDateString()%></p>
                               <p><strong>Description: </strong><%-indoorevents[i].description.replace(/\n/g,'<br>')%></p>
                               <a class="btn-eventregister btn" href="/admin/indooreventDelete/<%=indoorevents[i].id%>">Delete</a>
                            </div>
@@ -213,6 +199,7 @@
                            <div class="card-body">
                               <p><strong>Price:</strong> <%=outdoorevents[i].price%></p>
                               <p><strong>Discount:</strong> <%=outdoorevents[i].discountValue%>%</p>
+                              <p><strong>Date:</strong> <%=outdoorevents[i].date.toDateString()%></p>
                               <p><strong>Description: </strong><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></p>
                               <a class="btn-eventregister btn"
                                  href="/admin/outdooreventDelete/<%=outdoorevents[i].id%>">Delete</a>

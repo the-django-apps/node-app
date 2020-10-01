@@ -329,6 +329,7 @@ dateValidation = function() {
   return function(req,res,next) {
     if(req.body.day && req.body.month && req.body.year) {
       var valideDate = new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)
+     
       if((valideDate.getDate() !== parseInt(req.body.day)) || (valideDate.toString() === 'Invalid Date')  ) {
         req.flash("error_message", 'Invalid Date')
         return res.redirect('/admin?flag=event')
@@ -379,18 +380,18 @@ router.post('/admin/indoorevent/add', dateValidation() ,[
     }
 
     
-    const oldDate = await DateEvent.findOne({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+    const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
      /****** This  verification is done to keep all date unique in dateEvent model
       *  but if two objects of same date is created then there will be (ambiguity) conflict between two object. 
       * It means that, interpretar will find two objects have same date than it will repeat same result two time. 
       * Means it will find all the result of first date then again it will give same result for second date (if first and second are same) ********/
       
     if(!oldDate){ 
-     const date = new DateEvent({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+     const date = new DateEvent({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
       await date.save()     
     } 
     
-    const event = new IndoorEvent({...req.body,date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+    const event = new IndoorEvent({...req.body,date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
     await event.save()
     
     req.flash('optionFlag', 'indoor')
@@ -435,13 +436,13 @@ router.post('/admin/outdoorevent/add', dateValidation(),[
       req.flash('alert_msg', alert)
       return res.redirect('/admin?flag=event')
     }
-    const oldDate = await DateEvent.findOne({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+    const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
 
     if(!oldDate){ 
-      const date = new DateEvent({date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+      const date = new DateEvent({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
        await date.save()
     }
-    const event = new OutdoorEvent({...req.body,date:(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+    const event = new OutdoorEvent({...req.body,date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
     await event.save()
     
     req.flash('optionFlag', 'outdoor')
