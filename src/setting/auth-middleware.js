@@ -4,7 +4,7 @@ function checkAuthenticated(req, res, next) {
   	//Once loged out this line will not allow user to go back by pressing back button in browser. 
   	//It will throw you at login page
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0')
-    req.flash('error_message', 'You are already logged in')
+    
     return next()
   }
   req.flash('error_message', 'Please login to continue')
