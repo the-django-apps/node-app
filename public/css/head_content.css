@@ -13,9 +13,13 @@ body {
 }
 
 .activenavbar {
-  background-color: #85aecc;
   color: white !important;
 }
+.activenavbardropdown {
+  background-color: #85aecc;;
+  color: black !important;
+}
+
 
 /* for custom scrollbar for webkit browser*/
 
