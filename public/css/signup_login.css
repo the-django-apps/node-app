@@ -59,6 +59,10 @@
 
 .registered-event-table {
   margin-top: 100px;
-  margin-bottom: 100px;
+  max-height: 300px;
+  overflow: auto;
   flex-grow: 1;
+}
+.regeventsdetailscss{
+  word-wrap: break-word;
 }

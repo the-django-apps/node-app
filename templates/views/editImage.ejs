@@ -92,14 +92,24 @@
 
 		galleryapifunction(document.getElementById('mydiv').dataset.test)
 
-		var errorMessage = "<%- error_message %>";
-
-		if (errorMessage !== '') {
-			alert(errorMessage);
-			location.reload();
-		}
+		
 
 	</script>
+
+<% if(error_message != '') {%>
+	<script type="text/javascript">
+		swal({
+			title: '<%-error_message%>',
+			icon: "warning",
+			confirmButtonText: "Submit",
+			buttons: {
+				cancel: true,
+				confirm: "Confirm",
+			},
+			dangerMode: true,
+		})
+	</script>
+<%}%>
 
 	<%}%>
 

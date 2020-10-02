@@ -7,7 +7,7 @@
 
   <!-- Footer CSS -->
   <link rel="stylesheet" type="text/css" href="/css/footer.css">
-  
+
   <link rel="stylesheet" type="text/css" href="/css/signup_login.css">
 
   <!-- Main content -->
@@ -19,27 +19,27 @@
   <%- include('partials/header') %>
 
   <% if(accountOption == 'resetPassword') {%>
-    <div style="margin-top: 80px; margin-bottom: 60px">
-      <div class="row" style="margin: 0; padding: 0">
-        <div class="col-sm-12">
-          <div class="z-depth-2 form-div">
-            <div class="col-sm-12">
-              <h3 class="text-center p-3">Reset Password</h3>
-            </div>
-            <% if(typeof alert != 'undefined') { %>
-              <% alert.forEach(function(error) { %>
-              <div class="col-sm-12 alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong> <%= error.msg %> </strong>
-              </div>
-              <% }) %>
-              <% } %>
-              <% if(typeof err_msg != 'undefined') { %>
-              <div class="col-sm-12 alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong> <%= err_msg %> </strong>
-              </div>
-              <%}%>
+  <div style="margin-top: 80px; margin-bottom: 60px">
+    <div class="row" style="margin: 0; padding: 0">
+      <div class="col-sm-12">
+        <div class="z-depth-2 form-div">
+          <div class="col-sm-12">
+            <h3 class="text-center p-3">Reset Password</h3>
+          </div>
+          <% if(typeof alert != 'undefined') { %>
+          <% alert.forEach(function(error) { %>
+          <div class="col-sm-12 alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong> <%= error.msg %> </strong>
+          </div>
+          <% }) %>
+          <% } %>
+          <% if(typeof err_msg != 'undefined') { %>
+          <div class="col-sm-12 alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong> <%= err_msg %> </strong>
+          </div>
+          <%}%>
             <form action="/user/resetPassword" method="POST">
               <label>Old Password</label>
               <input type="password" class="form-control" name="oldPassword" placeholder="Old Password"><br>
@@ -57,61 +57,71 @@
 
      <% } else if(accountOption == 'registeredEvents') { %>
 
-        <% if(registeredEvents.length != 0) { %>
-      <div class="registered-event-table">
-        <table class="table table-hover">
-          
-          <thead>
-            <tr>
-              <th>Events</th>
-              <th>Price</th>
-              <th>Discount</th>
-              <th>Description</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(var i = 0; i < registeredEvents.length ; i++ ) { %>
-            <tr>
-              <td><%=registeredEvents[i].registeredEvent%></td>
-              <td><%=registeredEvents[i].price%></td>
-              <td><%=registeredEvents[i].discountFlag%></td>
-              <td><%=registeredEvents[i].eventDescription.replace(/\n/g,'<br>')%></td>
-              <td><a href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>" >Delete</a></td>
-            </tr>
-            <%}%>    
+          <% if(registeredEvents.length != 0) { %>
+          <div class="registered-event-table">
+            <table class="table table-hover">
+
+              <thead>
+                <tr>
+                  <th>Events</th>
+                  <th>Price</th>
+                  <th>Discount</th>
+                  <th>Description</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(var i = 0; i < registeredEvents.length ; i++ ) { %>
+                <tr>
+                  <td><%=registeredEvents[i].registeredEvent%></td>
+                  <td><%=registeredEvents[i].price%></td>
+                  <td><%=registeredEvents[i].discountFlag%></td>
+                  <td><%=registeredEvents[i].eventDescription.replace(/\n/g,'<br>')%></td>
+                  <td class="regeventsdetailscss"><a
+                      href="/myaccount/registeredEvents/delete/<%=registeredEvents[i].id%>">Delete</a></td>
+                </tr>
+                <%}%>    
             <tr>
               <td><strong>Total Price(with discount)</strong></td>
               <td><strong><%=eventsTotal%></strong></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              </tr>
-            </tbody>
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>
+              </tbody>
 
-          </table>
-        </div>
-        <% } else { %>
-        <div class="registered-event-main" style="margin-top: 100px; min-height: 60vh;">
-          <div class="no-content-text ">
-            No Event Registered
+            </table>
           </div>
-        </div>
+          <% } else { %>
+          <div class="registered-event-main" style="margin-top: 100px; min-height: 60vh;">
+            <div class="no-content-text ">
+              No Event Registered
+            </div>
+          </div>
 
 
-        <%}%>
+          <%}%>
         <% } else {%>
-        <div class="no-content-text">
-          Something went wrong
-        </div>
-        <%}%> 
+          <div class="no-content-text">
+            Something went wrong
+          </div>
+          <%}%> 
      
     <%- include('partials/footer') %>
 
-        <% if(error_message != '') {%>
-        <script type="text/javascript">
-          alert('<%-error_message%>')
-        </script>
-        <%}%>
+          <% if(error_message != '') {%>
+          <script type="text/javascript">
+            swal({
+              title: '<%-error_message%>',
+              icon: "warning",
+              confirmButtonText: "Submit",
+              buttons: {
+                cancel: true,
+                confirm: "Confirm",
+              },
+              dangerMode: true,
+            })
+          </script>
+          <%}%>
   </body>
 </html>

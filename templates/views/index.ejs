@@ -184,7 +184,16 @@
 
   <% if(error_message != '') {%>
     <script type="text/javascript">
-      alert('<%-error_message%>')
+      swal({
+        title: '<%-error_message%>',
+        icon: "warning",
+        confirmButtonText: "Submit",
+        buttons: {
+          cancel: true,
+          confirm: "Confirm",
+        },
+        dangerMode: true,
+      })
     </script>
   <%}%>
 

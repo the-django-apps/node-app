@@ -74,8 +74,17 @@
 	
 <% if( alert_msg != '') {%>
 	<% alert_msg.forEach(function(value) { %>
-		<script>
-			alert('<%-value.msg%>')
+		<script type="text/javascript">
+			swal({
+				title: '<%-value.msg%>',
+				icon: "warning",
+				confirmButtonText: "Submit",
+				buttons: {
+					cancel: true,
+					confirm: "Confirm",
+				},
+				dangerMode: true,
+			})
 		</script>
 	<% }) %>
 <%}%>

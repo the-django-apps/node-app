@@ -79,9 +79,18 @@
   <%- include('partials/footer') %>
 
   <% if(success_message != '') { %>
-  <script type="text/javascript">
-    alert("<%-success_message%>");
-  </script>
+    <script type="text/javascript">
+      swal({
+        title: '<%- success_message %>',
+        icon: "warning",
+        confirmButtonText: "Submit",
+        buttons: {
+          cancel: true,
+          confirm: "Confirm",
+        },
+        dangerMode: true,
+      })
+    </script>
   <%}%>
   </body>
 </html>
