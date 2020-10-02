@@ -25,7 +25,7 @@
     <tbody>
     <% for(var i = 0; i < feedbacktList.length ; i++ )  {%>
       <tr>
-        <td><%=feedbacktList[i].name%></td>
+        <td><%- feedbacktList[i].name %></td>
         <td><%=feedbacktList[i].email%></td>
         <td><%=feedbacktList[i].mobileNumber%></td>
         <td><%- feedbacktList[i].feedback.replace(/\n/g,'<br>') %></td>
