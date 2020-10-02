@@ -5,11 +5,11 @@
   <title>Edit Users</title>
   <%- include('partials/heads_content') %>
 
-  <link rel="stylesheet" href="css/signup_login.css" />
+  <link rel="stylesheet" href="/css/signup_login.css" />
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg  ">
+  <nav class="navbar navbar-expand-lg">
 		<div class="collapse navbar-collapse container" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -28,58 +28,59 @@
 				</div>
 			</ul>
 		</div>
-	</nav>
-  <div class="container z-depth-2 form-div" style="  border: 1px solid #000;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  padding: 25px;
-  max-width: 500px;  -webkit-box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-    0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-    0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);">
-    <div class="col-sm-12">
-      <h3 class="text-center p-3">Edit User</h3>
-    </div>
-    <% if (typeof err_msg != 'undefined') { %>
-    <div class="col-sm-12 alert alert-dismissible alert-danger">
-      <button type="button" class="close" data-dismiss="alert">
-        &times;
-      </button>
-      <strong> <%= err_msg %> </strong>
-    </div>
-    <%}%> <% if(typeof alert != 'undefined') { %> <%
-      alert.forEach(function(error){ %>
-    <div class="col-sm-12 alert alert-dismissible alert-success">
-      <button type="button" class="close" data-dismiss="alert">
-        &times;
-      </button>
-      <strong> <%= error.msg %> </strong>
-    </div>
-    <% }) %> <% } %> <% if(typeof userData != 'undefined') { %>
-    <form action="/admin/edituser/<%=userData.id%>" method="POST">
-      <div class="col-sm-12 form-group">
-        <label for="username">Enter Name</label>
-        <input type="text" class="form-control" name="name" id="username" value="<%=userData.name%>"
-          placeholder="Name" />
-      </div>
-      <div class="col-sm-12 form-group">
-        <label for="email">Enter Email</label>
-        <input type="email" class="form-control" name="email" id="email" value="<%=userData.email%>"
-          placeholder="Email" />
-      </div>
-
-      <div class="col-sm-12 form-group">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="isAdmin" id="customCheck1" />
-          <label class="custom-control-label" for="customCheck1">Admin Status</label>
+  </nav>
+  
+  <div style="margin-top: 50px; margin-bottom: 60px">
+    <div class="row" style="margin: 0; padding: 0">
+        <div class="col-sm-12">
+          <div class="z-depth-2 form-div">
+            <div class="col-sm-12">
+              <h3 class="text-center p-3">Edit User</h3>
+            </div>
+            <% if (typeof err_msg != 'undefined') { %>
+            <div class="col-sm-12 alert alert-dismissible alert-danger">
+              <button type="button" class="close" data-dismiss="alert">
+                &times;
+              </button>
+              <strong> <%= err_msg %> </strong>
+            </div>
+            <%}%> <% if(typeof alert != 'undefined') { %> <%
+              alert.forEach(function(error){ %>
+            <div class="col-sm-12 alert alert-dismissible alert-success">
+              <button type="button" class="close" data-dismiss="alert">
+                &times;
+              </button>
+              <strong> <%= error.msg %> </strong>
+            </div>
+            <% }) %> <% } %> <% if(typeof userData != 'undefined') { %>
+            <form action="/admin/edituser/<%=userData.id%>" method="POST">
+              <div class="col-sm-12 form-group">
+                <label for="username">Enter Name</label>
+                <input type="text" class="form-control" name="name" id="username" value="<%=userData.name%>"
+                  placeholder="Name" />
+              </div>
+              <div class="col-sm-12 form-group">
+                <label for="email">Enter Email</label>
+                <input type="email" class="form-control" name="email" id="email" value="<%=userData.email%>"
+                  placeholder="Email" />
+              </div>
+        
+              <div class="col-sm-12 form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="isAdmin" id="customCheck1" />
+                  <label class="custom-control-label" for="customCheck1">Admin Status</label>
+                </div>
+              </div>
+        
+              <div class="col-sm-12 form-group">
+                <input type="submit" class="btn btn-block btn-outline-primary" value="Edit" />
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-
-      <div class="col-sm-12 form-group">
-        <input type="submit" class="btn btn-block btn-outline-primary" value="Edit" />
-      </div>
-    </form>
+    </div>
   </div>
+
 
   <script type="text/javascript">
     function AdminCheckFunction(flag) {
