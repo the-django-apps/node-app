@@ -149,6 +149,22 @@ router.post('/contact' ,[
   })
 ] , async (req, res) => {
   try {
+
+    req.body.feedback = req.body.feedback.replace("<", "&lt");
+    req.body.feedback = req.body.feedback.replace(">", "&gt");
+    req.body.feedback = req.body.feedback.replace('"', "&quot");
+    req.body.feedback = req.body.feedback.replace("'", "&apos");
+    req.body.feedback = req.body.feedback.replace("(", "&#40");
+    req.body.feedback = req.body.feedback.replace(")", "&#41");
+    req.body.feedback = req.body.feedback.replace("!", "&#33");
+    req.body.feedback = req.body.feedback.replace(":", "&#58");
+    req.body.feedback = req.body.feedback.replace(";", "&#59");
+    req.body.feedback = req.body.feedback.replace("=", "&#61");
+    req.body.feedback = req.body.feedback.replace("?", "&#63");
+    req.body.feedback = req.body.feedback.replace("/", "&#47");
+    req.body.feedback = req.body.feedback.replace("{", "&#123");
+    req.body.feedback = req.body.feedback.replace("}", "&#125");
+    req.body.feedback = req.body.feedback.replace("`", "&#96");
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -207,6 +223,22 @@ router.post('/signup', auth.checkNotAuthenticated, [
   ] , async (req, res) => {
   
     try {
+    req.body.name = req.body.name.replace("<", "&lt");
+    req.body.name = req.body.name.replace(">", "&gt");
+    req.body.name = req.body.name.replace('"', "&quot");
+    req.body.name = req.body.name.replace("'", "&apos");
+    req.body.name = req.body.name.replace("(", "&#40");
+    req.body.name = req.body.name.replace(")", "&#41");
+    req.body.name = req.body.name.replace("!", "&#33");
+    req.body.name = req.body.name.replace(":", "&#58");
+    req.body.name = req.body.name.replace(";", "&#59");
+    req.body.name = req.body.name.replace("=", "&#61");
+    req.body.name = req.body.name.replace("?", "&#63");
+    req.body.name = req.body.name.replace("/", "&#47");
+    req.body.name = req.body.name.replace("{", "&#123");
+    req.body.name = req.body.name.replace("}", "&#125");
+    req.body.name = req.body.name.replace("`", "&#96");
+
       const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const alert = errors.array() 
