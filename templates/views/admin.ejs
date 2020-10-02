@@ -66,9 +66,17 @@
 </script>
 
 <% if(error_message != '') {%>
-		<script>
-			alert('<%- error_message %>')
-			console.log('<%- error_message %>')
+	<script type="text/javascript">
+			swal({
+				title: '<%- error_message %>',
+				icon: "warning",
+				confirmButtonText: "Submit",
+				buttons: {
+					cancel: true,
+					confirm: "Confirm",
+				},
+				dangerMode: true,
+			})
 		</script>
 <%}%>
 	

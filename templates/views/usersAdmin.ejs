@@ -15,7 +15,7 @@
   <tbody >
     <%if(user.isAdmin) {%>
     <tr class="table-primary">
-      <td scope="row"><%=user.name%></td>
+      <td scope="row"><%-user.name%></td>
       <td><%=user.email%></td>
       <td><%=user.isAdmin%></td>
       <td><a href="/admin/deleteuser/<%=user.id%>" class="btn btn-danger btn-sm">delete</a></td>
@@ -23,7 +23,7 @@
     </tr>
     <%} else {%>
     <tr>
-      <td scope="row"><%=user.name%></td>
+      <td scope="row"><%-user.name%></td>
       <td><%=user.email%></td>
       <td><%=user.isAdmin%></td>
       <td><a href="/admin/deleteuser/<%=user.id%>" class="btn btn-danger btn-sm">delete</a></td>
