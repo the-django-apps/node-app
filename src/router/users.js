@@ -120,6 +120,10 @@ router.get('/about', (req, res) => {
   res.render('about',{currentUser:req.user})
 })
 
+router.get('/notice', (req, res) => {
+  res.render('notice',{currentUser:req.user})
+})
+
 router.get('/example', (req, res) => {
   res.render('example',{currentUser:req.user})
 })

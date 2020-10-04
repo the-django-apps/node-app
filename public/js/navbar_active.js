@@ -8,6 +8,7 @@ let element2 = document.getElementById("about_navbar");
 let element3 = document.getElementById("event_navbar");
 let element3_1 = document.getElementById("event_navbar_dropdown1");
 let element3_2 = document.getElementById("event_navbar_dropdown2");
+let element3_3 = document.getElementById("event_navbar_dropdown3");
 let element4 = document.getElementById("contact_navbar");
 let element5 = document.getElementById("signup_navbar");
 let element6 = document.getElementById("login_navbar");
@@ -26,6 +27,10 @@ switch (page2) {
   case "eventDashboard?eventFlag=eventDashboard":
     element3.classList.add("activenavbar", "active");
     element3_2.classList.add("activenavbardropdown");
+    break;
+  case "notice":
+    element3.classList.add("activenavbar", "active");
+    element3_3.classList.add("activenavbardropdown");
     break;
   case "myaccount?accountOption=registeredEvents":
     element7.classList.add("activenavbar", "active");
