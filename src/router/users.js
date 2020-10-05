@@ -120,6 +120,10 @@ router.get('/about', (req, res) => {
   res.render('about',{currentUser:req.user})
 })
 
+router.get('/notice', (req, res) => {
+  res.render('notice',{currentUser:req.user})
+})
+
 router.get('/example', (req, res) => {
   res.render('example',{currentUser:req.user})
 })
@@ -149,6 +153,21 @@ router.post('/contact' ,[
   })
 ] , async (req, res) => {
   try {
+    req.body.name = req.body.name.replace("<", "&lt");
+    req.body.name = req.body.name.replace(">", "&gt");
+    req.body.name = req.body.name.replace('"', "&quot");
+    req.body.name = req.body.name.replace("'", "&apos");
+    req.body.name = req.body.name.replace("(", "&#40");
+    req.body.name = req.body.name.replace(")", "&#41");
+    req.body.name = req.body.name.replace("!", "&#33");
+    req.body.name = req.body.name.replace(":", "&#58");
+    req.body.name = req.body.name.replace(";", "&#59");
+    req.body.name = req.body.name.replace("=", "&#61");
+    req.body.name = req.body.name.replace("?", "&#63");
+    req.body.name = req.body.name.replace("/", "&#47");
+    req.body.name = req.body.name.replace("{", "&#123");
+    req.body.name = req.body.name.replace("}", "&#125");
+    req.body.name = req.body.name.replace("`", "&#96");
 
     req.body.feedback = req.body.feedback.replace("<", "&lt");
     req.body.feedback = req.body.feedback.replace(">", "&gt");
