@@ -28,7 +28,7 @@ switch (page2) {
     element3.classList.add("activenavbar", "active");
     element3_2.classList.add("activenavbardropdown");
     break;
-  case "notice":
+  case "eventNotice?eventFlag=notice":
     element3.classList.add("activenavbar", "active");
     element3_3.classList.add("activenavbardropdown");
     break;

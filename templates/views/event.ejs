@@ -16,13 +16,15 @@
   <link rel="stylesheet" href="/css/eventdashboard.css" />
   
   <link rel="stylesheet" href="/css/signup_login.css">
+
+  <link rel="stylesheet" href="/css/notice.css" />
   
 </head>
 
 <body>
   <%- include('partials/header') %>
-  <div style="margin-bottom: 56px"></div>
-
+  <div style="margin-bottom: 70px"></div>
+<!---------------------------------------- Event Registration ------------------------------------->
   <% if(eventFlag == 'eventRegistration') {%>
     <form action="/event/register" method="POST" id="registration-form"> 
   <div class="container-fluid" style="min-height: 60vh">
@@ -136,7 +138,7 @@
   </div>
 </form>
   <%}%>
-
+<!----------------------------------- Event Dashbord -------------------------------------->
 <%if(eventFlag == 'eventDashboard') {%>
     <%if(EventDates != 'undefined') {%>
       <%if(EventDates.length != 0) {%>
@@ -168,6 +170,33 @@
   <%}%>
   <%}%>
   <%}%>
+<!----------------------------------------- Notice section -------------------------------->
+  <%if(eventFlag == 'notice') {%>
+  <% if(typeof notices != 'undefined') {%>
+    <% if(notices.length != 0) { %> 
+      <div class="noitce-main">
+        <% for(var i=0; i < notices.length; i++){%>
+          <div class="container">
+                <div class="card my-2 z-depth-2">
+              <div class="card-header notice-heading" >
+                <%-notices[i].heading%>
+              </div>
+              <div class="card-body">
+                <p class="card-text"><%-notices[i].notice%></p>
+              </div>
+            </div>
+          </div>
+        <%}%>
+      </div>
+  <% } else {%>
+    <div class="registered-event-main">
+    <p class="no-content-text">No Notices</p>
+    </div>
+  <%}%>
+  <%}%>
+  <%}%>
+<!-- ------------------------------------------------------------------------------------------- -->
+
   <%- include('partials/footer') %>
 
   <% if(error_message != '') { %>
@@ -184,13 +213,49 @@
       })
     </script>
   <%}%>
+
+
+  <!---------------------------------- Discount and Total Event Price ---------------------------->
+
+  <!-- Script is used to check discount and calculate total
+ price of event registerd by user and also ask form confirmation -->
   <% if(typeof indoorevents != 'undefined') { %>
     <% if(indoorevents.length != 0) { %>
 
-  <script src="/js/event.js"></script>
+  <script >
+  function discountCheck(eventLength, eventName) {
+  var eventsTotal = 0
+  for (var i = 0; i < eventLength; i++) {
+    var rergisteredEvent = document.getElementsByClassName(eventName + i)
+    if (rergisteredEvent[2].checked) {
+      if (<%- discount %> && totalSelectedEvent > 1) {
+        var discountOnEvent = (parseInt(rergisteredEvent[0].innerHTML) * rergisteredEvent[1].innerHTML.slice(0, parseInt(rergisteredEvent[1].innerHTML.length) - 1)) / 100
+        eventsTotal += parseInt(rergisteredEvent[0].innerHTML) - discountOnEvent
+      } else {
+        eventsTotal += parseInt(rergisteredEvent[0].innerHTML)
+      }
+    }
+  }
+  return eventsTotal
+}
+
+$("#registration-form").submit(function (e) {
+  totalSelectedEvent = 0
+  var allInputs = document.getElementsByTagName('input')
+  for (value in allInputs) {
+    if (allInputs[value].checked) {
+      totalSelectedEvent++
+    }
+  }
+  var indoorDiscount = discountCheck(<%- indoorevents.length %>, 'indoor')
+  var outdoorDiscount = discountCheck(<%- outdoorevents.length %>, 'outdoor')
+  return confirm(" Your total price is (" + (indoorDiscount + outdoorDiscount) + "Rs)" + "\n Do you like to register?");
+})
+  </script>
   <%}%>
   <%}%>
 
+  <!-- ------------------------------------------------------------------------------------------ -->
 
   <script>
     $(window)

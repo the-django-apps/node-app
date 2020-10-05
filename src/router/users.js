@@ -7,6 +7,7 @@ const Registration = require('../model/registration')
 const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
 const DateEvent = require('../model/dateEvents')
+const Notice = require('../model/notice')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -115,6 +116,18 @@ router.get('/eventDashboard', async (req, res) => {
   res.redirect('/404')
 })
 
+router.get('/eventNotice',async (req, res) => {
+  if(req.query.eventFlag == 'notice') {
+    const notices = await Notice.find({})
+      
+   return res.render('event',{notices,currentUser:req.user,eventFlag: 'notice'})
+  } 
+  
+  res.redirect('/404')
+})
+
+
+
 
 router.get('/about', (req, res) => {
   res.render('about',{currentUser:req.user})
@@ -124,9 +137,6 @@ router.get('/notice', (req, res) => {
   res.render('notice',{currentUser:req.user})
 })
 
-router.get('/example', (req, res) => {
-  res.render('example',{currentUser:req.user})
-})
 
 router.get('/contact', (req, res) => {
   res.render('contact',{currentUser:req.user})

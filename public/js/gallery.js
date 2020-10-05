@@ -25,13 +25,9 @@ $(document).ready(async function () {
     for (let i = 0; i < myData["gallery"].length; i++) {
       var x = await document.getElementById(i);
 
-      // x.setAttribute("width", "354");
-      // x.setAttribute("height", "228");
 
-      x.src =
-        (await "data:image/jpeg;base64,") +
+      x.src =(await "data:image/jpeg;base64,") +
         toBase64(myData["gallery"][i].photo.data);
-      // x.style.padding = "5px 3px";
     }
   };
   await galleryapifunction();
