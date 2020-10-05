@@ -107,3 +107,33 @@ body{
     flex-grow: 1;
   }
 
+/******************************** Notice section ***********************/
+
+.add-notice{
+  position: absolute;
+  float: right;
+  right: 5%;
+  top: 3%;
+}
+.notice-main {
+  margin-left: 26%;
+  margin-top: 5%;
+  width: 50%;
+}
+  .notice{
+    background-color: #a7c4da;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .notice-heading{
+    font-size: 20px;
+    border-bottom: 1px solid gray;
+  }
+  .notice-collapse{
+    margin: 5px; 
+    padding: 5px;
+  }
+

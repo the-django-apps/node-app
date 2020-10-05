@@ -30,6 +30,7 @@
 	  <a href="/admin?flag=register">User Registration</a>
 	  <a href="/admin?flag=eventRegister">Event Registration</a>
 	  <a href="/admin?flag=contact">Contact Feedbacks</a>
+	  <a href="/admin?flag=notice">Notice</a>
 	</div>
 
 	<button class="openbtn" onclick="openNav()">☰ Admin Panel</button> 
@@ -46,6 +47,8 @@
 		<%- include('registerEventAdmin') %>
 	<%}else if(flag == "contact") {%> 
 		<%- include('contactUsAdmin') %>
+	<%} else if(flag == "notice") {%> 
+		<%- include('noticeAdmin') %>
 	<%} else {%>
 		<%- include('usersAdmin') %>
 	<%}%>

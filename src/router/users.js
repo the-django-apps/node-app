@@ -245,7 +245,10 @@ router.post('/signup', auth.checkNotAuthenticated, [
       return res.render('signup' , {alert})
     }
       
-    const user = new User(req.body)
+    const user = new User({name:req.body.name,
+      email:req.body.email,
+      password:req.body.password,
+      mobileNumber:req.body.mobileNumber})
     await user.save()   
     const msg = {
       to: req.body.email,
@@ -307,6 +310,7 @@ router.post('/user/forgotPassword/verifyPin' , verifyPin.verifyPin , (req, res) 
 router.post('/user/forgotPassword/setPassword' , [
   body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 chars long'),
   ] ,verifyPin.setPassword , (req, res) => {
+  
   req.flash('error_message', 'Password sucessfully Changed!')
   res.redirect('/login')
 })
@@ -484,16 +488,31 @@ router.get('/myaccount/registeredEvents/delete/:id' , auth.checkAuthenticated ,a
 
 
 // Reset password
-router.post('/user/resetPassword',async (req,res) => {
+router.post('/user/resetPassword', auth.checkAuthenticated, [
+  body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 chars long'),
+  ] ,async (req,res) => {
+    try{
   if (await bcrypt.compare(req.body.oldPassword, req.user.password)) {
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+      const alert = errors.array()    
+      return res.render('account',{accountOption:'resetPassword',alert})
+    }
+    if(req.body.password != req.body.confirmedPassword){
+      return res.render('account',{accountOption:'resetPassword',err_msg:'Password not matched!'})
+    }
     req.user.password = req.body.password
     await req.user.save()
     req.flash('error_message', 'Password Successfully Changed')
     res.redirect('/myaccount?accountOption=resetPassword')
   }else {
-    req.flash('error_message','Old password is wrong')
-    res.redirect('/myaccount?accountOption=resetPassword')
+    res.render('account',{accountOption:'resetPassword',err_msg:'Old password is wrong!'})
   }
+    } catch {
+      req.flash('error_message', "Somthing thing went wrong. Please try again!")
+      res.redirect('/myaccount?accountOption=resetPassword')
+    }
 })
 
 

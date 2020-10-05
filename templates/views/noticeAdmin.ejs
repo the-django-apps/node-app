@@ -1,0 +1,47 @@
+
+<a href="" data-toggle="modal" data-target="#notice" class="btn btn-primary btn-sm add-notice" >Add Notice</a>
+
+
+<!-- Model to send notice -->
+<div class="modal" id="notice">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Notice</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/admin/notice" method="post" >
+            <input type="text"  name="heading" placeholder="Heading" class="form-control" required><br>
+            <textarea name="notice"  cols="30" rows="10" placeholder="Notice..." class="form-control" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<% if(typeof notices != 'undefined') {%>
+    <% if(notices.length != 0) { %> 
+        <div class="notice-main">
+        <% for(var i=0; i < notices.length; i++){%>
+            <div data-toggle="collapse" class="notice" data-target="#deleteNotice<%=i%>" aria-expanded="true" aria-controls="deleteNotice<%=i%>">
+                <p class="notice-heading"><%-notices[i].heading%></p>
+                <p><%-notices[i].notice%></p>
+            </div>
+            <div id="deleteNotice<%=i%>" class="collapse notice-collapse">
+                <a href="/admin/noticeDelete/<%-notices[i].id%>" class="btn btn-primary btn-sm">Delete</a>
+             </div>
+        <%}%>
+    </div>
+  <% } else {%>
+    <p class="no-content-text">No Notices</p>
+  <%}%>
+  <%}%>
+  

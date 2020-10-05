@@ -8,6 +8,7 @@ const Registration = require('../model/registration')
 const EventRegistration = require('../model/eventRegistration')
 const Contact = require('../model/contactUs')
 const DateEvent = require('../model/dateEvents')
+const Notice = require('../model/notice')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -41,7 +42,7 @@ const requiresAdmin = function () {
 
 /***************************************** ADMIN PATHS ****************************************/
 
-/*****************************************User Paths ***********************************/
+/***************************************** User Paths ***********************************/
 
 router.get('/admin', requiresAdmin() ,async (req, res) => {
 
@@ -128,7 +129,11 @@ router.get('/admin', requiresAdmin() ,async (req, res) => {
   } else if (req.query.flag === 'contact') {
     const feedbacktList = await Contact.find({})
     res.render('admin',{feedbacktList, flag: 'contact'})
-  } else {
+  } else if (req.query.flag === 'notice') {
+    
+    const notices = await Notice.find({})
+    res.render('admin',{notices, flag: 'notice'})
+  }else {
     const userData = await User.find({})
     res.render('admin', { userData: userData })
   }
@@ -379,6 +384,21 @@ router.post('/admin/indoorevent/add', requiresAdmin() , dateValidation() ,[
       return res.redirect('/admin?flag=event')
     }
 
+    req.body.description = req.body.description.replace("<", "&lt");
+    req.body.description = req.body.description.replace(">", "&gt");
+    req.body.description = req.body.description.replace('"', "&quot");
+    req.body.description = req.body.description.replace("'", "&apos");
+    req.body.description = req.body.description.replace("(", "&#40");
+    req.body.description = req.body.description.replace(")", "&#41");
+    req.body.description = req.body.description.replace("!", "&#33");
+    req.body.description = req.body.description.replace(":", "&#58");
+    req.body.description = req.body.description.replace(";", "&#59");
+    req.body.description = req.body.description.replace("=", "&#61");
+    req.body.description = req.body.description.replace("?", "&#63");
+    req.body.description = req.body.description.replace("/", "&#47");
+    req.body.description = req.body.description.replace("{", "&#123");
+    req.body.description = req.body.description.replace("}", "&#125");
+    req.body.description = req.body.description.replace("`", "&#96");
     
     const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
      /****** This  verification is done to keep all date unique in dateEvent model
@@ -435,6 +455,23 @@ router.post('/admin/outdoorevent/add', requiresAdmin() ,dateValidation(),[
       req.flash('alert_msg', alert)
       return res.redirect('/admin?flag=event')
     }
+
+    req.body.description = req.body.description.replace("<", "&lt");
+    req.body.description = req.body.description.replace(">", "&gt");
+    req.body.description = req.body.description.replace('"', "&quot");
+    req.body.description = req.body.description.replace("'", "&apos");
+    req.body.description = req.body.description.replace("(", "&#40");
+    req.body.description = req.body.description.replace(")", "&#41");
+    req.body.description = req.body.description.replace("!", "&#33");
+    req.body.description = req.body.description.replace(":", "&#58");
+    req.body.description = req.body.description.replace(";", "&#59");
+    req.body.description = req.body.description.replace("=", "&#61");
+    req.body.description = req.body.description.replace("?", "&#63");
+    req.body.description = req.body.description.replace("/", "&#47");
+    req.body.description = req.body.description.replace("{", "&#123");
+    req.body.description = req.body.description.replace("}", "&#125");
+    req.body.description = req.body.description.replace("`", "&#96");
+    
     const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
 
     if(!oldDate){ 
@@ -514,3 +551,64 @@ router.post('/admin/contact' , async (req,res) => {
 } )
 
 module.exports = router
+
+
+/********************************* Notice *********************************************/
+
+
+
+router.post('/admin/notice', requiresAdmin(),async (req,res) => {
+  try{
+    req.body.heading = req.body.heading.replace("<", "&lt");
+    req.body.heading = req.body.heading.replace(">", "&gt");
+    req.body.heading = req.body.heading.replace('"', "&quot");
+    req.body.heading = req.body.heading.replace("'", "&apos");
+    req.body.heading = req.body.heading.replace("(", "&#40");
+    req.body.heading = req.body.heading.replace(")", "&#41");
+    req.body.heading = req.body.heading.replace("!", "&#33");
+    req.body.heading = req.body.heading.replace(":", "&#58");
+    req.body.heading = req.body.heading.replace(";", "&#59");
+    req.body.heading = req.body.heading.replace("=", "&#61");
+    req.body.heading = req.body.heading.replace("?", "&#63");
+    req.body.heading = req.body.heading.replace("/", "&#47");
+    req.body.heading = req.body.heading.replace("{", "&#123");
+    req.body.heading = req.body.heading.replace("}", "&#125");
+    req.body.heading = req.body.heading.replace("`", "&#96");
+
+    req.body.notice = req.body.notice.replace("<", "&lt");
+    req.body.notice = req.body.notice.replace(">", "&gt");
+    req.body.notice = req.body.notice.replace('"', "&quot");
+    req.body.notice = req.body.notice.replace("'", "&apos");
+    req.body.notice = req.body.notice.replace("(", "&#40");
+    req.body.notice = req.body.notice.replace(")", "&#41");
+    req.body.notice = req.body.notice.replace("!", "&#33");
+    req.body.notice = req.body.notice.replace(":", "&#58");
+    req.body.notice = req.body.notice.replace(";", "&#59");
+    req.body.notice = req.body.notice.replace("=", "&#61");
+    req.body.notice = req.body.notice.replace("?", "&#63");
+    req.body.notice = req.body.notice.replace("/", "&#47");
+    req.body.notice = req.body.notice.replace("{", "&#123");
+    req.body.notice = req.body.notice.replace("}", "&#125");
+    req.body.notice = req.body.notice.replace("`", "&#96");
+
+    const notice = new Notice(req.body)
+    await notice.save()
+
+    req.flash('error_message','Notice submited!')
+    res.redirect('/admin?flag=notice')
+  }catch {
+    req.flash('error_message','Something went wrong! Please try again.')
+    res.redirect('/admin?flag=notice')
+  }
+})
+
+
+router.get('/admin/noticeDelete/:id', requiresAdmin(), async (req,res) => {
+  try{
+  await Notice.findByIdAndDelete(req.params.id)
+  res.redirect('/admin?flag=notice')
+}catch {
+  req.flash('error_message','Something went wrong! Please try again.')
+  res.redirect('/admin?flag=notice')
+}
+} )
