@@ -4,7 +4,7 @@
    <title> Event Admin </title>
 
 </head>
-
+<script src="/js/eventAdmin.js"></script>
 <body>
 
    <h1 style="text-align: center; color: #333333; padding: 5px ;">Admin Events</h1>
@@ -178,6 +178,76 @@
                            <p><strong>Description: </strong><%-indoorevents[i].description.replace(/\n/g,'<br>')%></p>
                            <a class="btn-eventregister btn"
                               href="/admin/indooreventDelete/<%=indoorevents[i].id%>">Delete</a>
+                              <a  class="btn-eventregister btn" data-toggle="modal" data-target="#editIndoorEvent<%=i%>" href="">Edit</a>
+
+                              <!-- Edit Indoor Event (Modal) -->
+                              <div class="modal" id="editIndoorEvent<%=i%>">
+                                 <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                       <div class="modal-header">
+                                          <h5 class="modal-title">Edit Indoor Event</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                             <span aria-hidden="true">&times;</span>
+                                          </button>
+                                       </div>
+                                       <div class="modal-body">
+                                          <form action="/admin/indoorevent/edit/<%=indoorevents[i].id%>" method="post">
+                                             <div class="form-fields">
+                                                <input type="text" name="indoorEvent" placeholder="add Indoor event" value="<%=indoorevents[i].indoorEvent%>" class="form-control" required>
+                                             </div>
+                                             <div class="form-fields">
+                                                <input type="text" name="price" placeholder="price" value="<%=indoorevents[i].price%>" class="form-control">
+                                             </div>
+                                             <div class="form-fields form-fields-day">
+                                                <input type="text" name="day" placeholder="Day" id="day<%=i%>" class="form-control" maxlength="2" min="1" max="31"
+                                                   size="3" badinput="false">
+                                             </div>
+                                             <div class="form-fields form-fields-month">
+                                                <select name="month" class="form-control" id="month<%=i%>">
+                                                   <option value="1">January</option>
+                                                   <option value="2">February</option>
+                                                   <option value="3">March</option>
+                                                   <option value="4">April</option>
+                                                   <option value="5">May</option>
+                                                   <option value="6">June</option>
+                                                   <option value="7">July</option>
+                                                   <option value="8">August</option>
+                                                   <option value="9">September</option>
+                                                   <option value="10">October</option>
+                                                   <option value="11">November</option>
+                                                   <option value="12">December</option>
+                                                </select>
+                                             </div>
+                                             <div class="form-fields form-fields-year">
+                                                <input type="text" id="year<%=i%>" name="year" placeholder="Year" maxlength="4" size="5" class="form-control">
+                                             </div><br><br>
+                                             <div class="form-fields">
+                                                <input type="text" name="discountValue" placeholder="Discount e.g- 10,5,20" value="<%=indoorevents[i].discountValue%>" class="form-control"
+                                                   required>
+                                             </div>
+                                             <div class="form-fields">
+                                                <select name="allowRegistration" id="reg<%=i%>" class="form-control">
+                                                   <option value="true">Allow Registration</option>
+                                                   <option value="false">Don't Allow Registration</option>
+                                                </select>
+                                             </div>
+                                             <div class="form-fields">
+                                                <textarea class="form-control" name="description" placeholder="Add Description"><%-indoorevents[i].description.replace(/\n/g,'<br>')%></textarea>
+                                             </div>
+                                       </div>
+                                       <div class="modal-footer">
+                                          <button type="submit" class="btn btn-primary">Edit</button>
+                                       </div>
+                                       </form>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- Script to set date -->
+                              <script>
+                                 setDateOfEditIndoorEvent("<%-indoorevents[i].date%>","<%-i%>")
+                                 allowOrNotRegIndoor("<%-indoorevents[i].allowRegistration%>","<%-i%>")
+                              </script>
+                              <!------------------------------------ End Modal ------------------------>
                         </div>
                      </div>
                      <%}%>
@@ -213,6 +283,76 @@
                                     </strong><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></p>
                                  <a class="btn-eventregister btn"
                                     href="/admin/outdooreventDelete/<%=outdoorevents[i].id%>">Delete</a>
+                                    <a  class="btn-eventregister btn" data-toggle="modal" data-target="#editOutdoorEvent<%=i%>" href="">Edit</a>
+
+                                    <!------------------------------- Edit Outdoor Event (Modal) ------------------------------->
+                                    <div class="modal" id="editOutdoorEvent<%=i%>">
+                                       <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                             <div class="modal-header">
+                                                <h5 class="modal-title">Edit Outdoor Event</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                   <span aria-hidden="true">&times;</span>
+                                                </button>
+                                             </div>
+                                             <div class="modal-body">
+                                                <form action="/admin/outdoorevent/edit/<%=outdoorevents[i].id%>" method="post">
+                                                   <div class="form-fields">
+                                                      <input type="text" name="outdoorEvent" value="<%=outdoorevents[i].outdoorEvent%>" placeholder="add outdoor event" class="form-control">
+                                                   </div>
+                                                   <div class="form-fields">
+                                                      <input type="text" name="price" value="<%=outdoorevents[i].price%>" placeholder="price" class="form-control" required>
+                                                   </div>
+                                                   <div class="form-fields form-fields-day">
+                                                      <input type="text" name="day" placeholder="Day" id="oday<%=i%>" class="form-control" maxlength="2" min="1" max="31"
+                                                         size="3" badinput="false">
+                                                   </div>
+                                                   <div class="form-fields form-fields-month">
+                                                      <select name="month" class="form-control" id="omonth<%=i%>">
+                                                         <option value="1">January</option>
+                                                         <option value="2">February</option>
+                                                         <option value="3">March</option>
+                                                         <option value="4">April</option>
+                                                         <option value="5">May</option>
+                                                         <option value="6">June</option>
+                                                         <option value="7">July</option>
+                                                         <option value="8">August</option>
+                                                         <option value="9">September</option>
+                                                         <option value="10">October</option>
+                                                         <option value="11">November</option>
+                                                         <option value="12">December</option>
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-fields form-fields-year">
+                                                      <input type="text" id="oyear<%=i%>" name="year" placeholder="Year" maxlength="4" size="5" class="form-control">
+                                                   </div><br><br>
+                                                   <div class="form-fields">
+                                                      <input type="text" name="discountValue" value="<%=outdoorevents[i].discountValue%>" placeholder="Discount e.g- 10,5,20" class="form-control"
+                                                         required>
+                                                   </div>
+                                                   <div class="form-fields">
+                                                      <select name="allowRegistration" id="oreg<%=i%>" class="form-control">
+                                                         <option value="true">Allow Registration</option>
+                                                         <option value="false">Don't Allow Registration</option>
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-fields">
+                                                      <textarea class="form-control"  name="description" placeholder="Add Description"><%-outdoorevents[i].description.replace(/\n/g,'<br>')%></textarea>
+                                                   </div>
+                                             </div>
+                                             <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Edit</button>
+                                             </div>
+                                             </form>
+                                          </div>
+                                       </div>
+                                    </div>
+                                     <!-- Script to set date -->
+                                    <script>
+                                       setDateOfEditOutdoorEvent("<%-outdoorevents[i].date%>","<%-i%>")
+                                       allowOrNotRegOutdoor("<%-outdoorevents[i].allowRegistration%>","<%-i%>")
+                                    </script>
+                                    <!------------------------------------ End Modal ------------------------>
                               </div>
                            </div>
                            <%}%>
@@ -236,7 +376,7 @@
                   var indoorList = $('#list-indoor')
                   var outdoorList = $('#list-outdoor')
 
-                  if (' <%-optionFlag%>' === 'indoor') {
+                  if ( '<%-optionFlag%>' === 'indoor') {
                      indoorOption.addClass("active")
                      indoorOption.addClass("show")
                      indoorList.addClass("active")
@@ -255,17 +395,11 @@
                      indoorList.removeClass("active")
                      indoorList.removeClass("show")
                   }
-
-                  function setOrUnsetDiscount(discountValue) {
-                     console.log(discountValue)
-                     if (discountValue === true) {
-                        $('#discount').val('/admin/discount?discount=set')
-                     } else {
-                        $('#discount').val('/admin/discount?discount=unset')
-                     }
-                  }
+                 
                   setOrUnsetDiscount(<%- discount %>)
                </script>
+
+              
 
                
 </body>

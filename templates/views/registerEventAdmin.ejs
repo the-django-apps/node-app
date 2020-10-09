@@ -4,6 +4,7 @@
 <head>
   <title>Event Registration</title>
 
+  <script src="/js/registerEventAdmin.js"></script>
 </head>
 
 <body>
@@ -11,6 +12,7 @@
   <% if(typeof userEvents != 'undefined') { %>
   <% if(userEvents.length != 0) { %>
   <h1 style="text-align: center; color: #333333; padding: 5px ;">Event Registration</h1>
+  <form action="/registerEvent/removeParticipants" id="myAnchor" method="post" onsubmit="submitUncheckboxValues()">
   <table class="table table-hover table-css">
     <thead>
       <tr>
@@ -20,6 +22,8 @@
         <th>Registered Price</th>
         <th>Discount</th>
         <th>Paid</th>
+        
+        <th><input type="submit" value="Remove Participant" ></th>
         <th>Edit Paid</th>
         <th>Delete Event</th>
       </tr>
@@ -49,6 +53,10 @@
         <td><%=userEvents[i][j].price%></td>
         <td><%=userEvents[i][j].discountFlag%></td>
         <td><%=userEvents[i][j].payment%></td>
+        <td><input type="checkbox" class="userInEventFlag" id="<%=userEvents[i][j].id%>" name="userInEventFlag" value="<%=userEvents[i][j].id%>"></td>
+        <script>
+          tickCheckboxOfParticipant('<%- userEvents[i][j].userInEventFlag%>','<%=userEvents[i][j].id%>')
+        </script>
         <td><a href="" data-toggle="modal" data-target="#a<%=userEvents[i][j].id%>" class="btn btn-primary btn-sm">Edit</a></td>
         <td><a href="/registerEvent/delete/<%=userEvents[i][j].id%>" class="btn btn-danger btn-sm">Delete</a></td>
       </tr>
@@ -75,8 +83,9 @@
           </div>
         </div>
       </div>
-      <%}%>      
+      <%}%>  
     <%}%>
+  
       <tr>
         <td><strong>Grand Total</strong></td>
         <td></td>
@@ -89,14 +98,15 @@
       </tr>
     </tbody>
   </table>
+  <input type="hidden" id="unchecked-checkboxes" name="unchecked-checkboxes" value="">
+</form>
   <%} else {%>
   <p class="no-content-text">No Registration</p>
   <%}%>
   <%}%>
 
 
-
-
+  
 </body>
 
 </html>

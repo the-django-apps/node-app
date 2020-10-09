@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="/css/signup_login.css">
 
   <link rel="stylesheet" href="/css/notice.css" />
+
+  <link rel="stylesheet" href="/css/participantmodal.css" />
   
 </head>
 
@@ -150,16 +152,67 @@
           <%=EventDates[i][EventDates[i].length-1]%>
         </h4>
         <div class="card-body">
-          <% EventDates[i].forEach(function(value) { %>
-            <%if(value.indoorEvent){%>
-          <p class="card-title"><%=value.indoorEvent%></p>
+          <% for(var j = 0; j < EventDates[i].length -1 ; j++) { %>
+              <a href="#openModal-about<%=i%><%=j%>">
+                <p class="card-title"><%=EventDates[i][j][0]%></p>
+              </a>
+               <!-- Modal of participants for indoor events -->
+                <div id="openModal-about<%=i%><%=j%>" class="modalDialog">
+                  <div>
+                      <a href="#close" title="Close" class="close">X</a>
+                      <h2 style="text-align: center; padding-top: 10px;">Participants</h2>
+                      <div class="col-sm-12" style="padding: 0 !important;">
+                          <div class="tablebodycss">
+                              <div class="sectiontablecss" style="margin-top: 10px !important">
+                                  <div class="tbl-header">
+                                    <% if(EventDates[i][j][1]) {%>
+                                      <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                                          <thead>
+                                              <tr>
+                                                  <th>Sr.</th>
+                                                  <th>Participant 1</th>
+                                                  <th></th>
+                                                  <th>Participant 2</th>
+                                              </tr>
+                                          </thead>
+                                      </table>
+                                  </div>
+                                  <div class="tbl-content">
+                                      <table class="tablecssevent" cellpadding="0" cellspacing="0" border="0">
+                                          <tbody>
+                                            <%for(var x =0; x < EventDates[i][j][1].length ; x+=2) { %>
+                                              <tr>
+                                                <td><%=(x+(1-(x/2)))%></td>
+                                                  <%if(EventDates[i][j][1][x]){%>
+                                                  <td><%=EventDates[i][j][1][x].email%></td>
+                                                  <%}else{%>
+                                                    <td>-</td>
+                                                    <%}%>
+                                                  <td>vs</td>
+                                                  <%if(EventDates[i][j][1][x+1]){%>
+                                                  <td><%=EventDates[i][j][1][x+1].email%></td>
+                                                  <%}else{%>
+                                                    <td>-</td>
+                                                    <%}%>
+                                              </tr>
+                                            <%}%>
+                                          </tbody>
+                                      </table>
+                                      <%} else {%>
+                                        <p style="font-size: 20px;">no participants registered</p>
+                                      <%}%>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
           <%}%>
-          <%if(value.outdoorEvent){%>
-          <p class="card-title"><%=value.outdoorEvent%></p>
-          <%}%>
-          <%})%>
         </div>
       </div>
+
+     
+
         <%}%>
     </div>
   </div>

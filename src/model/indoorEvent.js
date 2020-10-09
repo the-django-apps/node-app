@@ -19,6 +19,10 @@ const indoorEventSchema = mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	allowRegistration: {
+		type: Boolean,
+		default: true
+	},
 	description: {
 		type:String,
 		required: true
@@ -27,8 +31,8 @@ const indoorEventSchema = mongoose.Schema({
 
 indoorEventSchema.virtual('indoorEventPath', {
 	ref: 'eventRegistered',
-	localField: '_id',
-	foreignField: 'indoorEventId'
+	localField: 'indoorEvent',
+	foreignField: 'indoorEvent'
 })
 
 /******** The above virtual is used to connect eventRegistered model IndoorEvent model  

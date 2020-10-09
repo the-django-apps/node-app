@@ -86,6 +86,12 @@ router.get('/admin', requiresAdmin() ,async (req, res) => {
     const users = await User.find({})
     const indoorEvents = await IndoorEvent.find({})
     const outdoorEvents = await OutdoorEvent.find({})
+    const eventRegistered = await EventRegistration.find({})
+    var userInEventFlagArray = []
+
+    eventRegistered.forEach(value => {  /********This is function is used to create array of all participants to tick checkboxes on admin panel */
+      userInEventFlagArray.push(value.userInEventFlag)
+    })
 
     var userEvents = []
     var grandTotal = 0;
@@ -125,7 +131,7 @@ router.get('/admin', requiresAdmin() ,async (req, res) => {
           userEvents.push(outdoorEvents[i].outdoorEventPath)
         }               
       }
-    res.render('admin', { userEvents, flag: 'eventRegister',grandTotal })
+    res.render('admin', { userEvents, userInEventFlagArray, flag: 'eventRegister',grandTotal })
   } else if (req.query.flag === 'contact') {
     const feedbacktList = await Contact.find({})
     res.render('admin',{feedbacktList, flag: 'contact'})
@@ -446,6 +452,13 @@ router.post('/admin/outdoorevent/add', requiresAdmin() ,dateValidation(),[
       return true
     }
     
+  }),
+  body('outdoorEvent').custom(value => {
+    return OutdoorEvent.findOne({outdoorEvent:value}).then(event => {
+      if (event) {
+        return Promise.reject('Event already exist')
+      }
+    })
   })
 ] , async (req, res) => {
   try {
@@ -494,6 +507,145 @@ router.post('/admin/outdoorevent/add', requiresAdmin() ,dateValidation(),[
   }
 })
 
+
+router.post('/admin/indoorevent/edit/:id', requiresAdmin() , dateValidation() ,[
+  body('price').custom(value => {
+    if(isNaN(value)) {
+       throw new Error('Price is not a number')
+    } else {
+      return true
+    }
+  }),
+  body('discountValue').custom(value => {
+    if(value) {
+      if(isNaN(value)) {
+        throw new Error('Discount value is not a number')
+     } else {
+       return true
+     }
+    } else {
+      return true
+    }
+    
+  })
+]  ,async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const alert = errors.array() 
+      req.flash('alert_msg', alert)
+      return res.redirect('/admin?flag=event')
+    }
+
+    req.body.description = req.body.description.replace("<", "&lt");
+    req.body.description = req.body.description.replace(">", "&gt");
+    req.body.description = req.body.description.replace('"', "&quot");
+    req.body.description = req.body.description.replace("'", "&apos");
+    req.body.description = req.body.description.replace("(", "&#40");
+    req.body.description = req.body.description.replace(")", "&#41");
+    req.body.description = req.body.description.replace("!", "&#33");
+    req.body.description = req.body.description.replace(":", "&#58");
+    req.body.description = req.body.description.replace(";", "&#59");
+    req.body.description = req.body.description.replace("=", "&#61");
+    req.body.description = req.body.description.replace("?", "&#63");
+    req.body.description = req.body.description.replace("/", "&#47");
+    req.body.description = req.body.description.replace("{", "&#123");
+    req.body.description = req.body.description.replace("}", "&#125");
+    req.body.description = req.body.description.replace("`", "&#96");
+    
+    const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+     /****** This  verification is done to keep all date unique in dateEvent model
+      *  but if two objects of same date is created then there will be (ambiguity) conflict between two object. 
+      * It means that, interpretar will find two objects have same date than it will repeat same result two time. 
+      * Means it will find all the result of first date then again it will give same result for second date (if first and second are same) ********/
+      
+    if(!oldDate){ 
+     const date = new DateEvent({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+      await date.save()     
+    } 
+    
+    await IndoorEvent.findByIdAndUpdate(req.params.id,{...req.body,date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+    
+    
+    req.flash('optionFlag', 'indoor')
+    res.redirect('/admin?flag=event')
+  } catch (e) {
+    if (e.toString().includes('required')) {
+      req.flash("error_message", 'All Fields are required')
+      res.redirect('/admin?flag=event')
+    } else {
+      req.flash("error_message", 'Somthing went wrong. Please try again!')
+      res.redirect('/admin?flag=event')
+    }
+  }
+})
+
+router.post('/admin/outdoorevent/edit/:id', requiresAdmin() ,dateValidation(),[
+  body('price').custom(value => {
+    if(isNaN(value)) {
+       throw new Error('Price is not a number')
+    } else {
+      return true
+    }
+  }),
+  body('discountValue').custom(value => {
+    if(value) {
+      if(isNaN(value)) {
+        throw new Error('Discount value is not a number')
+     } else {
+       return true
+     }
+    } else {
+      return true
+    }
+    
+  })
+] , async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const alert = errors.array() 
+      req.flash('alert_msg', alert)
+      return res.redirect('/admin?flag=event')
+    }
+
+    req.body.description = req.body.description.replace("<", "&lt");
+    req.body.description = req.body.description.replace(">", "&gt");
+    req.body.description = req.body.description.replace('"', "&quot");
+    req.body.description = req.body.description.replace("'", "&apos");
+    req.body.description = req.body.description.replace("(", "&#40");
+    req.body.description = req.body.description.replace(")", "&#41");
+    req.body.description = req.body.description.replace("!", "&#33");
+    req.body.description = req.body.description.replace(":", "&#58");
+    req.body.description = req.body.description.replace(";", "&#59");
+    req.body.description = req.body.description.replace("=", "&#61");
+    req.body.description = req.body.description.replace("?", "&#63");
+    req.body.description = req.body.description.replace("/", "&#47");
+    req.body.description = req.body.description.replace("{", "&#123");
+    req.body.description = req.body.description.replace("}", "&#125");
+    req.body.description = req.body.description.replace("`", "&#96");
+    
+    const oldDate = await DateEvent.findOne({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+
+    if(!oldDate){ 
+      const date = new DateEvent({date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+       await date.save()
+    }
+    await OutdoorEvent.findByIdAndUpdate(req.params.id,{...req.body,date:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day)})
+        
+    req.flash('optionFlag', 'outdoor')
+    res.redirect('/admin?flag=event')
+  } catch (e) {
+    if (e.toString().includes('required')) {
+      req.flash("error_message", 'All Fields are required')
+      res.redirect('/admin?flag=event')
+    } else {
+      req.flash("error_message", 'Somthing went wrong. Please try again!')
+      res.redirect('/admin?flag=event')
+    }
+  }
+})
+
 router.get('/admin/indooreventDelete/:id', requiresAdmin() ,  async (req, res) => {
   await IndoorEvent.findByIdAndDelete(req.params.id)
   req.flash('optionFlag', 'indoor')
@@ -528,6 +680,25 @@ router.post('/registerEvent/payment/:id', requiresAdmin() ,async (req,res) => {
     res.redirect('/admin?flag=register')
   }
   
+})
+
+router.post('/registerEvent/removeParticipants', requiresAdmin() , async (req,res) => {
+  
+  if(req.body.userInEventFlag){
+    req.body.userInEventFlag.forEach(async function(value) {
+      await EventRegistration.findByIdAndUpdate(value,{userInEventFlag:false})
+     })
+  }
+  if(req.body['unchecked-checkboxes']) {
+    var parsedUncheckedArray = JSON.parse(req.body['unchecked-checkboxes'])
+
+    parsedUncheckedArray.forEach(async function(value) {
+    await EventRegistration.findByIdAndUpdate(value,{userInEventFlag:true})
+   })
+  }
+ 
+ 
+  res.redirect('/admin?flag=eventRegister')
 })
 
 router.get('/registerEvent/delete/:id', requiresAdmin() ,async (req, res) => {

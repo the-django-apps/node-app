@@ -3,9 +3,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const userRoute = require('./router/users')
 const adminRoute = require('./router/admin')
+
 discount = false;
 
 const cors = require('cors')
+const randomisedUsers = require('./model/randomisedUserList')
 require('./db/mongoose')
 
 
@@ -26,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(userRoute)
 app.use(adminRoute)
 
+
 app.get('*', (req, res) => {
 	res.render('404page', {
 	  errorMsg: 'Page not found',
@@ -38,9 +41,4 @@ app.listen(port, () => {
 })
 
 
-// function dateValidation() {
-// 	var d = new Date("2015-02-32");
-// 	console.log(d)
-// }
 
-// dateValidation()

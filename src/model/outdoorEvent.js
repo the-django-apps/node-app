@@ -19,6 +19,10 @@ const outdoorEventSchema = mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	allowRegistration: {
+		type: Boolean,
+		default: true
+	},
 	description: {
 		type:String,
 		required:true
@@ -27,8 +31,8 @@ const outdoorEventSchema = mongoose.Schema({
 
 outdoorEventSchema.virtual('outdoorEventPath', {
 	ref: 'eventRegistered',
-	localField: '_id',
-	foreignField: 'outdoorEventId'
+	localField: 'outdoorEvent',
+	foreignField: 'outdoorEvent'
 })
 
 /******** The above virtual is used to connect eventRegistered model OutdoorEvent model 

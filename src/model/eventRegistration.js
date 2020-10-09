@@ -24,15 +24,19 @@ const eventRegisteredSchema = mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
+	userInEventFlag:{
+		type:Boolean,
+		default:true
+	},
 	syncRegistrationId:{
 		type: mongoose.Schema.Types.ObjectId
 	},
-	indoorEventId: {
-		type:mongoose.Schema.Types.ObjectId,
+	indoorEvent: {
+		type:String,
 		ref:'IndoorEvent'
 	},
-	outdoorEventId: {
-		type:mongoose.Schema.Types.ObjectId,
+	outdoorEvent: {
+		type:String,
 		ref:'OutdoorEvent'
 	}
 })
